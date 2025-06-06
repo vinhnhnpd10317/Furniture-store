@@ -1,7 +1,7 @@
 export default function Footer(){
     return(
         <>
-            <h1>Đây là chân tranggggggggggggggggggggg huy</h1>
+            <h1>Đây là chân trang huy tạo nhánh</h1>
         </>
     )
 }
