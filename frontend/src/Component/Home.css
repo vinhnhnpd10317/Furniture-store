@@ -1,0 +1,943 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+}
+
+.banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.product-layout {
+  display: flex;
+  height: 620px;
+  gap: 20px;
+  padding: 20px;
+  margin-top: 15px;
+}
+
+.left-large {
+  flex: 1;
+}
+
+.right-small {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.small-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+  height: 100%;
+}
+
+.product {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.product img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.label {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* phần 3 */
+.layout {
+  /* max-width: 1200px; */
+  margin: 0 auto;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.left img,
+.image-block img,
+.row2 .left img,
+.row2 .right img {
+  transition: transform 1.4s ease;
+  display: block;
+}
+
+.left,
+.image-block,
+.row2 .left,
+.row2 .right {
+  /* overflow: hidden; */
+}
+
+/* Khi hover ảnh, phóng to nhẹ */
+.left img:hover,
+.image-block img:hover,
+.row2 .left img:hover,
+.row2 .right img:hover {
+  transform: scale(1.05);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 60px;
+}
+
+.row1 .left,
+.row1 .right {
+  flex: 1;
+  display: flex;
+}
+
+.row1 .left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* border-radius: 8px; */
+}
+
+.row1 .right-col {
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.right-col .img-block img {
+  width: 100%;
+  height: auto;
+  /* border-radius: 8px; */
+  margin-bottom: 16px;
+}
+
+.right-col .text-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 12px;
+}
+.container {
+  display: flex;
+  width: 100%;
+  max-width: 940px;
+  height: 400px; /* Chiều cao tổng cố định */
+  gap: 20px;
+}
+
+.text-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.text-item {
+    flex: 1;
+    padding: 5px 40px;
+    margin-bottom: 10px;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 30px;
+    text-align: left;
+    /* border-radius: 6px; */
+  
+}
+
+.text-item:last-child {
+  margin-bottom: 0;
+  margin-left: 100px;
+  margin-top: 215px;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.image-block {
+  flex: 1;
+  height: 100%;
+}
+
+.image-block img {
+  /* width: 100%;  */
+    width: 511px;
+    height: 560px;
+    object-fit: cover;
+    /* border-radius: 6px; */
+}
+
+/* Hàng 2 */
+.row2 .left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-top: 40px;
+  text-align: left;
+  margin-left: 130px;
+}
+
+.row2 .left img {
+  width: 50%;
+  height: 100%;
+  margin-left: 300px;
+  margin-top: 30px;
+}
+
+.row2 .text-side {
+  flex: 1;
+  font-size: 30px;
+  font-weight: 500;
+  /* margin-bottom: 50px; */
+}
+
+.row2 .right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-left: 20px;
+}
+
+.row2 .right img {
+  width: 65%;
+  height: 360px;
+  margin-left: 100px;
+  margin-top: -75px;
+  /* border-radius: 8px; */
+}
+
+.row2 .text-below {
+  font-size: 30px;
+  font-weight: 500;
+  margin-left: 97px;
+  width: 535px;
+  text-align: left;
+}
+
+.right vertical{
+    margin-bottom: 200px;
+}
+
+/* GIỚI THIỆU */
+.intro-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 60px 0px;
+  padding: 30px;
+  gap: 40px;
+  background-color: #f4f4f4;
+}
+
+.intro-left {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 90px;
+}
+
+.intro-left h2 {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.intro-left p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.intro-left .btn-green {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid #4CAF50;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.intro-left .btn-green:hover {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.btn-green {
+  padding: 10px 20px;
+  background-color: #e7f3e9;
+  color: #2a7a38;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.intro-right {
+  flex: 1;
+}
+
+.intro-right img {
+  width: 1050px;
+  height: auto;
+}
+
+/* SẢN PHẨM MỚI */
+.product-container {
+  margin-top: 50px;
+  width: 1290px;
+  margin: 50px auto 0;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product-header h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.product-header a {
+  font-size: 14px;
+  color: #000;
+  text-decoration: none;
+}
+
+.product-list {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  width: calc(25% - 15px);
+  height: 360px;
+  padding: 15px;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.product-card img {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.product-name {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.price {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.actions button {
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #000;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.actions .black {
+  background-color: #000;
+  color: #fff;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Ẩn các nút ban đầu */
+.hover-actions {
+  position: absolute;
+  bottom: 0px;
+  left: -15px;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 15px;
+  transition: all 0.3s ease;
+}
+
+/* Hiện khi hover */
+.product-card:hover .hover-actions {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hover-actions button {
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #000;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.hover-actions .black {
+  background-color: #000;
+  color: #fff;
+}
+
+
+/* cảm hứng */
+ /* CSS scoped dưới .inspiration-section */
+  .inspiration-section {
+    text-align: center;
+    padding: 100px 20px;
+    max-width: 1500px;
+    margin: 0 auto 60px;
+    height: 750px;
+  }
+
+  .inspiration-section .section-title {
+    margin-bottom: 30px;
+    text-transform: none;
+    font-size: 40px;
+    font-weight: 600;
+  }
+
+  .inspiration-section .inspiration-slider {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    min-height: 480px;
+  }
+
+  .inspiration-section .inspiration-group {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+    pointer-events: none;
+  }
+
+  .inspiration-section .inspiration-group.active {
+    left: 0;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .inspiration-section .inspiration-group.slide-out-left {
+    left: -100%;
+    opacity: 0;
+  }
+
+  .inspiration-section .inspiration-group.slide-in-right {
+    left: 100%;
+    opacity: 0;
+  }
+
+  .inspiration-section .inspiration-group.show-from-right {
+    left: 0;
+    opacity: 1;
+  }
+
+  .inspiration-section .inspiration-item {
+    width: 45%;
+    overflow: hidden;
+  }
+
+  .inspiration-section .inspiration-item img {
+    width: 100%;
+    height: 400px;
+    display: block;
+  }
+
+  .inspiration-section .inspiration-item h3 {
+    font-size: 1.2em;
+    margin: 15px 15px 10px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .inspiration-section .inspiration-item p {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.5;
+    margin: 0 15px 15px;
+  }
+
+  .inspiration-section .inspiration-dots {
+    margin-top: 30px;
+  }
+
+  .inspiration-item img {
+   width: 100%;              /* Ảnh luôn bằng với phần tử cha */
+  height: 200px;            /* Chiều cao cố định */
+  object-fit: cover; 
+  }
+
+
+  .inspiration-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.inspiration-item {
+  flex: 1 1 45%;
+  text-align: center;
+}
+
+.inspiration-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.inspiration-item {
+  flex: 1 1 45%;
+  text-align: center;
+}
+
+  .inspiration-section .dot {
+    display: inline-block;
+    width: 30px;
+    height: 4px;
+    background: #ccc;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-radius: 2px;
+  }
+
+  .inspiration-section .dot.active {
+    background: #ffa500;
+  }
+
+.cta-button-alt {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #738b5b;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.cta-button-alt:hover {
+  background-color: #5c7445;
+}
+
+
+.layout-image-left-text-right {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  justify-content: space-between;
+  padding: 60px 0;
+  background-color: #f4f4f4;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 100px;
+}
+
+.image-left {
+  flex: 1 1 50%;
+  max-width: 600px;
+  padding: 0 110px;
+}
+
+.image-left img {
+  width: 1050px;
+  height: auto;
+  object-fit: cover;
+}
+
+.text-right {
+  flex: 1 1 40%;
+  max-width: 600px;
+  text-align: left;
+  margin-right: 100px;
+}
+
+.text-right h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.text-right p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.btn-green {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #738b5b;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-green:hover {
+  background-color: #5c7445;
+}
+
+
+/* Responsive adjustments for mobile devices */
+@media screen and (max-width: 768px) {
+  /* General adjustments */
+  body {
+    font-size: 14px; /* Slightly smaller base font size for mobile */
+  }
+
+  /* Banner */
+  .banner img {
+    height: 200px; /* Reduce banner height for mobile */
+    object-fit: cover;
+  }
+
+  /* Product Layout */
+  .product-layout {
+    flex-direction: column; /* Stack vertically on mobile */
+    height: auto; /* Allow height to adjust */
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .left-large,
+  .right-small {
+    flex: none; /* Remove flex constraints */
+    width: 100%;
+  }
+
+  .small-grid {
+    grid-template-columns: 1fr; /* Single column for small grid */
+    grid-template-rows: auto; /* Auto rows */
+    gap: 10px;
+  }
+
+  .product img {
+    height: 200px; /* Fixed height for product images */
+    object-fit: cover;
+  }
+
+  .label {
+    font-size: 14px; /* Smaller label text */
+    bottom: 10px;
+    left: 10px;
+  }
+
+  /* Layout Section */
+  .layout {
+    padding: 20px; /* Reduce padding */
+  }
+
+  .row {
+    flex-direction: column; /* Stack rows vertically */
+    margin-bottom: 30px;
+  }
+
+  .row1 .left,
+  .row1 .container,
+  .row2 .left,
+  .row2 .right {
+    width: 100%;
+    margin: 0;
+  }
+
+  .container {
+    flex-direction: column; /* Stack text and image */
+    height: auto; /* Allow height to adjust */
+    gap: 10px;
+  }
+
+  .text-block {
+    padding: 0;
+  }
+
+  .text-item {
+    font-size: 20px; /* Smaller heading */
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .text-item:last-child {
+    margin-left: 0;
+    margin-top: 0;
+    font-size: 20px;
+  }
+
+  .image-block img {
+    width: 100%;
+    height: 250px; /* Fixed height for images */
+    object-fit: cover;
+  }
+
+  .row2 .left {
+    flex-direction: column;
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  .row2 .left img {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0;
+    height: 200px;
+  }
+
+  .row2 .text-side {
+    font-size: 20px;
+    padding: 0 10px;
+  }
+
+  .row2 .right {
+    margin-left: 0;
+    gap: 10px;
+  }
+
+  .row2 .right img {
+    width: 100%;
+    height: 200px;
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .row2 .text-below {
+    font-size: 20px;
+    margin-left: 0;
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  /* Intro Section */
+  .intro-container {
+    flex-direction: column; /* Stack intro content */
+    padding: 20px;
+    margin: 30px 0;
+    gap: 20px;
+  }
+
+  .intro-left {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .intro-left h2 {
+    font-size: 24px;
+  }
+
+  .intro-left p {
+    font-size: 14px;
+  }
+
+  .intro-right img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Product Container */
+  .product-container {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .product-list {
+    flex-direction: column; /* Stack product cards */
+    gap: 10px;
+  }
+
+  .product-card {
+    width: 100%; /* Full width for product cards */
+    height: auto;
+  }
+
+  .product-card img {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .product-name {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 14px;
+  }
+
+  .hover-actions {
+    opacity: 1; /* Always show actions on mobile for simplicity */
+    visibility: visible;
+    position: static; /* Remove absolute positioning */
+    padding: 10px 0;
+  }
+
+  .hover-actions button {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  /* Inspiration Section */
+  .inspiration-section {
+    padding: 20px;
+    height: 620px;
+    margin-bottom: 30px;
+  }
+
+  .inspiration-section .section-title {
+    font-size: 28px;
+  }
+
+  .inspiration-slider {
+    min-height: auto;
+  }
+
+  .inspiration-group {
+    /* flex-direction: column;  */
+    gap: 20px;
+  }
+
+  .inspiration-item {
+    width: 100%; /* Full width for inspiration items */
+  }
+
+  .inspiration-item img {
+    height: 200px; /* Fixed height for images */
+    object-fit: cover;
+  }
+
+  .inspiration-item h3 {
+    font-size: 16px;
+    margin: 10px 0;
+  }
+
+  .inspiration-item p {
+    font-size: 13px;
+    margin: 0 10px 10px;
+  }
+
+  .inspiration-dots {
+    margin-top: 20px;
+  }
+
+  .inspiration-section .dot {
+    width: 20px;
+    height: 3px;
+  }
+
+  /* Layout Image Left, Text Right */
+  .layout-image-left-text-right {
+    flex-direction: column;
+    padding: 20px;
+    margin-top: 140px;
+    gap: 20px;
+  }
+
+  .image-left {
+    padding: 0 10px;
+    max-width: 100%;
+  }
+
+  .image-left img {
+    width: 100%;
+    height: auto;
+  }
+
+  .text-right {
+    padding: 0 10px;
+    max-width: 100%;
+  }
+
+  .text-right h2 {
+    font-size: 24px;
+  }
+
+  .text-right p {
+    font-size: 14px;
+  }
+
+  .btn-green {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+/* Extra small devices (phones, 480px and down) */
+@media screen and (max-width: 480px) {
+  .banner img {
+    height: 150px; /* Further reduce banner height */
+  }
+
+  .product img,
+  .image-block img,
+  .row2 .left img,
+  .row2 .right img,
+  .inspiration-item img {
+    height: 150px; /* Smaller images for very small screens */
+  }
+
+  .text-item,
+  .row2 .text-side,
+  .row2 .text-below {
+    font-size: 18px; /* Slightly smaller headings */
+  }
+
+  .intro-left h2,
+  .text-right h2 {
+    font-size: 20px;
+  }
+
+  .intro-left p,
+  .text-right p {
+    font-size: 13px;
+  }
+
+  .inspiration-section .section-title {
+    font-size: 24px;
+  }
+
+  .product-name,
+  .price {
+    font-size: 13px;
+  }
+
+  .hover-actions button {
+    font-size: 11px;
+    padding: 6px;
+  }
+}
