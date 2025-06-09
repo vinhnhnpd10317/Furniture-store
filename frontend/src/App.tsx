@@ -2,6 +2,7 @@ import './App.css'
 import { BrowserRouter as Router } from "react-router-dom";
 import Header from './Component/Header';
 import Home from './Component/Home';
+import Login from './Component/login';
 
 function App() {
 
@@ -14,8 +15,8 @@ function App() {
         {/* Nội dung giữa trang */}
        
           
-            <Home />
-        
+            {/* <Home /> */}
+            <Login />
        
 
         {/* Chân trang */}
