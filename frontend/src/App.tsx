@@ -1,29 +1,17 @@
-import './App.css'
 import { BrowserRouter as Router } from "react-router-dom";
-import Header from './Component/Header';
-import Home from './Component/Home';
-import Login from './Component/login';
+import AppRoutes from "./router/router";
+import "./App.css";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
-
   return (
-    <>
-      <Router>
-        {/* Menu (header) */}
-        <Header></Header>
-
-        {/* Nội dung giữa trang */}
-       
-          
-            {/* <Home /> */}
-            <Login />
-       
-
-        {/* Chân trang */}
-        {/* <Footer></Footer> */}
-      </Router>
-    </>
-  )
+    <Router>
+      <Header />
+      <AppRoutes />
+      <Footer />
+    </Router>
+  );
 }
 
-export default App
+export default App;
