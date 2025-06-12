@@ -1,7 +1,6 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f8f8f8;
 }
 
 .banner img {
@@ -92,7 +91,7 @@ body {
   transform: scale(1.05);
 }
 
-.row {
+.rows {
   display: flex;
   justify-content: space-between;
   margin-bottom: 60px;
@@ -130,7 +129,7 @@ body {
   height: 100%;
   gap: 12px;
 }
-.container {
+.containers {
   display: flex;
   width: 100%;
   max-width: 940px;
@@ -680,7 +679,7 @@ body {
     margin: 0;
   }
 
-  .container {
+  .containers {
     flex-direction: column; /* Stack text and image */
     height: auto; /* Allow height to adjust */
     gap: 10px;

@@ -108,14 +108,14 @@ function App() {
     </div>
   </div>
   <section className="layout">
-    <div className="row row1">
+    <div className="rows row1">
       <div className="left">
         <img
           src="https://nhaxinh.com/wp-content/uploads/2024/01/nha-xinh-banner-phong-khach-31-1-24.jpg"
           alt="Ảnh 1"
         />
       </div>
-      <div className="container">
+      <div className="containers">
         <div className="text-block">
           <div className="text-item">
             Không gian phòng khách
@@ -140,7 +140,7 @@ function App() {
       </div>
     </div>
     {/* Hàng 2 */}
-    <div className="row row2">
+    <div className="rows row2">
       <div className="left horizontal">
         <img
           src="https://nhaxinh.com/wp-content/uploads/2023/05/mau-phong-ngu-16-5-23.jpg"
