@@ -160,7 +160,7 @@ body {
 .text-item:last-child {
   margin-bottom: 0;
   margin-left: 100px;
-  margin-top: 215px;
+  margin-top: 140px;
   font-size: 30px;
   font-weight: 500;
 }
@@ -172,8 +172,8 @@ body {
 
 .image-block img {
   /* width: 100%;  */
-    width: 511px;
-    height: 560px;
+    width: 500px;
+    height: 450px;
     object-fit: cover;
     /* border-radius: 6px; */
 }
@@ -186,7 +186,7 @@ body {
   gap: 40px;
   margin-top: 40px;
   text-align: left;
-  margin-left: 130px;
+  /* margin-left: 130px; */
 }
 
 .row2 .left img {
@@ -328,7 +328,7 @@ body {
 
 .product-card {
   width: calc(25% - 15px);
-  height: 360px;
+  height: 380px;
   padding: 15px;
   box-sizing: border-box;
   text-align: center;
@@ -378,8 +378,8 @@ body {
 /* Ẩn các nút ban đầu */
 .hover-actions {
   position: absolute;
-  bottom: 0px;
-  left: -15px;
+  bottom: 10px;
+  left: 0px;
   width: 100%;
   opacity: 0;
   visibility: hidden;
@@ -573,7 +573,7 @@ body {
 .image-left {
   flex: 1 1 50%;
   max-width: 600px;
-  padding: 0 110px;
+  padding: 0 40px;
 }
 
 .image-left img {
@@ -586,7 +586,7 @@ body {
   flex: 1 1 40%;
   max-width: 600px;
   text-align: left;
-  margin-right: 100px;
+  margin-right: 40px;
 }
 
 .text-right h2 {
