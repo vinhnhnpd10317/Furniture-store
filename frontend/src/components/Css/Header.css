@@ -1,0 +1,38 @@
+/* Giảm padding top/bottom cho header trên mobile */
+@media (max-width: 767.98px) {
+  .navbar {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .navbar-brand img {
+    width: 60px;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Giảm chiều cao logo ở mọi kích thước */
+.navbar-brand img {
+  max-height: 70px;
+  height: auto;
+}
+
+/* Tùy chỉnh topbar (ẩn trên mobile) */
+.topbar {
+  font-size: 0.875rem;
+}
+
+@media (max-width: 767.98px) {
+  .topbar {
+    display: none !important;
+  }
+}
+
+
+.navbar-toggler-icon {
+  width: 20px;
+  height: 20px;
+}
