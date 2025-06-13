@@ -12,18 +12,19 @@ export default function Product() {
         updated[index] = !updated[index];
         setLikedList(updated);
     };
+
     return (
         <>
             {/* Banner */}
-            <div className="container-fluid p-0">
+            <div className="container-fluid p-0 position-relative">
                 <img
                     src="img/imgproduct/banner.jpg"
                     alt="Banner"
                     className="img-fluid w-100"
-                    style={{ height: 500, objectFit: "cover" }}
+                    style={{ height: "auto", maxHeight: 500, objectFit: "cover" }}
                 />
                 <div
-                    className="position-absolute text-white product-banner-text"
+                    className="position-absolute text-white product-banner-text d-none d-md-block"
                     style={{ top: "40%", left: "12%", zIndex: 2 }}
                 >
                     <h2 className="fw-bold text-white">Sản phẩm</h2>
@@ -34,10 +35,7 @@ export default function Product() {
                                     Trang chủ
                                 </a>
                             </li>
-                            <li
-                                className="breadcrumb-item active fw-bold text-white"
-                                aria-current="page"
-                            >
+                            <li className="breadcrumb-item active fw-bold text-white" aria-current="page">
                                 Sản phẩm
                             </li>
                         </ol>
@@ -45,48 +43,95 @@ export default function Product() {
                 </div>
             </div>
 
-            <div className="container my-4">
-                <div className="row">
-                    {/* Sidebar */}
-                    <div className="col-md-3 products-sidebar">
-                        <h5 className="fw-bold mb-3">Danh Mục</h5>
-                        <ul className="list-unstyled ps-0">
-                            {[
-                                "Armchair Mimi",
-                                "Armchair Curio",
-                                "Armchair Dark",
-                                "Armchair Dream",
-                                "Armchair Garbo",
-                                "Armchair Helen",
-                                "Armchair Hùng King",
-                                "Armchair Kiko Eponj"
-                            ].map((item, index) => (
-                                <li key={index}>
-                                    <a href="#" className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link">
-                                        {item}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
+            {/* Nút mở sidebar ở mobile */}
+            <div className="d-md-none mt-3 ">
+                <button
+                    className="btn btn-outline-dark"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#categorySidebar"
+                    aria-controls="categorySidebar"
+                >
+                    <i className="bi bi-list me-2"></i> Danh Mục
+                </button>
+            </div>
 
-                        <h5 className="fw-bold mt-4 mb-3">Màu sắc</h5>
-                        <ul className="list-unstyled ps-0">
-                            {["Màu trắng", "Màu be", "Màu đỏ", "Màu nâu cafe", "Màu xanh lá", "Màu vàng"].map((color, index) => (
-                                <li key={index}>
-                                    <a href="#" className="d-block py-1 text-decoration-none text-dark product-sidebar-link">
-                                        {color}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
+            <div className="container-fluid px-3 px-md-5 my-4">
+                <div className="row align-items-stretch">
+                    {/* Offcanvas cho mobile */}
+                    <div className="col-md-3 mb-md-0">
+                        <div
+                            className="offcanvas offcanvas-start d-md-none"
+                            tabIndex={-1}
+                            id="categorySidebar"
+                            aria-labelledby="categorySidebarLabel"
+                        >
+                            <div className="offcanvas-body">
+                                <div className="offcanvas-header">
+                                    <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                </div>
+                                <h5 className="fw-bold mb-3">Danh Mục</h5>
+                                <ul className="list-unstyled ps-0">
+                                    {[
+                                        "Armchair Mimi", "Armchair Curio", "Armchair Dark", "Armchair Dream",
+                                        "Armchair Garbo", "Armchair Helen", "Armchair Hùng King", "Armchair Kiko Eponj"
+                                    ].map((item, index) => (
+                                        <li key={index}>
+                                            <a href="#" className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link">
+                                                {item}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <h5 className="fw-bold mt-4 mb-3">Màu sắc</h5>
+                                <ul className="list-unstyled ps-0">
+                                    {["Màu trắng", "Màu be", "Màu đỏ", "Màu nâu cafe", "Màu xanh lá", "Màu vàng"].map((color, index) => (
+                                        <li key={index}>
+                                            <a href="#" className="d-block py-1 text-decoration-none text-dark product-sidebar-link">
+                                                {color}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+
+                        {/* Sidebar desktop */}
+                        <div className="d-none d-md-block products-sidebar">
+                            <h5 className="fw-bold mb-3">Danh Mục</h5>
+                            <ul className="list-unstyled ps-0">
+                                {[
+                                    "Armchair Mimi", "Armchair Curio", "Armchair Dark", "Armchair Dream",
+                                    "Armchair Garbo", "Armchair Helen", "Armchair Hùng King", "Armchair Kiko Eponj"
+                                ].map((item, index) => (
+                                    <li key={index}>
+                                        <a href="#" className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link">
+                                            {item}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <h5 className="fw-bold mt-4 mb-3">Màu sắc</h5>
+                            <ul className="list-unstyled ps-0">
+                                {["Màu trắng", "Màu be", "Màu đỏ", "Màu nâu cafe", "Màu xanh lá", "Màu vàng"].map((color, index) => (
+                                    <li key={index}>
+                                        <a href="#" className="d-block py-1 text-decoration-none text-dark product-sidebar-link">
+                                            {color}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
                     {/* Products */}
                     <div className="col-md-9">
                         <div className="row">
-                            {[1, 2, 3, 4, 5 ,6 ,7, 8].map((_, idx) => (
-                                <div className="col-md-4" key={idx}>
-                                    <div className="product-cards">
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map((_, idx) => (
+                                <div className="col-12 col-sm-6 col-md-4" key={idx}>
+                                    <div className="product-cards h-100 d-flex flex-column justify-content-between">
                                         <img
                                             src="img/imgproduct/product.png"
                                             alt="Armchair Mimi"
@@ -109,7 +154,7 @@ export default function Product() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="btn-group d-flex justify-content-center mt-3">
+                                        <div className="btn-group d-flex justify-content-center mt-3 product-btn-group">
                                             <button className="btn btn-outline-dark btn-sm">THÊM VÀO GIỎ</button>
                                             <button className="btn btn-dark btn-sm">XEM THÊM</button>
                                         </div>
