@@ -62,7 +62,7 @@ const Login = () => {
               <button type="button" className="btn btn-primary w-100">Đăng nhập bằng Facebook</button>
             </div>
             <p className="text-center text-white">
-              Không có tài khoản? <a href="#" className="fw-bold text-white text-decoration-underline">Đăng ký tại đây!</a>
+              Không có tài khoản? <a href="/signup" className="fw-bold text-white text-decoration-underline">Đăng ký tại đây!</a>
             </p>
           </form>
         </div>
