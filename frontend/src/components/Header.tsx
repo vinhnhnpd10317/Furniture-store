@@ -80,7 +80,7 @@ const Header = () => {
                 <Link className="nav-link text-dark fw-semibold" to="#">THIẾT KẾ NỘI THẤT</Link>
               </li>
               <li className="nav-item px-2">
-                <Link className="nav-link text-dark fw-semibold" to="#">GÓC CẢM HỨNG</Link>
+                <Link className="nav-link text-dark fw-semibold" to="/inspiration">GÓC CẢM HỨNG</Link>
               </li>
               <li className="nav-item px-2">
                 <Link className="nav-link text-dark fw-semibold" to="/contact">LIÊN HỆ</Link>

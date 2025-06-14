@@ -1,0 +1,55 @@
+/* InspirationPage.css */
+
+/* Card Image */
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Card Title */
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Card Text */
+.card-text {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Button */
+.btn-success {
+  background-color: #198754;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-success:hover {
+  background-color: #146c43;
+  transform: scale(1.05);
+}
+
+/* Responsive Tweaks */
+@media (max-width: 576px) {
+  .card-img-top {
+    height: 160px;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .card-img-top {
+    height: 220px;
+  }
+}

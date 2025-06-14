@@ -1,0 +1,91 @@
+/* InspirationHero.css */
+
+.main-hero-image {
+  object-fit: cover;
+  height: 54vh;
+  width: 100%;
+}
+
+.side-hero-image {
+  object-fit: cover;
+  height: 27vh;
+  width: 100%;
+}
+
+.overlay-text {
+  z-index: 2;
+  color: white;
+}
+
+.overlay-text p {
+  font-size: 1.25rem;
+}
+
+.overlay-text h1 {
+  line-height: 1.2;
+  font-size: 3rem;
+}
+
+.overlay-text button {
+  font-size: 1rem;
+  padding: 0.5rem 1.5rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .main-hero-image {
+    height: 40vh;
+  }
+
+  .side-hero-image {
+    height: 20vh;
+  }
+
+  .overlay-text h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .overlay-text {
+    position: relative;
+    transform: none;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1rem 1.5rem;
+    text-align: center;
+  }
+
+  .overlay-text h1 {
+    font-size: 1.75rem;
+  }
+
+  .overlay-text p {
+    font-size: 1rem;
+  }
+
+  .main-hero-image {
+    height: 35vh;
+  }
+
+  .side-hero-image {
+    height: 17.5vh;
+  }
+}
+
+@media (max-width: 576px) {
+  .overlay-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .overlay-text p {
+    font-size: 0.95rem;
+  }
+
+  .main-hero-image {
+    height: 45vh;
+  }
+
+  .side-hero-image {
+    height: 22.5vh;
+  }
+}
