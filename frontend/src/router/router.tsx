@@ -12,6 +12,7 @@ import AboutPage from "../components/Abouts/AboutPage";
 import Contact from "../components/Contact";
 // import InspirationHero from "../components/Inspiration/InspirationHero";
 import InspirationPage from "../components/Inspiration/InspirationPage";
+import UserOrders from "../components/UserOrders";
 
 export default function AppRoutes() {
   return (
@@ -29,6 +30,7 @@ export default function AppRoutes() {
         <Route path="/aboutpage" element={<AboutPage />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/inspiration" element={<InspirationPage />} />
+        <Route path="/userorder" element={<UserOrders />} />
       </Routes>
       <Footer />
     </>

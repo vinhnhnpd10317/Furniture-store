@@ -1,0 +1,19 @@
+.text-orange {
+  color: #f29d00;
+}
+
+.nav-link.active {
+  border-width: 3px !important;
+}
+
+.nav-link:hover {
+  color: #f29d00 !important;
+}
+
+/* Responsive bổ sung nếu cần */
+@media (max-width: 767.98px) {
+  .account-orders .nav-link {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
