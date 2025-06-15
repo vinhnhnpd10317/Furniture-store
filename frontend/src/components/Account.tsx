@@ -2,6 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./Css/Account.css";
+import { Link } from "react-router-dom";
 
 const Account = () => {
     return (
@@ -12,10 +13,15 @@ const Account = () => {
                     <div className="sidebar p-3 rounded shadow-sm bg-light">
                         <h5 className="mb-4 fw-bold">Tài khoản cá nhân</h5>
                         <ul className="list-unstyled">
-                        <li className="mb-2"><a href="#" className="text-dark text-decoration-none">Thông tin của tôi</a></li>
-                        <li className="mb-2"><a href="useroder" className="text-dark text-decoration-none">Đơn hàng</a></li>
-                        
-                        <li><a href="#" className="text-dark text-decoration-none">Đăng xuất</a></li>
+                            <li className="mb-2">
+                                <Link to="/account" className="text-dark text-decoration-none">Thông tin của tôi</Link>
+                            </li>
+                            
+                            <li className="mb-2">
+                                <Link to="/userorder" className="text-dark text-decoration-none">Đơn hàng</Link>
+                            </li>
+                            
+                            <li><a href="#" className="text-dark text-decoration-none">Đăng xuất</a></li>
                         </ul>
                     </div>
                 </div>
