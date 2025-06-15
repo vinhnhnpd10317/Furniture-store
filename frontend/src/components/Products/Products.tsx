@@ -56,7 +56,7 @@ export default function Product() {
                 </button>
             </div>
 
-            <div className="container-fluid px-3 px-md-5 my-4">
+            <div className="container my-4">
                 <div className="row align-items-stretch">
                     {/* Offcanvas cho mobile */}
                     <div className="col-md-3 mb-md-0">
@@ -130,7 +130,7 @@ export default function Product() {
                     <div className="col-md-9">
                         <div className="row">
                             {[1, 2, 3, 4, 5, 6, 7, 8].map((_, idx) => (
-                                <div className="col-12 col-sm-6 col-md-4" key={idx}>
+                                <div className="col-12 col-sm-6 col-md-4 mb-desktop-48" key={idx}>
                                     <div className="product-cards h-100 d-flex flex-column justify-content-between">
                                         <img
                                             src="img/imgproduct/product.png"

@@ -80,3 +80,9 @@
         padding: 10px;
     }
 }
+
+@media (min-width: 768px) {
+  .mb-desktop-48 {
+    margin-bottom: 23px;
+  }
+}
