@@ -10,9 +10,12 @@ import ProductCart from "../components/Products/ProductCart";
 import ProductDetail from "../components/Products/ProductDetail";
 import AboutPage from "../components/Abouts/AboutPage";
 import Contact from "../components/Contact";
+// import InspirationHero from "../components/Inspiration/InspirationHero";
+import InspirationPage from "../components/Inspiration/InspirationPage";
 
 export default function AppRoutes() {
   return (
+
     <>
       <Header />
       <Routes>
@@ -25,6 +28,7 @@ export default function AppRoutes() {
         <Route path="/productdetail" element={<ProductDetail />} />
         <Route path="/aboutpage" element={<AboutPage />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/inspiration" element={<InspirationPage />} />
       </Routes>
       <Footer />
     </>
