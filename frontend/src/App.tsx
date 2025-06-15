@@ -1,15 +1,18 @@
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AppRoutes from "./router/router";
-import "./App.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import AdminRoutes from "./router/AdminRoutes";
+import './App.css'
 
 function App() {
   return (
     <Router>
-      <Header />
-      <AppRoutes />
-      <Footer />
+      <Routes>
+        {/* User layout */}
+        <Route path="/*" element={<AppRoutes />} />
+
+        {/* Admin layout */}
+        <Route path="/admin/*" element={<AdminRoutes />} />
+      </Routes>
     </Router>
   );
 }
