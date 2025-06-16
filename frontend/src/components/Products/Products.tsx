@@ -1,12 +1,27 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Css/Product.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { useState } from "react";
+// import { useState } from "react";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-export default function Product() {
-    const [likedList, setLikedList] = useState<boolean[]>(Array(8).fill(false));
+import { useEffect, useState } from "react";
 
+import { fetchProducts, type ProductItem } from "../../api/ProductApi";
+
+export default function Product() {
+    const [products, setProducts] = useState<ProductItem[]>([]);
+    const [likedList, setLikedList] = useState<boolean[]>([]);
+
+    useEffect(() => {
+        fetchProducts()
+            .then((data) => {
+                setProducts(data);
+                setLikedList(new Array(data.length).fill(false));
+            })
+            .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
+    }, []);
+
+    
     const toggleLike = (index: number) => {
         const updated = [...likedList];
         updated[index] = !updated[index];
@@ -129,16 +144,16 @@ export default function Product() {
                     {/* Products */}
                     <div className="col-md-9">
                         <div className="row">
-                            {[1, 2, 3, 4, 5, 6, 7, 8].map((_, idx) => (
-                                <div className="col-12 col-sm-6 col-md-4 mb-desktop-48" key={idx}>
+                            {products.map((item, idx) => (
+                                <div className="col-12 col-sm-6 col-md-4 mb-desktop-48" key={item.id}>
                                     <div className="product-cards h-100 d-flex flex-column justify-content-between">
                                         <img
-                                            src="img/imgproduct/product.png"
-                                            alt="Armchair Mimi"
+                                            src={item.hinh_anh_dai_dien ? `/img/${item.hinh_anh_dai_dien}` : "img/imgproduct/product.png"}
+                                            alt={item.ten_san_pham}
                                             className="img-fluid"
                                         />
                                         <div className="d-flex justify-content-between align-items-start mt-2">
-                                            <h6 className="mb-1">Armchair Mimi</h6>
+                                            <h6 className="mb-1">{item.ten_san_pham}</h6>
                                             <div className="text-end">
                                                 <i
                                                     className={`bi ${likedList[idx] ? "bi-heart-fill" : "bi-heart"} product-heart-icon`}
@@ -150,7 +165,7 @@ export default function Product() {
                                                     onClick={() => toggleLike(idx)}
                                                 />
                                                 <div className="product-price mt-1" style={{ fontSize: 14 }}>
-                                                    49.000.000₫
+                                                    {item.gia.toLocaleString("vi-VN")}₫
                                                 </div>
                                             </div>
                                         </div>
