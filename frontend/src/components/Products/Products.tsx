@@ -1,15 +1,19 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Css/Product.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-// import { useState } from "react";
 import "bootstrap-icons/font/bootstrap-icons.css";
+
+import { Offcanvas } from "bootstrap";
 
 import { useEffect, useState } from "react";
 
 import { fetchProducts, type ProductItem } from "../../api/ProductApi";
+import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
 
 export default function Product() {
     const [products, setProducts] = useState<ProductItem[]>([]);
+    const [categories, setCategories] = useState<CategoryItem[]>([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
     const [likedList, setLikedList] = useState<boolean[]>([]);
 
     useEffect(() => {
@@ -19,7 +23,21 @@ export default function Product() {
                 setLikedList(new Array(data.length).fill(false));
             })
             .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
+
+        fetchCategories()
+            .then((data) => setCategories(data))
+            .catch((err) => console.error("Lỗi khi tải danh mục:", err));
     }, []);
+
+    useEffect(() => {
+        // Tải sản phẩm theo danh mục (nếu có)
+        fetchProducts(selectedCategoryId ?? undefined)
+            .then((data) => {
+                setProducts(data);
+                setLikedList(new Array(data.length).fill(false));
+            })
+            .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
+    }, [selectedCategoryId]);
 
     
     const toggleLike = (index: number) => {
@@ -27,7 +45,7 @@ export default function Product() {
         updated[index] = !updated[index];
         setLikedList(updated);
     };
-
+    
     return (
         <>
             {/* Banner */}
@@ -86,18 +104,50 @@ export default function Product() {
                                     <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                 </div>
                                 <h5 className="fw-bold mb-3">Danh Mục</h5>
+
                                 <ul className="list-unstyled ps-0">
-                                    {[
-                                        "Armchair Mimi", "Armchair Curio", "Armchair Dark", "Armchair Dream",
-                                        "Armchair Garbo", "Armchair Helen", "Armchair Hùng King", "Armchair Kiko Eponj"
-                                    ].map((item, index) => (
-                                        <li key={index}>
-                                            <a href="#" className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link">
-                                                {item}
+                                    <li>
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setSelectedCategoryId(null); // Hiển thị tất cả sản phẩm
+                                                
+                                                // Ẩn offcanvas sau khi chọn danh mục (mobile)
+                                                const sidebarElement = document.getElementById("categorySidebar");
+                                                if (sidebarElement) {
+                                                    const bsOffcanvas = Offcanvas.getInstance(sidebarElement) || new Offcanvas(sidebarElement);
+                                                    bsOffcanvas.hide();
+                                                }
+                                            }}
+                                            className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link"
+                                        >
+                                            Tất cả sản phẩm
+                                        </a>
+                                    </li>
+                                    {categories.map((cat) => (
+                                        <li key={cat.id}>
+                                            <a
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setSelectedCategoryId(cat.id);
+
+                                                    // Ẩn offcanvas sau khi chọn danh mục (mobile)
+                                                    const sidebarElement = document.getElementById("categorySidebar");
+                                                    if (sidebarElement) {
+                                                        const bsOffcanvas = Offcanvas.getInstance(sidebarElement) || new Offcanvas(sidebarElement);
+                                                        bsOffcanvas.hide();
+                                                    }
+                                                }}
+                                                className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link"
+                                            >
+                                                {cat.ten_danh_muc}
                                             </a>
                                         </li>
                                     ))}
                                 </ul>
+
 
                                 <h5 className="fw-bold mt-4 mb-3">Màu sắc</h5>
                                 <ul className="list-unstyled ps-0">
@@ -116,17 +166,34 @@ export default function Product() {
                         <div className="d-none d-md-block products-sidebar">
                             <h5 className="fw-bold mb-3">Danh Mục</h5>
                             <ul className="list-unstyled ps-0">
-                                {[
-                                    "Armchair Mimi", "Armchair Curio", "Armchair Dark", "Armchair Dream",
-                                    "Armchair Garbo", "Armchair Helen", "Armchair Hùng King", "Armchair Kiko Eponj"
-                                ].map((item, index) => (
-                                    <li key={index}>
-                                        <a href="#" className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link">
-                                            {item}
+                                <li>
+                                    <a
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setSelectedCategoryId(null); // Hiển thị tất cả sản phẩm
+                                        }}
+                                        className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link"
+                                    >
+                                        Tất cả sản phẩm
+                                    </a>
+                                </li>
+                                {categories.map((cat) => (
+                                    <li key={cat.id}>
+                                        <a 
+                                            href="#"  
+                                            onClick={(e) => { 
+                                                e.preventDefault();  
+                                                setSelectedCategoryId(cat.id);
+                                            }} 
+                                            className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link"
+                                        >
+                                            {cat.ten_danh_muc}
                                         </a>
                                     </li>
                                 ))}
                             </ul>
+
 
                             <h5 className="fw-bold mt-4 mb-3">Màu sắc</h5>
                             <ul className="list-unstyled ps-0">
@@ -148,9 +215,13 @@ export default function Product() {
                                 <div className="col-12 col-sm-6 col-md-4 mb-desktop-48" key={item.id}>
                                     <div className="product-cards h-100 d-flex flex-column justify-content-between">
                                         <img
-                                            src={item.hinh_anh_dai_dien ? `/img/${item.hinh_anh_dai_dien}` : "img/imgproduct/product.png"}
+                                            src={item.hinh_anh_dai_dien ? `/img/imgproduct/${item.hinh_anh_dai_dien}` : "img/imgproduct/product.png"}
                                             alt={item.ten_san_pham}
                                             className="img-fluid"
+                                            style={{
+                                                height: "135px",    
+                                                objectFit: "cover",   
+                                            }}
                                         />
                                         <div className="d-flex justify-content-between align-items-start mt-2">
                                             <h6 className="mb-1">{item.ten_san_pham}</h6>

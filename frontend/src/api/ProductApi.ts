@@ -12,10 +12,22 @@ export interface ProductItem {
 }
 
 // Hàm gọi API lấy danh sách sản phẩm
-export const fetchProducts = async (): Promise<ProductItem[]> => {
-    const response = await fetch("http://localhost:3001/products");
+// export const fetchProducts = async (): Promise<ProductItem[]> => {
+//     const response = await fetch("http://localhost:3001/products");
+//     if (!response.ok) {
+//         throw new Error("Lỗi khi tải sản phẩm từ API");
+//     }
+//     return await response.json();
+// };
+export async function fetchProducts(categoryId?: number): Promise<ProductItem[]> {
+    const url = categoryId
+        ? `http://localhost:3001/products?categoryId=${categoryId}`
+        : `http://localhost:3001/products`;
+
+    const response = await fetch(url);
     if (!response.ok) {
-        throw new Error("Lỗi khi tải sản phẩm từ API");
+        throw new Error("Không thể tải sản phẩm");
     }
     return await response.json();
-};
+}
+

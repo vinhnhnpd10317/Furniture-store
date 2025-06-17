@@ -1,115 +1,114 @@
-import { useState, useEffect } from "react";
-
-interface Category {
-    id: number;
-    ten_danh_muc: string;
-}
-
-interface Product {
-    id: number;
-    ten_san_pham: string;
-    vat_lieu: string;
-    chat_lieu: string;
-    mo_ta: string;
-    gia: number;
-    danh_muc_id: number;
-    hinh_anh_dai_dien: string;
-    ngay_tao: string;
-}
+import { useRef, useState, useEffect } from "react";
+import { fetchProducts, type ProductItem } from "../../api/ProductApi";
+import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
 
 export default function Products() {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState<CategoryItem[]>([]);
+    const [products, setProducts] = useState<ProductItem[]>([]);
 
     const [tenSanPham, setTenSanPham] = useState("");
     const [vatLieu, setVatLieu] = useState("");
     const [chatLieu, setChatLieu] = useState("");
     const [moTa, setMoTa] = useState("");
     const [gia, setGia] = useState<number>(0);
-    const [danhMucId, setDanhMucId] = useState<number | null>(null);
-    const [hinhAnhDaiDien, setHinhAnhDaiDien] = useState("");
+    const [danhMucId, setDanhMucId] = useState<string | null>(null);
+    const [hinhAnhDaiDienFile, setHinhAnhDaiDienFile] = useState<File | null>(null);
     const [editingId, setEditingId] = useState<number | null>(null);
+    const hinhAnhRef = useRef<HTMLInputElement | null>(null);
+    const dsHinhAnhRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
-        // Giả lập load danh mục
-        setCategories([
-            { id: 1, ten_danh_muc: "Túi xách" },
-            { id: 2, ten_danh_muc: "Đồng hồ" }
-        ]);
+        fetchCategories()
+            .then((data) => setCategories(data))
+            .catch((err) => console.error("Lỗi khi tải danh mục:", err));
+
+        fetchProducts()
+            .then((data) => setProducts(data))
+            .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!danhMucId) {
             alert("Vui lòng chọn danh mục!");
             return;
         }
 
-        if (editingId !== null) {
-            // Update
-            setProducts(products.map((p) =>
-                p.id === editingId
-                    ? {
-                        ...p,
-                        ten_san_pham: tenSanPham,
-                        vat_lieu: vatLieu,
-                        chat_lieu: chatLieu,
-                        mo_ta: moTa,
-                        gia,
-                        danh_muc_id: danhMucId,
-                        hinh_anh_dai_dien: hinhAnhDaiDien
-                    }
-                    : p
-            ));
+        const formData = new FormData();
+        formData.append("ten_san_pham", tenSanPham);
+        formData.append("vat_lieu", vatLieu);
+        formData.append("chat_lieu", chatLieu);
+        formData.append("mo_ta", moTa);
+        formData.append("gia", gia.toString());
+        formData.append("danh_muc_id", danhMucId);
+
+        if (hinhAnhDaiDienFile) {
+            formData.append("hinh_anh_dai_dien", hinhAnhDaiDienFile);
+        }
+
+        // Thêm danh sách hình ảnh
+        dsHinhAnhFiles.forEach((file) => {
+            formData.append("ds_hinh_anh", file);
+        });
+
+        try {
+            if (editingId !== null) {
+                console.log("Cập nhật sản phẩm:", formData);
+            } else {
+                const response = await fetch("http://localhost:3001/products", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!response.ok) throw new Error("Lỗi khi thêm sản phẩm");
+
+                const newProduct = await response.json();
+                setProducts([...products, newProduct]);
+            }
+
+            // Reset form
+            setTenSanPham("");
+            setVatLieu("");
+            setChatLieu("");
+            setMoTa("");
+            setGia(0);
+            setDanhMucId(null);
+            setHinhAnhDaiDienFile(null);
+            setDsHinhAnhFiles([]);
             setEditingId(null);
-        } else {
-            // Add
-            const newProduct: Product = {
-                id: products.length > 0 ? products[products.length - 1].id + 1 : 1,
-                ten_san_pham: tenSanPham,
-                vat_lieu: vatLieu,
-                chat_lieu: chatLieu,
-                mo_ta: moTa,
-                gia,
-                danh_muc_id: danhMucId,
-                hinh_anh_dai_dien: hinhAnhDaiDien,
-                ngay_tao: new Date().toISOString()
-            };
-            setProducts([...products, newProduct]);
-        }
 
-        // Reset form
-        setTenSanPham("");
-        setVatLieu("");
-        setChatLieu("");
-        setMoTa("");
-        setGia(0);
-        setDanhMucId(null);
-        setHinhAnhDaiDien("");
-    };
+            // Reset ô input file bằng ref
+            if (hinhAnhRef.current) hinhAnhRef.current.value = "";
+            if (dsHinhAnhRef.current) dsHinhAnhRef.current.value = "";
 
-    const handleEdit = (p: Product) => {
-        setEditingId(p.id);
-        setTenSanPham(p.ten_san_pham);
-        setVatLieu(p.vat_lieu);
-        setChatLieu(p.chat_lieu);
-        setMoTa(p.mo_ta);
-        setGia(p.gia);
-        setDanhMucId(p.danh_muc_id);
-        setHinhAnhDaiDien(p.hinh_anh_dai_dien);
-    };
-
-    const handleDelete = (id: number) => {
-        if (window.confirm("Bạn có chắc muốn xoá sản phẩm này?")) {
-            setProducts(products.filter((p) => p.id !== id));
+            alert("Thêm sản phẩm thành công!");
+        } catch (error) {
+            console.error("Lỗi:", error);
+            alert("Đã có lỗi xảy ra khi thêm sản phẩm");
         }
     };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setHinhAnhDaiDienFile(e.target.files[0]);
+        }
+    };
+
+    const [dsHinhAnhFiles, setDsHinhAnhFiles] = useState<File[]>([]);
+
+    const handleMultiFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setDsHinhAnhFiles(Array.from(e.target.files));
+        }
+    };
+
 
     return (
         <div className="container mt-4">
             <h4>Quản lý sản phẩm</h4>
             <form onSubmit={handleSubmit} className="p-3 border rounded bg-light mb-4">
                 <h5>{editingId !== null ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}</h5>
+
                 <div className="mb-3">
                     <label className="form-label">Tên sản phẩm</label>
                     <input
@@ -120,6 +119,7 @@ export default function Products() {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label">Vật liệu</label>
                     <input
@@ -129,6 +129,7 @@ export default function Products() {
                         onChange={(e) => setVatLieu(e.target.value)}
                     />
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label">Chất liệu</label>
                     <input
@@ -138,6 +139,7 @@ export default function Products() {
                         onChange={(e) => setChatLieu(e.target.value)}
                     />
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label">Mô tả</label>
                     <textarea
@@ -146,6 +148,7 @@ export default function Products() {
                         onChange={(e) => setMoTa(e.target.value)}
                     ></textarea>
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label">Giá</label>
                     <input
@@ -156,34 +159,49 @@ export default function Products() {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label">Danh mục</label>
                     <select
                         className="form-select"
                         value={danhMucId ?? ""}
-                        onChange={(e) => setDanhMucId(Number(e.target.value))}
+                        onChange={(e) => setDanhMucId(e.target.value)}
                         required
                     >
                         <option value="">-- Chọn danh mục --</option>
                         {categories.map((cat) => (
-                            <option key={cat.id} value={cat.id}>
+                            <option key={cat.id} value={cat.id.toString()}>
                                 {cat.ten_danh_muc}
                             </option>
                         ))}
                     </select>
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label">Hình ảnh đại diện</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={hinhAnhDaiDien}
-                        onChange={(e) => setHinhAnhDaiDien(e.target.value)}
+                    <input 
+                        type="file" 
+                        className="form-control" 
+                        onChange={handleFileChange} 
+                        ref={hinhAnhRef}
                     />
                 </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Danh sách hình ảnh (chọn nhiều)</label>
+                    <input
+                        type="file"
+                        className="form-control"
+                        multiple
+                        onChange={handleMultiFileChange}
+                        ref={dsHinhAnhRef}
+                    />
+                </div>
+
                 <button type="submit" className="btn btn-success">
                     {editingId !== null ? "Cập nhật" : "Thêm sản phẩm"}
                 </button>
+
                 {editingId !== null && (
                     <button
                         type="button"
@@ -196,61 +214,13 @@ export default function Products() {
                             setMoTa("");
                             setGia(0);
                             setDanhMucId(null);
-                            setHinhAnhDaiDien("");
+                            setHinhAnhDaiDienFile(null);
                         }}
                     >
                         Hủy
                     </button>
                 )}
             </form>
-
-            <table className="table table-bordered">
-                <thead className="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Giá</th>
-                        <th>Danh mục</th>
-                        <th>Ngày tạo</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map((p) => (
-                        <tr key={p.id}>
-                            <td>{p.id}</td>
-                            <td>{p.ten_san_pham}</td>
-                            <td>{p.gia.toLocaleString()}</td>
-                            <td>
-                                {categories.find((cat) => cat.id === p.danh_muc_id)?.ten_danh_muc ||
-                                    "Không xác định"}
-                            </td>
-                            <td>{new Date(p.ngay_tao).toLocaleString()}</td>
-                            <td>
-                                <button
-                                    className="btn btn-sm btn-warning me-2"
-                                    onClick={() => handleEdit(p)}
-                                >
-                                    Sửa
-                                </button>
-                                <button
-                                    className="btn btn-sm btn-danger"
-                                    onClick={() => handleDelete(p.id)}
-                                >
-                                    Xóa
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                    {products.length === 0 && (
-                        <tr>
-                            <td colSpan={6} className="text-center">
-                                Chưa có sản phẩm nào.
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
         </div>
     );
 }
