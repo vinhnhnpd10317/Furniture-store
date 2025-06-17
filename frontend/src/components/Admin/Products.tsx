@@ -162,16 +162,16 @@ export default function Products() {
 
                 <div className="mb-3">
                     <label className="form-label">Danh mục</label>
-                    <select
+                   <select
                         className="form-select"
                         value={danhMucId ?? ""}
                         onChange={(e) => setDanhMucId(e.target.value)}
                         required
-                    >
+                        >
                         <option value="">-- Chọn danh mục --</option>
                         {categories.map((cat) => (
                             <option key={cat.id} value={cat.id.toString()}>
-                                {cat.ten_danh_muc}
+                            {cat.ten_danh_muc}
                             </option>
                         ))}
                     </select>

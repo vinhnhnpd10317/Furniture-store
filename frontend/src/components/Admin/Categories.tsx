@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Category {
   id: number;
@@ -13,26 +13,48 @@ export default function Categories() {
   const [moTa, setMoTa] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Load danh mục từ MySQL khi mở trang
+  useEffect(() => {
+    fetch("http://localhost:3001/categorys")
+      .then((res) => res.json())
+      .then(setCategories)
+      .catch((err) => console.error("Lỗi khi tải danh mục:", err));
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingId !== null) {
-      // Cập nhật danh mục
-      setCategories(categories.map(cat =>
-        cat.id === editingId ? { ...cat, ten_danh_muc: tenDanhMuc, mo_ta: moTa } : cat
-      ));
+    const categoryData = { ten_danh_muc: tenDanhMuc, mo_ta: moTa };
+
+    try {
+      if (editingId !== null) {
+        // Cập nhật danh mục
+        await fetch(`http://localhost:3001/categorys/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(categoryData),
+        });
+      } else {
+        // Thêm danh mục mới
+        await fetch("http://localhost:3001/categorys", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(categoryData),
+        });
+      }
+
+      // Sau khi thêm hoặc cập nhật → load lại từ MySQL
+      const res = await fetch("http://localhost:3001/categorys");
+      const data = await res.json();
+      setCategories(data);
+
+      // Reset form
+      setTenDanhMuc("");
+      setMoTa("");
       setEditingId(null);
-    } else {
-      // Thêm danh mục mới
-      const newCategory: Category = {
-        id: categories.length > 0 ? categories[categories.length - 1].id + 1 : 1,
-        ten_danh_muc: tenDanhMuc,
-        mo_ta: moTa,
-        ngay_tao: new Date().toISOString()
-      };
-      setCategories([...categories, newCategory]);
+    } catch (err) {
+      alert("❌ Lỗi khi thêm/cập nhật danh mục");
+      console.error(err);
     }
-    setTenDanhMuc("");
-    setMoTa("");
   };
 
   const handleEdit = (cat: Category) => {
@@ -41,9 +63,19 @@ export default function Categories() {
     setEditingId(cat.id);
   };
 
-  const handleDelete = (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xoá danh mục này không?")) {
-      setCategories(categories.filter(cat => cat.id !== id));
+  const handleDelete = async (id: number) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xoá danh mục này không?")) return;
+
+    try {
+      await fetch(`http://localhost:3001/categorys/${id}`, { method: "DELETE" });
+
+      // Cập nhật lại danh sách
+      const res = await fetch("http://localhost:3001/categorys");
+      const data = await res.json();
+      setCategories(data);
+    } catch (err) {
+      alert("❌ Lỗi khi xoá danh mục");
+      console.error(err);
     }
   };
 

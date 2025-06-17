@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import ProductRoutes from './Routes/Product.js';
 import CategorytRoutes from './Routes/Category.js';
+// import CategoryRoutes from './Routes/category.js'; 
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -25,6 +26,7 @@ const upload = multer({ storage: storage });
 
 app.use(cors());
 app.use(express.json());
+app.use('/categorys', CategorytRoutes);
 
 // Sử dụng middleware upload cho route /products
 // Cập nhật middleware cho nhiều ảnh
