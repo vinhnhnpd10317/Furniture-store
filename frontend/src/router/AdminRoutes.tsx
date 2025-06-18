@@ -5,6 +5,7 @@ import HeaderAdmin from "../components/HeaderAdmin";
 import Categories from "../components/Admin/Categories";
 import Products from "../components/Admin/Products";
 import Customer from "../components/Admin/Customer";
+import AdminArticle from "../components/Admin/Article";
 
 export default function AdminRoutes() {
   return (
@@ -16,6 +17,7 @@ export default function AdminRoutes() {
           <Route path="categories" element={<Categories/>}/>
           <Route path="products" element={<Products/>}/>
           <Route path="customer" element={<Customer/>}/>
+          <Route path="article" element={<AdminArticle/>}/>
         </Routes>
       </AdminLayout>
     </>

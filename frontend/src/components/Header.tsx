@@ -85,6 +85,9 @@ const Header = () => {
               <li className="nav-item px-2">
                 <Link className="nav-link text-dark fw-semibold" to="/contact">LIÊN HỆ</Link>
               </li>
+              <li className="nav-item px-2">
+                <Link className="nav-link text-dark fw-semibold" to="/article">BÀI VIẾT</Link>
+              </li>
             </ul>
 
             {/* Search (desktop only) */}
