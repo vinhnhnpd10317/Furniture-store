@@ -17,7 +17,7 @@ const Header = () => {
           </span>
           <span className="text-muted">Giới thiệu</span>
           <span className="text-muted">Khuyến mãi</span>
-          <span className="text-danger fw-bold">Giảm giá đặc biệt</span>
+          <span className="text-danger fw-bold">Giảm giá đặc biệt ưu đãi</span>
         </div>
 
         {/* Desktop Icons */}
@@ -74,7 +74,7 @@ const Header = () => {
                 <Link className="nav-link text-dark fw-semibold" to="#">PHÒNG</Link>
               </li>
               <li className="nav-item px-2">
-                <Link className="nav-link text-dark fw-semibold" to="/aboutpage">BỘ SƯU TẬP</Link>
+                <Link className="nav-link text-dark fw-semibold" to="/aboutpage">GIỚI THIỆU</Link>
               </li>
               <li className="nav-item px-2">
                 <Link className="nav-link text-dark fw-semibold" to="#">THIẾT KẾ NỘI THẤT</Link>
