@@ -1,0 +1,209 @@
+/* ==== RESET & BASE ==== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fa;
+  overflow-x: hidden;
+}
+
+/* ==== SECTION PADDING ==== */
+.intro-section,
+.team-section,
+.gallery-section,
+.service-section,
+.style-section,
+.ti-phan-nhom {
+  padding: 60px 0;
+}
+
+/* ==== SECTION TITLES ==== */
+.section-title,
+.ti-tieu-de-nhom {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #343a40;
+}
+
+/* ==== INTRO TEXT ==== */
+.intro-text,
+.ti-intro-van-ban,
+.ti-mo-ta-nhom {
+  font-size: 18px;
+  color: #444;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 95%;
+  margin: 0 auto 40px;
+  padding: 0 16px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* ==== IMAGE BLOCK ==== */
+.image-block img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* ==== GALLERY ==== */
+.gallery img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+.gallery img:hover {
+  transform: scale(1.03);
+}
+
+/* Responsive Gallery */
+@media (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==== TEAM SECTION ==== */
+.team-card,
+.ti-the-nhom {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.8s ease-in-out;
+}
+
+.team-card:hover,
+.ti-the-nhom:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+}
+
+/* ==== AVATAR ==== */
+.member-avatar,
+.ti-anh-dai-dien,
+.team-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+.ti-anh-dai-dien {
+  width: 140px;
+  height: 140px;
+  border: 4px solid #dee2e6;
+}
+
+.team-card:hover .member-avatar,
+.ti-anh-dai-dien:hover {
+  transform: scale(1.08);
+}
+
+/* ==== TEAM CONTENT ==== */
+.ti-ten-thanh-vien {
+  font-size: 24px;
+  font-weight: 600;
+  color: #212529;
+}
+
+.ti-vai-tro-thanh-vien {
+  color: #6c757d;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.ti-mo-ta-thanh-vien {
+  font-size: 16px;
+  color: #495057;
+  min-height: 80px;
+}
+
+/* ==== SOCIAL ICONS ==== */
+.social-icons,
+.ti-bieu-tuong-mang-xa-hoi {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  font-size: 20px;
+}
+
+.social-icons a {
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #007bff;
+}
+
+/* ==== BUTTON ==== */
+.btn-outline-secondary,
+.ti-nut-lien-he {
+  display: inline-block;
+  background-color: #e9ecef;
+  color: #212529;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-outline-secondary:hover,
+.ti-nut-lien-he:hover {
+  background-color: #d6d8db;
+  color: #000;
+}
+
+/* ==== ANIMATIONS ==== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+.banner-wrapper {
+  background-color: #f8f9fa;
+}
+
+.banner-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  object-fit: cover;
+  max-height: 400px; /* giữ tỉ lệ banner ngang chuẩn */
+}
