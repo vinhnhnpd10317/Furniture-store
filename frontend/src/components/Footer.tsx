@@ -44,7 +44,7 @@ export default function Footer() {
                     <div className="col-12 col-md-3">
                         <h5 className="fw-bold mb-3">G7 PRIME - NỘI THẤT</h5>
                         <ul className="list-unstyled">
-                            <li><a href="#" className="text-light text-decoration-none">Giới Thiệu</a></li>
+                            <li><a href="AboutPage" className="text-light text-decoration-none">Giới Thiệu</a></li>
                             <li><a href="#" className="text-light text-decoration-none">Chuyện Nhà G7 PRIME</a></li>
                             <li><a href="#" className="text-light text-decoration-none">Tuyển Dụng</a></li>
                             <li><a href="#" className="text-light text-decoration-none">Thẻ Hội Viên</a></li>
