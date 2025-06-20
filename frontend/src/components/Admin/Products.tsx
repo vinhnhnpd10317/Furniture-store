@@ -1,226 +1,107 @@
-import { useRef, useState, useEffect } from "react";
-import { fetchProducts, type ProductItem } from "../../api/ProductApi";
-import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
+import ProductActions from "./Product/ProductActions";
+import type { ProductItem } from "../../api/ProductApi";
+import type { CategoryItem } from "../../api/CategoryApi";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Products() {
-    const [categories, setCategories] = useState<CategoryItem[]>([]);
     const [products, setProducts] = useState<ProductItem[]>([]);
-
-    const [tenSanPham, setTenSanPham] = useState("");
-    const [vatLieu, setVatLieu] = useState("");
-    const [chatLieu, setChatLieu] = useState("");
-    const [moTa, setMoTa] = useState("");
-    const [gia, setGia] = useState<number>(0);
-    const [danhMucId, setDanhMucId] = useState<string | null>(null);
-    const [hinhAnhDaiDienFile, setHinhAnhDaiDienFile] = useState<File | null>(null);
-    const [editingId, setEditingId] = useState<number | null>(null);
-    const hinhAnhRef = useRef<HTMLInputElement | null>(null);
-    const dsHinhAnhRef = useRef<HTMLInputElement | null>(null);
+    const [categories, setCategories] = useState<CategoryItem[]>([]);
 
     useEffect(() => {
-        fetchCategories()
-            .then((data) => setCategories(data))
-            .catch((err) => console.error("Lỗi khi tải danh mục:", err));
+        fetch("http://localhost:3001/products")
+            .then((res) => res.json())
+            .then(setProducts);
 
-        fetchProducts()
-            .then((data) => setProducts(data))
-            .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
+        fetch("http://localhost:3001/categorys")
+            .then((res) => res.json())
+            .then(setCategories);
     }, []);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!danhMucId) {
-            alert("Vui lòng chọn danh mục!");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("ten_san_pham", tenSanPham);
-        formData.append("vat_lieu", vatLieu);
-        formData.append("chat_lieu", chatLieu);
-        formData.append("mo_ta", moTa);
-        formData.append("gia", gia.toString());
-        formData.append("danh_muc_id", danhMucId);
-
-        if (hinhAnhDaiDienFile) {
-            formData.append("hinh_anh_dai_dien", hinhAnhDaiDienFile);
-        }
-
-        // Thêm danh sách hình ảnh
-        dsHinhAnhFiles.forEach((file) => {
-            formData.append("ds_hinh_anh", file);
-        });
-
-        try {
-            if (editingId !== null) {
-                console.log("Cập nhật sản phẩm:", formData);
-            } else {
-                const response = await fetch("http://localhost:3001/products", {
-                    method: "POST",
-                    body: formData,
-                });
-
-                if (!response.ok) throw new Error("Lỗi khi thêm sản phẩm");
-
-                const newProduct = await response.json();
-                setProducts([...products, newProduct]);
-            }
-
-            // Reset form
-            setTenSanPham("");
-            setVatLieu("");
-            setChatLieu("");
-            setMoTa("");
-            setGia(0);
-            setDanhMucId(null);
-            setHinhAnhDaiDienFile(null);
-            setDsHinhAnhFiles([]);
-            setEditingId(null);
-
-            // Reset ô input file bằng ref
-            if (hinhAnhRef.current) hinhAnhRef.current.value = "";
-            if (dsHinhAnhRef.current) dsHinhAnhRef.current.value = "";
-
-            alert("Thêm sản phẩm thành công!");
-        } catch (error) {
-            console.error("Lỗi:", error);
-            alert("Đã có lỗi xảy ra khi thêm sản phẩm");
-        }
+    const handleDeleted = (id: number) => {
+        setProducts(products.filter((p) => p.id !== id));
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setHinhAnhDaiDienFile(e.target.files[0]);
-        }
+    const getTenDanhMuc = (id: number) => {
+        const cat = categories.find((c) => c.id === id);
+        return cat ? cat.ten_danh_muc : "Không rõ";
     };
-
-    const [dsHinhAnhFiles, setDsHinhAnhFiles] = useState<File[]>([]);
-
-    const handleMultiFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setDsHinhAnhFiles(Array.from(e.target.files));
-        }
-    };
-
 
     return (
-        <div className="container mt-4">
-            <h4>Quản lý sản phẩm</h4>
-            <form onSubmit={handleSubmit} className="p-3 border rounded bg-light mb-4">
-                <h5>{editingId !== null ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}</h5>
+        <div className="container py-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2 className="fw-bold">📦 Quản lý sản phẩm</h2>
+                <Link to="addproduct" className="btn btn-success">
+                    ➕ Thêm sản phẩm
+                </Link>
+            </div>
 
-                <div className="mb-3">
-                    <label className="form-label">Tên sản phẩm</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={tenSanPham}
-                        onChange={(e) => setTenSanPham(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label">Vật liệu</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={vatLieu}
-                        onChange={(e) => setVatLieu(e.target.value)}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label">Chất liệu</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={chatLieu}
-                        onChange={(e) => setChatLieu(e.target.value)}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label">Mô tả</label>
-                    <textarea
-                        className="form-control"
-                        value={moTa}
-                        onChange={(e) => setMoTa(e.target.value)}
-                    ></textarea>
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label">Giá</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        value={gia}
-                        onChange={(e) => setGia(parseFloat(e.target.value))}
-                        required
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label">Danh mục</label>
-                    <select
-                        className="form-select"
-                        value={danhMucId ?? ""}
-                        onChange={(e) => setDanhMucId(e.target.value)}
-                        required
-                    >
-                        <option value="">-- Chọn danh mục --</option>
-                        {categories.map((cat) => (
-                            <option key={cat.id} value={cat.id.toString()}>
-                                {cat.ten_danh_muc}
-                            </option>
+            <div className="table-responsive shadow rounded bg-white">
+                <table className="table table-bordered table-hover align-middle text-center">
+                    <thead className="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Vật liệu</th>
+                            <th>Chất liệu</th>
+                            <th style={{ width: "180px" }}>Mô tả</th>
+                            <th>Giá</th>
+                            <th>Danh mục</th>
+                            <th>Ảnh đại diện</th>
+                            <th>DS Hình ảnh</th>
+                            <th>Ngày tạo</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {products.map((p) => (
+                            <tr key={p.id}>
+                                <td>{p.id}</td>
+                                <td className="text-start">{p.ten_san_pham}</td>
+                                <td>{p.vat_lieu}</td>
+                                <td>{p.chat_lieu}</td>
+                                <td className="text-start small" style={{ wordBreak: "break-word", maxWidth: "200px", whiteSpace: "pre-wrap" }}>
+                                    {p.mo_ta}
+                                </td>
+                                <td className="text-danger fw-bold">{p.gia.toLocaleString()} đ</td>
+                                <td>
+                                    <span className="badge bg-primary">
+                                        {getTenDanhMuc(Number(p.danh_muc_id))}
+                                    </span>
+                                </td>
+                                <td>
+                                    <img
+                                        src={`/img/imgproduct/${p.hinh_anh_dai_dien}`}
+                                        alt="ảnh đại diện"
+                                        width={50}
+                                        className="rounded border"
+                                    />
+                                </td>
+                                <td>
+                                    <div className="d-flex flex-wrap justify-content-center gap-1">
+                                        {p.ds_hinh_anh?.split(";").map((img, i) => (
+                                            <img
+                                                key={i}
+                                                src={`/img/imgproduct/${img}`}
+                                                width={30}
+                                                className="rounded border"
+                                                alt={`img-${i}`}
+                                            />
+                                        ))}
+                                    </div>
+                                </td>
+                                <td>{new Date(p.ngay_tao).toLocaleString()}</td>
+                                <td>
+                                    <ProductActions
+                                        product={p}
+                                        onDeleteSuccess={() => handleDeleted(p.id)}
+                                    />
+                                </td>
+                            </tr>
                         ))}
-                    </select>
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label">Hình ảnh đại diện</label>
-                    <input 
-                        type="file" 
-                        className="form-control" 
-                        onChange={handleFileChange} 
-                        ref={hinhAnhRef}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label">Danh sách hình ảnh (chọn nhiều)</label>
-                    <input
-                        type="file"
-                        className="form-control"
-                        multiple
-                        onChange={handleMultiFileChange}
-                        ref={dsHinhAnhRef}
-                    />
-                </div>
-
-                <button type="submit" className="btn btn-success">
-                    {editingId !== null ? "Cập nhật" : "Thêm sản phẩm"}
-                </button>
-
-                {editingId !== null && (
-                    <button
-                        type="button"
-                        className="btn btn-secondary ms-2"
-                        onClick={() => {
-                            setEditingId(null);
-                            setTenSanPham("");
-                            setVatLieu("");
-                            setChatLieu("");
-                            setMoTa("");
-                            setGia(0);
-                            setDanhMucId(null);
-                            setHinhAnhDaiDienFile(null);
-                        }}
-                    >
-                        Hủy
-                    </button>
-                )}
-            </form>
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

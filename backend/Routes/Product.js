@@ -65,4 +65,79 @@ router.post('/', (req, res) => {
     });
 });
 
+// Lấy sản phẩm theo id
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+    db.query('SELECT * FROM san_pham WHERE id = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (results.length === 0) return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
+        res.json(results[0]);
+    });
+});
+
+// Cập nhật sản phẩm theo id
+router.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const { ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id } = req.body;
+
+    const hinh_anh_dai_dien = req.files?.['hinh_anh_dai_dien']?.[0]?.filename || null;
+
+    const ds_hinh_anh_arr = req.files?.['ds_hinh_anh'] || [];
+    const ds_hinh_anh = ds_hinh_anh_arr.map(file => file.filename).join(';');
+
+    // Câu truy vấn cập nhật
+    let query = `
+        UPDATE san_pham SET 
+        ten_san_pham = ?, 
+        vat_lieu = ?, 
+        chat_lieu = ?, 
+        mo_ta = ?, 
+        gia = ?, 
+        danh_muc_id = ?`;
+
+    const values = [ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id];
+
+    if (hinh_anh_dai_dien) {
+        query += `, hinh_anh_dai_dien = ?`;
+        values.push(hinh_anh_dai_dien);
+    }
+
+    if (ds_hinh_anh) {
+        query += `, ds_hinh_anh = ?`;
+        values.push(ds_hinh_anh);
+    }
+
+    query += ` WHERE id = ?`;
+    values.push(id);
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Lỗi khi cập nhật sản phẩm:', err);
+            return res.status(500).json({ error: err.message });
+        }
+
+        res.json({ message: 'Cập nhật sản phẩm thành công' });
+    });
+});
+
+// Xoá sản phẩm theo ID
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+
+    // Trước khi xoá, có thể kiểm tra sản phẩm tồn tại (tuỳ chọn)
+    db.query('DELETE FROM san_pham WHERE id = ?', [id], (err, result) => {
+        if (err) {
+            console.error("Lỗi khi xoá sản phẩm:", err);
+            return res.status(500).json({ error: "Lỗi server" });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
+        }
+
+        res.json({ message: "Xoá sản phẩm thành công" });
+    });
+});
+
+
 export default router;

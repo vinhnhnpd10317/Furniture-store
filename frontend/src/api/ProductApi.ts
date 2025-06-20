@@ -8,7 +8,7 @@ export interface ProductItem {
     danh_muc_id: string;
     hinh_anh_dai_dien: string;
     ds_hinh_anh?: string;
-    ngay_tao: number;
+    ngay_tao: string;
 }
 
 // Hàm gọi API lấy danh sách sản phẩm
@@ -31,3 +31,10 @@ export async function fetchProducts(categoryId?: number): Promise<ProductItem[]>
     return await response.json();
 }
 
+export async function fetchProductById(id: string): Promise<ProductItem> {
+    const response = await fetch(`http://localhost:3001/products/${id}`);
+    if (!response.ok) {
+        throw new Error("Không thể tải sản phẩm");
+    }
+    return await response.json();
+}
