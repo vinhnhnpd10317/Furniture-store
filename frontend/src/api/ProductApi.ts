@@ -21,4 +21,12 @@ export const fetchProducts = async (categoryId?: number): Promise<ProductItem[]>
         throw new Error("Không thể tải sản phẩm");
     }
     return await response.json();
-};
+}
+
+export async function fetchProductById(id: string): Promise<ProductItem> {
+    const response = await fetch(`http://localhost:3001/products/${id}`);
+    if (!response.ok) {
+        throw new Error("Không thể tải sản phẩm");
+    }
+    return await response.json();
+}
