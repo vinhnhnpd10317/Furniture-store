@@ -3,6 +3,7 @@
     import ProductRoutes from './Routes/Product.js';
     import CategorytRoutes from './Routes/Category.js';
     import ArticleRoutes from './Routes/Article.js';
+    import cartRoutes from './Routes/cart.js';
     import multer from 'multer';
     import path from 'path';
     import { fileURLToPath } from 'url';
@@ -28,6 +29,7 @@
     app.use(express.json());
     app.use('/categorys', CategorytRoutes);
     app.use('/articles', ArticleRoutes);
+    app.use('/cart', cartRoutes);
 
     // Sử dụng middleware upload cho route /products
     // Cập nhật middleware cho nhiều ảnh

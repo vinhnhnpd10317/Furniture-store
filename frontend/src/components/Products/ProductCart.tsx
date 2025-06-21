@@ -1,65 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import "../Css/Productcart.css";
-
-interface CartItem {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
-    material: string;
-    texture: string;
-    image: string;
-}
-
-const initialCartItems: CartItem[] = [
-    {
-        id: 1,
-        name: 'Armchair Mimi',
-        price: 3490000,
-        quantity: 1,
-        material: '4246',
-        texture: '4247',
-        image: 'https://nhaxinh.com/wp-content/uploads/2024/08/ban-nuoc-orientale-walnut-600x400.jpg',
-    },
-    {
-        id: 2,
-        name: 'Armchair Mimi',
-        price: 3490000,
-        quantity: 1,
-        material: '4246',
-        texture: '4247',
-        image: 'https://nhaxinh.com/wp-content/uploads/2024/08/ban-nuoc-orientale-walnut-600x400.jpg',
-    },
-    {
-        id: 3,
-        name: 'Armchair Mimi',
-        price: 3490000,
-        quantity: 1,
-        material: '4246',
-        texture: '4247',
-        image: 'https://nhaxinh.com/wp-content/uploads/2024/08/ban-nuoc-orientale-walnut-600x400.jpg',
-    },
-];
+import { useCart } from "../Products/CartContext";
 
 export default function ProductCart() {
-    const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
+    const { cartItems, updateQuantity, removeFromCart  } = useCart();
+
 
     const handleIncrease = (id: number) => {
-        setCartItems(prevItems =>
-            prevItems.map(item =>
-                item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-            )
-        );
+        const item = cartItems.find(i => i.id === id);
+        if (item) updateQuantity(id, item.quantity + 1);
+    };
+
+    const handleRemove = (id: number) => {
+    const updatedCart = cartItems.filter(item => item.id !== id);
+    removeFromCart(id);
+    alert("Sản phẩm đã được xoá khỏi giỏ hàng!");
+    // setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
     };
 
     const handleDecrease = (id: number) => {
-        setCartItems(prevItems =>
-            prevItems.map(item =>
-                item.id === id && item.quantity > 1
-                    ? { ...item, quantity: item.quantity - 1 }
-                    : item
-            )
-        );
+        const item = cartItems.find(i => i.id === id);
+        if (item && item.quantity > 1) {
+            updateQuantity(id, item.quantity - 1);
+        }
     };
 
     const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -84,8 +48,8 @@ export default function ProductCart() {
                             />
                             <div className="ms-md-3 mt-3 mt-md-0 flex-grow-1 text-center text-md-start">
                                 <h5 className="mb-1">{item.name}</h5>
-                                <p className="text-muted mb-1">pa_vat-lieu: {item.material}</p>
-                                <p className="text-muted mb-1">pa_chat-lieu: {item.texture}</p>
+                                <p className="text-muted mb-1">Mã vật liệu: {item.material}</p>
+                                <p className="text-muted mb-1">Chất liệu: {item.texture}</p>
                                 <p className="text-danger fw-bold mb-2">
                                     {(item.price * item.quantity).toLocaleString()}₫
                                 </p>
@@ -94,6 +58,13 @@ export default function ProductCart() {
                                 <button className="btn btn-outline-secondary" onClick={() => handleDecrease(item.id)}>-</button>
                                 <span>{item.quantity}</span>
                                 <button className="btn btn-outline-secondary" onClick={() => handleIncrease(item.id)}>+</button>
+                                <button
+                                        className="btn btn-danger btn-sm ms-2"
+                                        onClick={() => handleRemove(item.id)}
+                                        >
+                                        Xoá
+                                        </button>
+
                             </div>
                         </div>
                     ))}

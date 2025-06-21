@@ -3,7 +3,6 @@ import axios from 'axios';
 
 // ✅ Interface Article (dùng cho toàn bộ frontend)
 export interface Article {
-  tac_gia_id: ReactNode;
   id: number;
   tieu_de: string;
   noi_dung: string;
@@ -12,10 +11,11 @@ export interface Article {
 }
 
 // ✅ Form mẫu để tạo mới
-export const initialArticleForm: Omit<Article, 'id' | 'ngay_dang'> = {
+export const initialArticleForm: Omit<Article, 'id'> = {
   tieu_de: '',
   noi_dung: '',
   hinh_anh: '',
+  ngay_dang: '',
 };
 
 const API_URL = 'http://localhost:3001/articles';
@@ -27,7 +27,7 @@ export const getArticles = async (): Promise<Article[]> => {
 };
 
 export const createArticle = async (
-  data: Omit<Article, 'id' | 'ngay_dang'>
+  data: Omit<Article, 'id'> // giữ lại ngay_dang
 ): Promise<{ message: string; id: number }> => {
   const res = await axios.post(API_URL, data);
   return res.data;
@@ -35,7 +35,7 @@ export const createArticle = async (
 
 export const updateArticle = async (
   id: number,
-  data: Partial<Omit<Article, 'id' | 'ngay_dang'>>
+  data: Omit<Article, 'id'>
 ): Promise<{ message: string }> => {
   const res = await axios.put(`${API_URL}/${id}`, data);
   return res.data;

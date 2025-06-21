@@ -4,36 +4,29 @@ import { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
-
 function App() {
   useEffect(() => {
     function createInspirationSlider(container: Element) {
       const dots = container.querySelectorAll(".dot");
       const groups = container.querySelectorAll(".inspiration-group");
-
       let currentIndex = 0;
 
       dots.forEach(dot => {
         dot.addEventListener("click", () => {
-          const newIndex = parseInt(dot.getAttribute("data-index"));
+          const newIndex = parseInt(dot.getAttribute("data-index") || "0");
           if (newIndex === currentIndex) return;
 
           const currentGroup = groups[currentIndex];
           const nextGroup = groups[newIndex];
 
-          // Remove active from dots
           dots.forEach(d => d.classList.remove("active"));
           dot.classList.add("active");
 
-          // Reset animation states
           groups.forEach(g => {
             g.classList.remove("active", "slide-out-left", "slide-in-right", "show-from-right");
           });
 
-          // Animate current group out
           currentGroup.classList.add("slide-out-left");
-
-          // Prepare next group
           nextGroup.classList.add("slide-in-right");
 
           setTimeout(() => {
@@ -47,11 +40,39 @@ function App() {
       });
     }
 
-    // Gọi hàm cho mỗi section
     document.querySelectorAll(".inspiration-section").forEach(section => {
       createInspirationSlider(section);
     });
   }, []);
+
+  const handleAddToCart = (product: {
+    id: number;
+    name: string;
+    price: number;
+    image: string;
+    material: string;
+    texture: string;
+  }) => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const existingIndex = cart.findIndex((item: any) => item.id === product.id);
+
+    if (existingIndex !== -1) {
+      cart[existingIndex].quantity += 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+
+    if (user?.id) {
+      console.log("Người dùng đã đăng nhập, đang lưu vào DB...");
+      // TODO: Gọi API POST để lưu cart vào database tại đây
+    } else {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Đã thêm vào giỏ hàng!");
+    }
+  };
   return (
     <>
       <meta charSet="UTF-8" />
@@ -190,61 +211,41 @@ function App() {
           />
         </div>
       </div>
-      {/* PHẦN SẢN PHẨM MỚI */}
+      {/* Phần sản phẩm mới thêm 3 sản phẩm có id khác nhau để tránh trùng lặp */}
       <div className="product-container">
         <div className="product-header">
           <h3>SẢN PHẨM MỚI</h3>
           <a href="#">xem tất cả &gt;</a>
         </div>
         <div className="product-list">
-          <div className="product-card">
-            <img
-              src="https://nhaxinh.com/wp-content/uploads/2024/08/ban-nuoc-orientale-walnut-300x200.jpg"
-              alt="Sản phẩm 1"
-            />
-            <div className="product-name">Bàn nước Orientale walnut</div>
-            <div className="price">49,000,000đ</div>
-            <div className="hover-actions">
-              <button>THÊM VÀO GIỎ</button>
-              <button className="black">XEM THÊM</button>
+          {[1, 2, 3, 4].map((id) => (
+            <div className="product-card" key={id}>
+              <img
+                src="https://nhaxinh.com/wp-content/uploads/2024/08/ban-nuoc-orientale-walnut-300x200.jpg"
+                alt={`Sản phẩm ${id}`}
+              />
+              <div className="product-name">Bàn nước Orientale walnut {id}</div>
+              <div className="price">49,000,000đ</div>
+              <div className="hover-actions">
+                <button
+                  className="btn btn-outline-dark btn-sm"
+                  onClick={() =>
+                    handleAddToCart({
+                      id: id,
+                      name: `Bàn nước Orientale walnut ${id}`,
+                      price: 49000000,
+                      image: "https://nhaxinh.com/wp-content/uploads/2024/08/ban-nuoc-orientale-walnut-300x200.jpg",
+                      material: "Gỗ walnut",
+                      texture: "Bóng mờ",
+                    })
+                  }
+                >
+                  THÊM VÀO GIỎ
+                </button>
+                <button className="black">XEM THÊM</button>
+              </div>
             </div>
-          </div>
-          <div className="product-card">
-            <img
-              src="https://nhaxinh.com/wp-content/uploads/2025/05/300000000000117909_ARMCHAIR-SF044VF.I-VAI-SO-405-300x200.webp"
-              alt="Sản phẩm 1"
-            />
-            <div className="product-name">Armchair Dark 405-1</div>
-            <div className="price">17,900,000đ</div>
-            <div className="hover-actions">
-              <button>THÊM VÀO GIỎ</button>
-              <button className="black">XEM THÊM</button>
-            </div>
-          </div>
-          <div className="product-card">
-            <img
-              src="https://nhaxinh.com/wp-content/uploads/2024/07/sofa-2-cho-may-moi-mau-xanh-300x200.jpg"
-              alt="Sản phẩm 1"
-            />
-            <div className="product-name">Sofa 2 chỗ Mây mới</div>
-            <div className="price">21,900,000đ</div>
-            <div className="hover-actions">
-              <button>THÊM VÀO GIỎ</button>
-              <button className="black">XEM THÊM</button>
-            </div>
-          </div>
-          <div className="product-card">
-            <img
-              src="https://nhaxinh.com/wp-content/uploads/2024/07/armchair-may-moi-mau-xanh-300x200.jpg"
-              alt="Sản phẩm 1"
-            />
-            <div className="product-name">Armchair Mây mới</div>
-            <div className="price">14,500,000đ</div>
-            <div className="hover-actions">
-              <button>THÊM VÀO GIỎ</button>
-              <button className="black">XEM THÊM</button>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
       {/* Slider 1 */}
