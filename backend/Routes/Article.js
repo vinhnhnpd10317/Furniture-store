@@ -13,33 +13,27 @@ router.get('/', (req, res) => {
   });
 });
 
-// ➕ Thêm bài viết (đã loại bỏ tac_gia_id)
+// Thêm bài viết
 router.post('/', (req, res) => {
-  const { tieu_de, noi_dung, hinh_anh } = req.body;
-
-  console.log('📥 Dữ liệu nhận được:', req.body);
-
-  const sql = 'INSERT INTO bai_viet (tieu_de, noi_dung, hinh_anh) VALUES (?, ?, ?)';
-  db.query(sql, [tieu_de, noi_dung, hinh_anh], (err, result) => {
-    if (err) {
-      console.error('❌ Lỗi khi thêm bài viết:', err);
-      return res.status(500).json({ error: err });
-    }
+  const { tieu_de, noi_dung, hinh_anh, ngay_dang } = req.body;
+  const sql = 'INSERT INTO bai_viet (tieu_de, noi_dung, hinh_anh, ngay_dang) VALUES (?, ?, ?, ?)';
+  db.query(sql, [tieu_de, noi_dung, hinh_anh, ngay_dang], (err, result) => {
+    if (err) return res.status(500).json({ error: err });
     res.json({ message: 'Thêm bài viết thành công', id: result.insertId });
   });
 });
 
-// ✏️ Sửa bài viết
+// Sửa bài viết
 router.put('/:id', (req, res) => {
   const { id } = req.params;
-  const { tieu_de, noi_dung, hinh_anh } = req.body;
-
-  const sql = 'UPDATE bai_viet SET tieu_de=?, noi_dung=?, hinh_anh=? WHERE id=?';
-  db.query(sql, [tieu_de, noi_dung, hinh_anh, id], (err, result) => {
+  const { tieu_de, noi_dung, hinh_anh, ngay_dang } = req.body;
+  const sql = 'UPDATE bai_viet SET tieu_de=?, noi_dung=?, hinh_anh=?, ngay_dang=? WHERE id=?';
+  db.query(sql, [tieu_de, noi_dung, hinh_anh, ngay_dang, id], (err, result) => {
     if (err) return res.status(500).json({ error: err });
     res.json({ message: 'Cập nhật bài viết thành công' });
   });
 });
+
 
 // ❌ Xoá bài viết
 router.delete('/:id', (req, res) => {

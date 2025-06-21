@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Css/Product.css";
+import { useCart } from "../Products/CartContext";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -15,6 +16,24 @@ export default function Product() {
     const [categories, setCategories] = useState<CategoryItem[]>([]);
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
     const [likedList, setLikedList] = useState<boolean[]>([]);
+    const { addToCart } = useCart();
+
+
+      const handleAddToCart = (item: ProductItem) => {
+        addToCart({
+            id: item.id,
+            name: item.ten_san_pham,
+            price: Number(item.gia),
+            quantity: 1,
+            image: item.hinh_anh_dai_dien
+            ? `/img/imgproduct/${item.hinh_anh_dai_dien}`
+            : "/img/imgproduct/default.jpg",
+            material: item.vat_lieu || 'N/A',
+            texture: item.chat_lieu || 'N/A',
+        });
+        alert("Đã thêm vào giỏ hàng!");
+    };
+
 
     useEffect(() => {
         fetchProducts()
@@ -241,7 +260,7 @@ export default function Product() {
                                             </div>
                                         </div>
                                         <div className="btn-group d-flex justify-content-center mt-3 product-btn-group">
-                                            <button className="btn btn-outline-dark btn-sm">THÊM VÀO GIỎ</button>
+                                            <button className="btn btn-outline-dark btn-sm" onClick={() => handleAddToCart(item)}>THÊM VÀO GIỎ</button>
                                             <button className="btn btn-dark btn-sm">XEM THÊM</button>
                                         </div>
                                     </div>

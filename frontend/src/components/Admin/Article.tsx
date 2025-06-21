@@ -29,11 +29,21 @@ const AdminArticle = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const formattedDate = new Date(formData.ngay_dang)
+        .toISOString()
+        .slice(0, 19)
+        .replace('T', ' ');
+
+      const payload = { ...formData, ngay_dang: formattedDate };
+
       if (editingId !== null) {
-        await updateArticle(editingId, formData);
+        await updateArticle(editingId, payload);
+         alert('✅ Cập nhật bài viết thành công!');
       } else {
-        await createArticle(formData);
+        await createArticle(payload);
+         alert('✅ Thêm bài viết thành công!');
       }
+
       setFormData(initialArticleForm);
       setEditingId(null);
       loadArticles();
@@ -44,13 +54,17 @@ const AdminArticle = () => {
   };
 
   const handleEdit = (article: Article) => {
-    setEditingId(article.id);
-    setFormData({
-      tieu_de: article.tieu_de,
-      noi_dung: article.noi_dung,
-      hinh_anh: article.hinh_anh,
-    });
-  };
+        setEditingId(article.id);
+        setFormData({
+          tieu_de: article.tieu_de,
+          noi_dung: article.noi_dung,
+          hinh_anh: article.hinh_anh,
+          ngay_dang: article.ngay_dang
+            ? new Date(article.ngay_dang).toISOString().slice(0, 16)
+            : '',
+        });
+      };
+
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Bạn có chắc muốn xoá bài viết này?')) {
@@ -91,6 +105,16 @@ const AdminArticle = () => {
           value={formData.hinh_anh}
           onChange={handleChange}
         />
+        <input
+          type="datetime-local"
+          name="ngay_dang"
+          placeholder="Ngày đăng"
+          className="form-control mb-2"
+          value={formData.ngay_dang}
+          onChange={handleChange}
+          required
+        />
+
         <button type="submit" className="btn btn-primary me-2">
           {editingId !== null ? 'Cập nhật' : 'Thêm'}
         </button>
