@@ -4,6 +4,7 @@
     import CategorytRoutes from './Routes/Category.js';
     import ArticleRoutes from './Routes/Article.js';
     import cartRoutes from './Routes/cart.js';
+    import CustomerRoutes from './Routes/Customer.js';
     import multer from 'multer';
     import path from 'path';
     import { fileURLToPath } from 'url';
@@ -30,6 +31,7 @@
     app.use('/categorys', CategorytRoutes);
     app.use('/articles', ArticleRoutes);
     app.use('/cart', cartRoutes);
+    app.use('/customer', CustomerRoutes);
 
     // Sử dụng middleware upload cho route /products
     // Cập nhật middleware cho nhiều ảnh

@@ -1,155 +1,198 @@
-import { useState } from "react";
+import { useEffect, useState } from 'react';
+import {
+  getCustomer,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
+  type Customer,
+  initialCustomerForm
+} from '../../api/Customer';
 
-interface User {
-  id: number;
-  ho_ten: string;
-  email: string;
-  mat_khau: string;
-  so_dien_thoai: string;
-  dia_chi: string;
-  vai_tro: "khach_hang" | "quan_tri";
-  ngay_tao: string;
-}
-
-export default function Customer() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [hoTen, setHoTen] = useState("");
-  const [email, setEmail] = useState("");
-  const [matKhau, setMatKhau] = useState("");
-  const [soDienThoai, setSoDienThoai] = useState("");
-  const [diaChi, setDiaChi] = useState("");
-  const [vaiTro, setVaiTro] = useState<"khach_hang" | "quan_tri">("khach_hang");
+export default function CustomerPage() {
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [form, setForm] = useState(initialCustomerForm);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
 
-    if (editingId !== null) {
-      setUsers(users.map((u) =>
-        u.id === editingId
-          ? { ...u, ho_ten: hoTen, email, mat_khau: matKhau, so_dien_thoai: soDienThoai, dia_chi: diaChi, vai_tro: vaiTro }
-          : u
-      ));
-      setEditingId(null);
-    } else {
-      const newUser: User = {
-        id: users.length > 0 ? users[users.length - 1].id + 1 : 1,
-        ho_ten: hoTen,
-        email,
-        mat_khau: matKhau,
-        so_dien_thoai: soDienThoai,
-        dia_chi: diaChi,
-        vai_tro: vaiTro,
-        ngay_tao: new Date().toISOString()
-      };
-      setUsers([...users, newUser]);
-    }
-
-    // Reset form
-    setHoTen("");
-    setEmail("");
-    setMatKhau("");
-    setSoDienThoai("");
-    setDiaChi("");
-    setVaiTro("khach_hang");
+  const fetchCustomers = () => {
+    getCustomer().then(setCustomers);
   };
 
-  const handleEdit = (u: User) => {
-    setEditingId(u.id);
-    setHoTen(u.ho_ten);
-    setEmail(u.email);
-    setMatKhau(u.mat_khau);
-    setSoDienThoai(u.so_dien_thoai);
-    setDiaChi(u.dia_chi);
-    setVaiTro(u.vai_tro);
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!form.ho_ten.trim()) newErrors.ho_ten = 'Họ tên không được để trống';
+    if (!form.email.trim()) newErrors.email = 'Email không được để trống';
+    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = 'Email không hợp lệ';
+    if (!form.mat_khau.trim()) newErrors.mat_khau = 'Mật khẩu không được để trống';
+    if (!form.so_dien_thoai.trim()) newErrors.so_dien_thoai = 'SĐT không được để trống';
+    if (!form.dia_chi.trim()) newErrors.dia_chi = 'Địa chỉ không được để trống';
+    if (!form.vai_tro.trim()) newErrors.vai_tro = 'Vai trò không được để trống';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    // Xoá lỗi khi người dùng sửa đúng
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: '' });
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!validate()) {
+      return;
+    }
+    if (editingId) {
+      updateCustomer(editingId, form).then(() => {
+        fetchCustomers();
+        resetForm();
+      });
+    } else {
+      createCustomer(form).then(() => {
+        fetchCustomers();
+        resetForm();
+      });
+    }
+  };
+
+  const handleEdit = (c: Customer) => {
+    setForm(c);
+    setEditingId(c.id);
   };
 
   const handleDelete = (id: number) => {
-    if (window.confirm("Bạn có chắc muốn xoá người dùng này?")) {
-      setUsers(users.filter((u) => u.id !== id));
+    if (window.confirm('Bạn có chắc muốn xoá khách hàng này?')) {
+      deleteCustomer(id).then(fetchCustomers);
     }
+  };
+
+  const resetForm = () => {
+    setForm(initialCustomerForm);
+    setEditingId(null);
+    setErrors({});
   };
 
   return (
     <div className="container mt-4">
-      <h4>Quản lý người dùng</h4>
-      <form onSubmit={handleSubmit} className="p-3 border rounded bg-light mb-4">
-        <h5>{editingId !== null ? "Cập nhật người dùng" : "Thêm người dùng"}</h5>
-        <div className="mb-3">
-          <label className="form-label">Họ tên</label>
-          <input type="text" className="form-control" value={hoTen} onChange={(e) => setHoTen(e.target.value)} required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Mật khẩu</label>
-          <input type="password" className="form-control" value={matKhau} onChange={(e) => setMatKhau(e.target.value)} required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Số điện thoại</label>
-          <input type="text" className="form-control" value={soDienThoai} onChange={(e) => setSoDienThoai(e.target.value)} />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Địa chỉ</label>
-          <textarea className="form-control" value={diaChi} onChange={(e) => setDiaChi(e.target.value)}></textarea>
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Vai trò</label>
-          <select className="form-select" value={vaiTro} onChange={(e) => setVaiTro(e.target.value as "khach_hang" | "quan_tri")}>
-            <option value="khach_hang">Khách hàng</option>
-            <option value="quan_tri">Quản trị</option>
-          </select>
-        </div>
-        <button type="submit" className="btn btn-primary">
-          {editingId !== null ? "Cập nhật" : "Thêm người dùng"}
-        </button>
-        {editingId !== null && (
-          <button type="button" className="btn btn-secondary ms-2" onClick={() => {
-            setEditingId(null);
-            setHoTen("");
-            setEmail("");
-            setMatKhau("");
-            setSoDienThoai("");
-            setDiaChi("");
-            setVaiTro("khach_hang");
-          }}>
-            Hủy
-          </button>
-        )}
-      </form>
+      <h2 className="mb-4">Quản lý khách hàng</h2>
 
-      <table className="table table-bordered">
+      <div className="card mb-4">
+        <div className="card-body">
+          <h5 className="card-title">{editingId ? 'Cập nhật khách hàng' : 'Thêm khách hàng mới'}</h5>
+
+          <div className="row g-3">
+            <div className="col-md-6">
+              <input
+                className={`form-control ${errors.ho_ten ? 'is-invalid' : ''}`}
+                name="ho_ten"
+                value={form.ho_ten}
+                onChange={handleChange}
+                placeholder="Họ tên"
+              />
+              {errors.ho_ten && <div className="invalid-feedback">{errors.ho_ten}</div>}
+            </div>
+            <div className="col-md-6">
+              <input
+                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Email"
+              />
+              {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+            </div>
+            <div className="col-md-6">
+              <input
+                className={`form-control ${errors.mat_khau ? 'is-invalid' : ''}`}
+                name="mat_khau"
+                value={form.mat_khau}
+                onChange={handleChange}
+                placeholder="Mật khẩu"
+              />
+              {errors.mat_khau && <div className="invalid-feedback">{errors.mat_khau}</div>}
+            </div>
+            <div className="col-md-6">
+              <input
+                className={`form-control ${errors.so_dien_thoai ? 'is-invalid' : ''}`}
+                name="so_dien_thoai"
+                value={form.so_dien_thoai}
+                onChange={handleChange}
+                placeholder="Số điện thoại"
+              />
+              {errors.so_dien_thoai && <div className="invalid-feedback">{errors.so_dien_thoai}</div>}
+            </div>
+            <div className="col-md-6">
+              <input
+                className={`form-control ${errors.dia_chi ? 'is-invalid' : ''}`}
+                name="dia_chi"
+                value={form.dia_chi}
+                onChange={handleChange}
+                placeholder="Địa chỉ"
+              />
+              {errors.dia_chi && <div className="invalid-feedback">{errors.dia_chi}</div>}
+            </div>
+            <div className="col-md-6">
+              <input
+                className={`form-control ${errors.vai_tro ? 'is-invalid' : ''}`}
+                name="vai_tro"
+                value={form.vai_tro}
+                onChange={handleChange}
+                placeholder="Vai trò"
+              />
+              {errors.vai_tro && <div className="invalid-feedback">{errors.vai_tro}</div>}
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <button className="btn btn-primary me-2" onClick={handleSubmit}>
+              {editingId ? 'Cập nhật' : 'Thêm mới'}
+            </button>
+            <button className="btn btn-secondary" onClick={resetForm}>
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <table className="table table-bordered table-hover">
         <thead className="table-light">
           <tr>
-            <th>ID</th>
             <th>Họ tên</th>
             <th>Email</th>
-            <th>Điện thoại</th>
+            <th>SĐT</th>
+            <th>Địa chỉ</th>
             <th>Vai trò</th>
-            <th>Ngày tạo</th>
             <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
-          {users.map((u) => (
-            <tr key={u.id}>
-              <td>{u.id}</td>
-              <td>{u.ho_ten}</td>
-              <td>{u.email}</td>
-              <td>{u.so_dien_thoai}</td>
-              <td>{u.vai_tro === "khach_hang" ? "Khách hàng" : "Quản trị"}</td>
-              <td>{new Date(u.ngay_tao).toLocaleString()}</td>
+          {customers.map((c) => (
+            <tr key={c.id}>
+              <td>{c.ho_ten}</td>
+              <td>{c.email}</td>
+              <td>{c.so_dien_thoai}</td>
+              <td>{c.dia_chi}</td>
+              <td>{c.vai_tro}</td>
               <td>
-                <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(u)}>Sửa</button>
-                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(u.id)}>Xóa</button>
+                <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(c)}>
+                  Sửa
+                </button>
+                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(c.id)}>
+                  Xoá
+                </button>
               </td>
             </tr>
           ))}
-          {users.length === 0 && (
+          {customers.length === 0 && (
             <tr>
-              <td colSpan={7} className="text-center">Chưa có người dùng nào.</td>
+              <td colSpan={6} className="text-center">
+                Không có khách hàng nào
+              </td>
             </tr>
           )}
         </tbody>
