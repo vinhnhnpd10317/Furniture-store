@@ -5,13 +5,14 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import { Offcanvas } from "bootstrap";
-
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { fetchProducts, type ProductItem } from "../../api/ProductApi";
 import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
 
 export default function Product() {
+    const navigate = useNavigate();
     const [products, setProducts] = useState<ProductItem[]>([]);
     const [categories, setCategories] = useState<CategoryItem[]>([]);
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
@@ -261,7 +262,9 @@ export default function Product() {
                                         </div>
                                         <div className="btn-group d-flex justify-content-center mt-3 product-btn-group">
                                             <button className="btn btn-outline-dark btn-sm" onClick={() => handleAddToCart(item)}>THÊM VÀO GIỎ</button>
-                                            <button className="btn btn-dark btn-sm">XEM THÊM</button>
+                                            <button className="btn btn-dark btn-sm" onClick={() => navigate(`/productdetail/${item.id}`)}>
+                                                XEM THÊM
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

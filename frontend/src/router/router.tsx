@@ -27,7 +27,7 @@ export default function AppRoutes() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/account" element={<Account />} />
         <Route path="/productcart" element={<ProductCart />} />
-        <Route path="/productdetail" element={<ProductDetail />} />
+        <Route path="/productdetail/:id" element={<ProductDetail />} />
         <Route path="/aboutpage" element={<AboutPage />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/inspiration" element={<InspirationPage />} />

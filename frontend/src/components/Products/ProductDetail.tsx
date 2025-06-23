@@ -1,190 +1,217 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Css/Productdetail.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { useParams } from "react-router-dom";
+import { fetchProductById, type ProductItem } from "../../api/ProductApi";
+import type { CategoryItem } from "../../api/CategoryApi";
 
-interface Product {
-    name: string;
-    material: string;
-    size: string;
-    code: string;
-    category: string;
-    mainImage: string;
-    images: string[];
-    description: string[];
-    warranty: string;
-}
 
 export default function ProductDetail() {
     const [likedList, setLikedList] = useState<boolean[]>(Array(8).fill(false));
+    const { id } = useParams<{ id: string }>(); // Lấy ID từ URL
+    const [product, setProduct] = useState<ProductItem | null>(null);
+    const [categories, setCategories] = useState<CategoryItem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [quantity, setQuantity] = useState(1);
+    const [mainImage, setMainImage] = useState<string>("");
 
+    // Hàm thay đổi trạng thái thích
     const toggleLike = (index: number) => {
         const updated = [...likedList];
         updated[index] = !updated[index];
         setLikedList(updated);
     };
 
-    // Giả lập dữ liệu sản phẩm lấy từ DB
-    const product: Product = {
-        name: "Armchair Hùng King + Gối VACT3231",
-        material: "Mặt ngồi nhồi đệm bọc vải, chân kim loại",
-        size: "S910 - RF60 - C1000mm",
-        code: "31176218",
-        category: "Armchair, Phòng khách",
-        mainImage: "img/imgproduct/image.png",
-        images: [
-            "img/imgproduct/image.png",
-            "img/imgproduct/image1.png",
-            "img/imgproduct/image2.png",
-            "img/imgproduct/image3.png",
-            "img/imgproduct/image4.png",
-            "img/imgproduct/image5.png",
-        ],
-        description: [
-            "Khung ghế bằng gỗ, mặt ngồi bọc vải",
-            "Màu sắc: Màu be",
-            "Hàng thật như hình",
-            "Không giống hoàn tiền 100%",
-            "Giao hàng tận nơi, kiểm tra hàng trước khi thanh toán",
-        ],
-        warranty: "Bảo hành 12 tháng.",
+    // Tải dữ liệu sản phẩm theo ID
+    useEffect(() => {
+        const loadProduct = async () => {
+        if (!id) {
+            setError("Thiếu ID sản phẩm");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const fetchedProduct = await fetchProductById(id);
+            setProduct(fetchedProduct);
+            setMainImage(`/img/imgproduct/${fetchedProduct.hinh_anh_dai_dien }`); // Đặt hình ảnh chính
+            setLoading(false);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (err) {
+            setError("Không thể tải sản phẩm này");
+            setLoading(false);
+        }
+        };
+
+        loadProduct();
+    }, [id]);
+    
+    useEffect(() => {
+        fetch("http://localhost:3001/categorys")
+            .then((res) => res.json())
+            .then(setCategories);
+    }, []);
+
+    const getTenDanhMuc = (id: number) => {
+        const cat = categories.find((c) => c.id === id);
+        return cat ? cat.ten_danh_muc : "Không rõ";
     };
 
-    const comments = [
-    {
-        user: "Nguyễn Văn A",
-        avatar: "https://i.pravatar.cc/40?img=1",
-        comment: "Sản phẩm rất đẹp, chất lượng tốt.",
-        time: "2 giờ trước"
-    },
-    {
-        user: "Trần Thị B",
-        avatar: "https://i.pravatar.cc/40?img=2",
-        comment: "Đã mua và rất hài lòng!",
-        time: "1 ngày trước"
-    }
-  ];
-
-    const [quantity, setQuantity] = useState(1);
-    const [mainImage, setMainImage] = useState<string>(product.mainImage);
-
+    // Xử lý thay đổi số lượng
     const handleQuantityChange = (value: number) => {
         if (quantity + value >= 1) {
         setQuantity(quantity + value);
         }
     };
 
+    // Dữ liệu bình luận giả lập
+    const comments = [
+        {
+        user: "Nguyễn Văn A",
+        avatar: "https://i.pravatar.cc/40?img=1",
+        comment: "Sản phẩm rất đẹp, chất lượng tốt.",
+        time: "2 giờ trước",
+        },
+        {
+        user: "Trần Thị B",
+        avatar: "https://i.pravatar.cc/40?img=2",
+        comment: "Đã mua và rất hài lòng!",
+        time: "1 ngày trước",
+        },
+    ];
+
+    // Xử lý khi đang tải hoặc lỗi
+    if (loading) {
+        return <div className="container mt-4">Đang tải sản phẩm...</div>;
+    }
+
+    if (error || !product) {
+        return <div className="container mt-4">{error || "Không tìm thấy sản phẩm"}</div>;
+    }
+
+    // Xử lý danh sách hình ảnh từ chuỗi JSON
+    const imageList = product.ds_hinh_anh
+    ? product.ds_hinh_anh.split(";").filter((img) => img.trim() !== "")
+    : [];
+
+    const allImages = [
+    product.hinh_anh_dai_dien,
+    ...imageList.filter((img) => img !== product.hinh_anh_dai_dien),
+    ];
+
+    const images = allImages.map((img) => "/img/imgproduct/" + img);
+
     return (
         <div className="container mt-4 mb-5">
             <div className="row">
-                {/* Product Images */}
+                {/* Hình ảnh sản phẩm */}
                 <div className="col-md-6">
-                <img
-                    src={mainImage}
-                    className="img-fluid mb-3"
-                    alt="Main Product"
-                    style={{ maxHeight: "500px", objectFit: "cover", width: "100%" }}
-                />
-
-                <div className="d-flex gap-2 flex-wrap">
-                    {product.images.map((img, i) => (
                     <img
-                        key={i}
-                        src={img}
-                        onClick={() => setMainImage(img)}
-                        className={`img-thumbnail ${
-                        mainImage === img ? "border-primary border-3" : ""
-                        }`}
-                        alt={`Thumb ${i}`}
-                        style={{
-                        width: "80px",
-                        height: "80px",
-                        cursor: "pointer",
-                        objectFit: "cover",
-                        }}
+                        src={mainImage}
+                        className="img-fluid mb-3"
+                        alt="Main Product"
+                        style={{ maxHeight: "500px", objectFit: "cover", width: "100%", outline: "none" }}
                     />
-                    ))}
-                </div>
+
+                    <div className="d-flex gap-2 flex-wrap">
+                        {images.map((img, i) => (
+                        <img
+                            key={i}
+                            src={img}
+                            onClick={() => setMainImage(img)}
+                            className={`img-thumbnail ${mainImage === img ? "border-primary border-3" : ""}`}
+                            alt={`Thumb ${i}`}
+                            style={{
+                            width: "80px",
+                            height: "80px",
+                            cursor: "pointer",
+                            objectFit: "cover",
+                            }}
+                        />
+                        ))}
+                    </div>
                 </div>
 
-                {/* Product Info */}
+                {/* Thông tin sản phẩm */}
                 <div className="col-md-6 mt-5">
-                <h2 className="mb-3">{product.name}</h2>
-                <p><strong>Vật liệu:</strong> {product.material}</p>
-                <p><strong>Chất liệu:</strong> {product.size}</p>
-                <p><strong>Mã SP:</strong> {product.code}</p>
-                <p><strong>Danh mục:</strong> {product.category}</p>
+                    <h2 className="mb-3">{product.ten_san_pham || "Tên sản phẩm không có"}</h2>
+                    <p><strong>Vật liệu:</strong> {product.vat_lieu || "Chưa cập nhật"}</p>
+                    <p><strong>Chất liệu:</strong> {product.chat_lieu || "Chưa cập nhật"}</p>
+                    <p><strong>Giá:</strong> {product.gia ? product.gia.toLocaleString("vi-VN") + "₫" : "Chưa cập nhật"}</p>
+                    <p><strong>Danh mục:</strong> {getTenDanhMuc(Number(product.danh_muc_id))}</p>
 
-                <div className="my-3 d-flex align-items-center">
-                    <button className="btn btn-outline-secondary" onClick={() => handleQuantityChange(-1)}>-</button>
-                    <span className="mx-3">{quantity}</span>
-                    <button className="btn btn-outline-secondary" onClick={() => handleQuantityChange(1)}>+</button>
-                </div>
+                    <div className="my-3 d-flex align-items-center">
+                        <button className="btn btn-outline-secondary" onClick={() => handleQuantityChange(-1)}>
+                        -
+                        </button>
+                        <span className="mx-3">{quantity}</span>
+                        <button className="btn btn-outline-secondary" onClick={() => handleQuantityChange(1)}>
+                        +
+                        </button>
+                    </div>
 
-                <div className="d-flex gap-2 flex-wrap">
-                    <button className="btn btn-dark">MUA NGAY</button>
-                    <button className="btn btn-outline-dark">THÊM VÀO GIỎ</button>
-                </div>
+                    <div className="d-flex gap-2 flex-wrap">
+                        <button className="btn btn-dark">MUA NGAY</button>
+                        <button className="btn btn-outline-dark">THÊM VÀO GIỎ</button>
+                    </div>
                 </div>
             </div>
 
             {/* Mô tả sản phẩm */}
             <div className="row mt-5">
                 <div className="col-12">
-                <h4 className="mb-3">MÔ TẢ SẢN PHẨM</h4>
-                <div className="border p-4 bg-light rounded">
-                    <ul>
-                    {product.description.map((desc, index) => (
-                        <li key={index}>{desc}</li>
-                    ))}
-                    </ul>
-                    <p className="mt-3"><strong>{product.warranty}</strong></p>
-                </div>
+                    <h4 className="mb-3">MÔ TẢ SẢN PHẨM</h4>
+                    <div className="border p-4 bg-light rounded">
+                        <p>{product.mo_ta || "Chưa có mô tả"}</p>
+                        <p className="mt-3"><strong>Ngày tạo:</strong> {product.ngay_tao || "Chưa cập nhật"}</p>
+                    </div>
                 </div>
             </div>
 
-            {/* Related Products */}
+            {/* Sản phẩm liên quan */}
             <div className="mt-5 d-none d-md-block">
                 <h4 className="mb-4 fw-bold text-center">Sản phẩm bạn có thể thích</h4>
                 <div className="row g-4">
-                    {[1, 2, 3, 4].map((_, idx) => (
-                        <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={idx}>
-                            <div className="product-cards h-100 d-flex flex-column justify-content-between">
-                                <img
-                                    src="img/imgproduct/product.png"
-                                    alt="Armchair Mimi"
-                                    className="img-fluid"
-                                />
-                                <div className="d-flex justify-content-between align-items-start mt-2">
-                                    <h6 className="mb-1">Armchair Mimi</h6>
-                                    <div className="text-end">
-                                        <i
-                                            className={`bi ${likedList[idx] ? "bi-heart-fill" : "bi-heart"} product-heart-icon`}
-                                            style={{
-                                                fontSize: "1.2rem",
-                                                color: likedList[idx] ? "red" : "#999",
-                                                cursor: "pointer"
-                                            }}
-                                            onClick={() => toggleLike(idx)}
-                                        />
-                                        <div className="product-price mt-1" style={{ fontSize: 14 }}>
-                                            49.000.000₫
-                                        </div>
+                {[1, 2, 3, 4].map((_, idx) => (
+                    <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={idx}>
+                        <div className="product-cards h-100 d-flex flex-column justify-content-between">
+                            <img
+                            src="img/imgproduct/product.png"
+                            alt="Armchair Mimi"
+                            className="img-fluid"
+                            />
+                            <div className="d-flex justify-content-between align-items-start mt-2">
+                                <h6 className="mb-1">Armchair Mimi</h6>
+                                <div className="text-end">
+                                    <i
+                                    className={`bi ${likedList[idx] ? "bi-heart-fill" : "bi-heart"} product-heart-icon`}
+                                    style={{
+                                        fontSize: "1.2rem",
+                                        color: likedList[idx] ? "red" : "#999",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={() => toggleLike(idx)}
+                                    />
+                                    <div className="product-price mt-1" style={{ fontSize: 14 }}>
+                                    49.000.000₫
                                     </div>
                                 </div>
-                                <div className="btn-group d-flex justify-content-center mt-3 product-btn-group">
-                                    <button className="btn btn-outline-dark btn-sm">THÊM VÀO GIỎ</button>
-                                    <button className="btn btn-dark btn-sm">XEM THÊM</button>
-                                </div>
+                            </div>
+                            
+                            <div className="btn-group d-flex justify-content-center mt-3 product-btn-group">
+                                <button className="btn btn-outline-dark btn-sm">THÊM VÀO GIỎ</button>
+                                <button className="btn btn-dark btn-sm">XEM THÊM</button>
                             </div>
                         </div>
-                    ))}
+                    </div>
+                ))}
                 </div>
             </div>
 
-
-            {/* Comments Section */}
+            {/* Phần bình luận */}
             <div className="mt-5">
                 <h5 className="fw-bold mb-4">Bình luận</h5>
 
@@ -195,13 +222,13 @@ export default function ProductDetail() {
                     key={idx}
                     className="d-flex align-items-start gap-3 p-3 mb-3 rounded shadow-sm"
                     >
-                        <img
-                            src={cmt.avatar}
-                            className="rounded-circle"
-                            alt="User"
-                            width={40}
-                            height={40}
-                        />
+                    <img
+                        src={cmt.avatar}
+                        className="rounded-circle"
+                        alt="User"
+                        width={40}
+                        height={40}
+                    />
                         <div>
                             <h6 className="mb-1 fw-semibold">{cmt.user}</h6>
                             <p className="mb-1">{cmt.comment}</p>
@@ -213,13 +240,13 @@ export default function ProductDetail() {
 
                 {/* Form bình luận */}
                 <div className="d-flex align-items-start gap-3">
-                    <img
-                        src="https://i.pravatar.cc/40?img=3"
-                        className="rounded-circle"
-                        alt="User"
-                        width={40}
-                        height={40}
-                    />
+                <img
+                    src="https://i.pravatar.cc/40?img=3"
+                    className="rounded-circle"
+                    alt="User"
+                    width={40}
+                    height={40}
+                />
                     <div className="flex-grow-1">
                         <textarea
                         className="form-control"
@@ -233,9 +260,6 @@ export default function ProductDetail() {
                     </div>
                 </div>
             </div>
-
         </div>
-
-        
     );
 }
