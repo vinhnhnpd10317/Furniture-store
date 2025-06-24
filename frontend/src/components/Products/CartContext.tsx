@@ -1,7 +1,15 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from '../AuthContext';
+import {
+  fetchCartFromDB,
+  saveCartItemToDB,
+  updateCartItemInDB,
+  deleteCartItemFromDB,
+} from '../../api/CartApi';
 
-// Định nghĩa loại dữ liệu cho sản phẩm trong giỏ hàng
 export interface CartItem {
+  cartItemId?: number;
   id: number;
   name: string;
   price: number;
@@ -11,7 +19,6 @@ export interface CartItem {
   image: string;
 }
 
-// Định nghĩa loại dữ liệu cho context
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (item: CartItem) => void;
@@ -20,75 +27,137 @@ interface CartContextType {
   clearCart: () => void;
 }
 
-// Tạo Context
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// Provider cho toàn bộ ứng dụng
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const { user } = useAuth();
 
-  // ✅ Khởi tạo từ localStorage khi load lần đầu
+  // 1. Lấy cart từ localStorage nếu chưa login
   useEffect(() => {
     const stored = localStorage.getItem('cart');
-    if (stored) {
-      setCartItems(JSON.parse(stored));
-    }
-  }, []);
-
-  // ✅ Lưu vào localStorage khi cart thay đổi
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  // ✅ Thêm sản phẩm vào giỏ hàng
-  const addToCart = (item: CartItem) => {
-    setCartItems(prev => {
-      const exists = prev.find(p => p.id === item.id);
-      if (exists) {
-        return prev.map(p =>
-          p.id === item.id
-            ? { ...p, quantity: p.quantity + item.quantity }
-            : p
-        );
+    if (stored && !user) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) setCartItems(parsed);
+      } catch (err) {
+        console.error('Lỗi khi đọc localStorage:', err);
+        localStorage.removeItem('cart'); // xoá nếu lỗi
       }
-      return [...prev, item];
-    });
+    }
+  }, [user]);
+
+  // 2. Lưu cart vào localStorage nếu chưa login
+  useEffect(() => {
+    if (!user) {
+      localStorage.setItem('cart', JSON.stringify(cartItems));
+    }
+  }, [cartItems, user]);
+
+  // 3. Khi user login: đồng bộ cart từ localStorage lên DB và load từ DB
+  useEffect(() => {
+   const syncLocalCartToDB = async () => {
+  if (user) {
+    const stored = localStorage.getItem('cart');
+    if (stored) {
+      try {
+        const localCart: CartItem[] = JSON.parse(stored);
+        
+        // ✅ Duyệt tuần tự, không chạy song song
+        for (const item of localCart) {
+          await saveCartItemToDB(user.id, item.id, item.quantity);
+        }
+
+        localStorage.removeItem('cart');
+      } catch (err) {
+        console.error('Lỗi khi đồng bộ giỏ hàng từ localStorage:', err);
+      }
+    }
+
+    try {
+      const dbCart = await fetchCartFromDB(user.id);
+      setCartItems(dbCart);
+    } catch (err) {
+      console.error('Lỗi khi tải giỏ hàng từ DB:', err);
+    }
+  }
+};
+
+    syncLocalCartToDB();
+  }, [user]);
+
+  // 4. Thêm vào giỏ hàng
+  const addToCart = async (item: CartItem) => {
+    if (user) {
+      try {
+        await saveCartItemToDB(user.id, item.id, item.quantity);
+        const dbCart = await fetchCartFromDB(user.id);
+        setCartItems(dbCart);
+      } catch (error) {
+        console.error('Lỗi khi lưu vào DB:', error);
+      }
+    } else {
+      setCartItems(prev => {
+        const exists = prev.find(p => p.id === item.id);
+        if (exists) {
+          return prev.map(p =>
+            p.id === item.id ? { ...p, quantity: p.quantity + item.quantity } : p
+          );
+        }
+        return [...prev, item];
+      });
+    }
   };
 
-  // ✅ Cập nhật số lượng sản phẩm
-  const updateQuantity = (id: number, quantity: number) => {
+  // 5. Cập nhật số lượng
+  const updateQuantity = async (id: number, quantity: number) => {
+    const item = cartItems.find(p => p.id === id);
+    if (!item) return;
+
+    if (user && item.cartItemId) {
+      try {
+        await updateCartItemInDB(item.cartItemId, quantity);
+      } catch (error) {
+        console.error('Lỗi khi cập nhật DB:', error);
+      }
+    }
+
     setCartItems(prev =>
       prev.map(p => (p.id === id ? { ...p, quantity } : p))
     );
   };
 
-  // ✅ Xoá sản phẩm khỏi giỏ hàng
-  const removeFromCart = (id: number) => {
+  // 6. Xoá sản phẩm
+  const removeFromCart = async (id: number) => {
+    const item = cartItems.find(p => p.id === id);
+    if (!item) return;
+
+    if (user && item.cartItemId) {
+      try {
+        await deleteCartItemFromDB(item.cartItemId);
+      } catch (error) {
+        console.error('Lỗi khi xoá khỏi DB:', error);
+      }
+    }
+
     setCartItems(prev => prev.filter(p => p.id !== id));
   };
 
-  // ✅ Xoá toàn bộ giỏ hàng
+  // 7. Xoá toàn bộ
   const clearCart = () => {
     setCartItems([]);
+    if (!user) localStorage.removeItem('cart');
   };
 
   return (
     <CartContext.Provider
-      value={{
-        cartItems,
-        addToCart,
-        updateQuantity,
-        removeFromCart,
-        clearCart,
-      }}
+      value={{ cartItems, addToCart, updateQuantity, removeFromCart, clearCart }}
     >
       {children}
     </CartContext.Provider>
   );
 };
 
-// ✅ Hook sử dụng CartContext
-// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = (): CartContextType => {
   const context = useContext(CartContext);
   if (!context) throw new Error('CartContext must be used within CartProvider');

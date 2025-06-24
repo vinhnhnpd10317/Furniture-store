@@ -7,23 +7,22 @@ export default function ProductCart() {
 
 
     const handleIncrease = (id: number) => {
-        const item = cartItems.find(i => i.id === id);
-        if (item) updateQuantity(id, item.quantity + 1);
-    };
-
-    const handleRemove = (id: number) => {
-    const updatedCart = cartItems.filter(item => item.id !== id);
-    removeFromCart(id);
-    alert("Sản phẩm đã được xoá khỏi giỏ hàng!");
-    // setCartItems(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    const item = cartItems.find(i => i.id === id);
+    if (item) {
+        updateQuantity(id, item.quantity + 1); // CartContext sẽ lo cập nhật DB
+    }
     };
 
     const handleDecrease = (id: number) => {
-        const item = cartItems.find(i => i.id === id);
-        if (item && item.quantity > 1) {
-            updateQuantity(id, item.quantity - 1);
-        }
+    const item = cartItems.find(i => i.id === id);
+    if (item && item.quantity > 1) {
+        updateQuantity(id, item.quantity - 1); // CartContext sẽ lo cập nhật DB
+    }
+    };
+
+    const handleRemove = (id: number) => {
+    removeFromCart(id); // CartContext sẽ lo gọi API xóa DB
+    alert("Sản phẩm đã được xoá khỏi giỏ hàng!");
     };
 
     const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -58,12 +57,7 @@ export default function ProductCart() {
                                 <button className="btn btn-outline-secondary" onClick={() => handleDecrease(item.id)}>-</button>
                                 <span>{item.quantity}</span>
                                 <button className="btn btn-outline-secondary" onClick={() => handleIncrease(item.id)}>+</button>
-                                <button
-                                        className="btn btn-danger btn-sm ms-2"
-                                        onClick={() => handleRemove(item.id)}
-                                        >
-                                        Xoá
-                                        </button>
+                                <button className="btn btn-danger btn-sm ms-2" onClick={() => handleRemove(item.id)}> Xoá </button>
 
                             </div>
                         </div>

@@ -32,6 +32,8 @@
     app.use('/articles', ArticleRoutes);
     app.use('/cart', cartRoutes);
     app.use('/customer', CustomerRoutes);
+    app.use('/uploads', express.static('uploads'));
+    app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
     // Sử dụng middleware upload cho route /products
     // Cập nhật middleware cho nhiều ảnh
