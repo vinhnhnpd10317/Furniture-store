@@ -4,8 +4,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./Css/Header.css";
+import { useAuth } from "../components/AuthContext";
 
 const Header = () => {
+   const { user, logout } = useAuth();
   return (
     <>
       {/* TOP BAR */}
@@ -25,9 +27,16 @@ const Header = () => {
           <i className="bi bi-geo-alt"></i>
           <i className="bi bi-heart"></i>
           <Link to="/productcart" className="text-muted"><i className="bi bi-bag"></i></Link>
-          <Link to="/login" className="d-flex align-items-center text-dark text-decoration-none">
-            Đăng nhập <i className="bi bi-person ms-1"></i>
-          </Link>
+           {user ? (
+            <div className="d-flex align-items-center gap-2">
+              <span className="fw-semibold text-dark">Xin chào, {user.name}</span>
+              <button className="btn btn-sm btn-outline-dark" onClick={logout}>Đăng xuất</button>
+            </div>
+          ) : (
+            <Link to="/login" className="d-flex align-items-center text-dark text-decoration-none">
+              Đăng nhập <i className="bi bi-person ms-1"></i>
+            </Link>
+          )}
         </div>
       </div>
 
