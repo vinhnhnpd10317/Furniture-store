@@ -6,6 +6,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useParams } from "react-router-dom";
 import { fetchProductById, type ProductItem } from "../../api/ProductApi";
 import type { CategoryItem } from "../../api/CategoryApi";
+import { useCart } from "../Products/CartContext";
 
 
 export default function ProductDetail() {
@@ -17,6 +18,24 @@ export default function ProductDetail() {
     const [error, setError] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [mainImage, setMainImage] = useState<string>("");
+    const { addToCart } = useCart();
+    
+    // Thêm vào giỏ hàng
+    const handleAddToCart = (item: ProductItem) => {
+        addToCart({
+            id: item.id,
+            name: item.ten_san_pham,
+            price: Number(item.gia),
+            quantity: quantity, // Sử dụng số lượng đã chọn
+            image: item.hinh_anh_dai_dien
+                ? `/img/imgproduct/${item.hinh_anh_dai_dien}`
+                : "/img/imgproduct/default.jpg",
+            material: item.vat_lieu || 'N/A',
+            texture: item.chat_lieu || 'N/A',
+        });
+        alert(`Đã thêm ${quantity} sản phẩm vào giỏ hàng!`);
+    };
+
 
     // Hàm thay đổi trạng thái thích
     const toggleLike = (index: number) => {
@@ -27,6 +46,8 @@ export default function ProductDetail() {
 
     // Tải dữ liệu sản phẩm theo ID
     useEffect(() => {
+        window.scrollTo(0, 0);
+
         const loadProduct = async () => {
         if (!id) {
             setError("Thiếu ID sản phẩm");
@@ -155,7 +176,7 @@ export default function ProductDetail() {
 
                     <div className="d-flex gap-2 flex-wrap">
                         <button className="btn btn-dark">MUA NGAY</button>
-                        <button className="btn btn-outline-dark">THÊM VÀO GIỎ</button>
+                        <button className="btn btn-outline-dark" onClick={() => handleAddToCart(product)}>THÊM VÀO GIỎ</button>
                     </div>
                 </div>
             </div>

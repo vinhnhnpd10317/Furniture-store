@@ -1,10 +1,11 @@
 import React from 'react';
 import "../Css/Productcart.css";
 import { useCart } from "../Products/CartContext";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductCart() {
     const { cartItems, updateQuantity, removeFromCart  } = useCart();
-
+    const navigate = useNavigate();
 
     const handleIncrease = (id: number) => {
     const item = cartItems.find(i => i.id === id);
@@ -86,7 +87,7 @@ export default function ProductCart() {
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-between">
                             <button className="btn btn-outline-dark">← TIẾP TỤC MUA HÀNG</button>
-                            <button className="btn btn-dark">ĐẶT HÀNG</button>
+                            <button className="btn btn-dark"  onClick={() => navigate(`/orderform`)}>ĐẶT HÀNG</button>
                         </div>
                     </div>
                 </div>
