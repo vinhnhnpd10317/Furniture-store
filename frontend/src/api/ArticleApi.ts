@@ -26,18 +26,13 @@ export const getArticles = async (): Promise<Article[]> => {
   return res.data;
 };
 
-export const createArticle = async (
-  data: Omit<Article, 'id'> // giữ lại ngay_dang
-): Promise<{ message: string; id: number }> => {
-  const res = await axios.post(API_URL, data);
+export const createArticle = async (payload: Omit<Article, 'id'>) => {
+  const res = await axios.post(API_URL, payload);
   return res.data;
 };
 
-export const updateArticle = async (
-  id: number,
-  data: Omit<Article, 'id'>
-): Promise<{ message: string }> => {
-  const res = await axios.put(`${API_URL}/${id}`, data);
+export const updateArticle = async (id: number, payload: Omit<Article, 'id'>) => {
+  const res = await axios.put(`${API_URL}/${id}`, payload);
   return res.data;
 };
 
@@ -47,3 +42,11 @@ export const deleteArticle = async (
   const res = await axios.delete(`${API_URL}/${id}`);
   return res.data;
 };
+
+export const getArticleById = async (id: number): Promise<Article> => {
+  const res = await axios.get(`${API_URL}/${id}`);
+  return res.data;
+};  
+
+
+
