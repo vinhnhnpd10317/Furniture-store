@@ -1,0 +1,7 @@
+/* Bỏ hiệu ứng shadow khi click vào nút phân trang */
+.page-link:focus,
+.page-link:active,
+.page-item.active .page-link {
+    box-shadow: none !important;
+    outline: none !important;
+}

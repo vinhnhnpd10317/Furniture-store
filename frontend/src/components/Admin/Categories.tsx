@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Category {
   id: number;
@@ -9,48 +9,51 @@ interface Category {
 
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
+
   const [tenDanhMuc, setTenDanhMuc] = useState("");
   const [moTa, setMoTa] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  // Load danh mục từ MySQL khi mở trang
+  // Biến phân trang 
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+  const totalPages = Math.max(1, Math.ceil(categories.length / pageSize));
+
+  const currentCategories = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return categories.slice(start, start + pageSize);
+  }, [categories, currentPage]);
+
+  // Load danh mục
   useEffect(() => {
     fetch("http://localhost:3001/categorys")
-      .then((res) => res.json())
+      .then(res => res.json())
       .then(setCategories)
-      .catch((err) => console.error("Lỗi khi tải danh mục:", err));
+      .catch(err => console.error("Lỗi khi tải danh mục:", err));
   }, []);
 
+  // Form thêm / sửa 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const categoryData = { ten_danh_muc: tenDanhMuc, mo_ta: moTa };
+    const body = JSON.stringify({ ten_danh_muc: tenDanhMuc, mo_ta: moTa });
+    const url = editingId
+      ? `http://localhost:3001/categorys/${editingId}`
+      : "http://localhost:3001/categorys";
+    const method = editingId ? "PUT" : "POST";
 
     try {
-      if (editingId !== null) {
-        // Cập nhật danh mục
-        await fetch(`http://localhost:3001/categorys/${editingId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(categoryData),
-        });
-      } else {
-        // Thêm danh mục mới
-        await fetch("http://localhost:3001/categorys", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(categoryData),
-        });
-      }
+      await fetch(url, { method, headers: { "Content-Type": "application/json" }, body });
 
-      // Sau khi thêm hoặc cập nhật → load lại từ MySQL
-      const res = await fetch("http://localhost:3001/categorys");
-      const data = await res.json();
-      setCategories(data);
+      const list = await fetch("http://localhost:3001/categorys").then(r => r.json());
+      setCategories(list);
 
-      // Reset form
       setTenDanhMuc("");
       setMoTa("");
       setEditingId(null);
+
+      if (!editingId) {
+        setCurrentPage(Math.ceil((list.length || 1) / pageSize));
+      }
     } catch (err) {
       alert("❌ Lỗi khi thêm/cập nhật danh mục");
       console.error(err);
@@ -65,32 +68,32 @@ export default function Categories() {
 
   const handleDelete = async (id: number) => {
     if (!window.confirm("Bạn có chắc chắn muốn xoá danh mục này không?")) return;
-
     try {
       await fetch(`http://localhost:3001/categorys/${id}`, { method: "DELETE" });
+      const list = await fetch("http://localhost:3001/categorys").then(r => r.json());
+      setCategories(list);
 
-      // Cập nhật lại danh sách
-      const res = await fetch("http://localhost:3001/categorys");
-      const data = await res.json();
-      setCategories(data);
+      const lastPage = Math.max(1, Math.ceil(list.length / pageSize));
+      if (currentPage > lastPage) setCurrentPage(lastPage);
     } catch (err) {
       alert("❌ Lỗi khi xoá danh mục");
       console.error(err);
     }
   };
 
+  const goToPage = (n: number) => setCurrentPage(n);
+
   return (
     <div className="container mt-4">
-      <h4>Quản lý danh mục</h4>
       <form onSubmit={handleSubmit} className="p-3 border rounded bg-light mb-4">
-        <h5>{editingId !== null ? "Cập nhật danh mục" : "Thêm Danh Mục"}</h5>
+        <h5>{editingId ? "Cập nhật danh mục" : "Thêm Danh Mục"}</h5>
         <div className="mb-3">
           <label className="form-label">Tên danh mục</label>
           <input
             type="text"
             className="form-control"
             value={tenDanhMuc}
-            onChange={(e) => setTenDanhMuc(e.target.value)}
+            onChange={e => setTenDanhMuc(e.target.value)}
             required
           />
         </div>
@@ -99,13 +102,13 @@ export default function Categories() {
           <textarea
             className="form-control"
             value={moTa}
-            onChange={(e) => setMoTa(e.target.value)}
-          ></textarea>
+            onChange={e => setMoTa(e.target.value)}
+          />
         </div>
         <button type="submit" className="btn btn-primary">
-          {editingId !== null ? "Cập nhật" : "Thêm danh mục"}
+          {editingId ? "Cập nhật" : "Thêm danh mục"}
         </button>
-        {editingId !== null && (
+        {editingId && (
           <button
             type="button"
             className="btn btn-secondary ms-2"
@@ -131,37 +134,58 @@ export default function Categories() {
           </tr>
         </thead>
         <tbody>
-          {categories.map((cat) => (
+          {currentCategories.map(cat => (
             <tr key={cat.id}>
               <td>{cat.id}</td>
               <td>{cat.ten_danh_muc}</td>
               <td>{cat.mo_ta}</td>
               <td>{new Date(cat.ngay_tao).toLocaleString()}</td>
               <td>
-                <button
-                  className="btn btn-sm btn-warning me-2"
-                  onClick={() => handleEdit(cat)}
-                >
+                <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(cat)}>
                   Sửa
                 </button>
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleDelete(cat.id)}
-                >
+                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(cat.id)}>
                   Xóa
                 </button>
               </td>
             </tr>
           ))}
-          {categories.length === 0 && (
+          {currentCategories.length === 0 && (
             <tr>
               <td colSpan={5} className="text-center">
-                Chưa có danh mục nào.
+                Không có danh mục nào.
               </td>
             </tr>
           )}
         </tbody>
       </table>
+
+      {/* phân trang */}
+      {totalPages > 1 && (
+        <nav aria-label="Pagination" className="mt-3">
+          <ul className="pagination justify-content-center mb-0">
+            <li className={`page-item ${currentPage === 1 && "disabled"}`}>
+              <button className="page-link" onClick={() => goToPage(currentPage - 1)}>
+                &laquo;
+              </button>
+            </li>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
+              <li key={n} className={`page-item ${currentPage === n && "active"}`}>
+                <button className="page-link" onClick={() => goToPage(n)}>
+                  {n}
+                </button>
+              </li>
+            ))}
+
+            <li className={`page-item ${currentPage === totalPages && "disabled"}`}>
+              <button className="page-link" onClick={() => goToPage(currentPage + 1)}>
+                &raquo;
+              </button>
+            </li>
+          </ul>
+        </nav>
+      )}
     </div>
   );
 }
