@@ -1,162 +1,37 @@
+// src/pages/CustomerList.tsx
 import { useEffect, useState } from 'react';
-import {
-  getCustomer,
-  createCustomer,
-  updateCustomer,
-  deleteCustomer,
-  type Customer,
-  initialCustomerForm
-} from '../../api/Customer';
+import { getCustomer, deleteCustomer, type Customer } from '../../api/Customer';
+import { Link } from 'react-router-dom';
 
-export default function CustomerPage() {
+export default function CustomerList() {
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [form, setForm] = useState(initialCustomerForm);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const perPage = 10;
 
   useEffect(() => {
-    fetchCustomers();
+    getCustomer().then(data => {
+      const sorted = [...data].sort((a, b) => b.id - a.id); // Mới nhất lên đầu
+      setCustomers(sorted);
+    });
   }, []);
-
-  const fetchCustomers = () => {
-    getCustomer().then(setCustomers);
-  };
-
-  const validate = () => {
-    const newErrors: { [key: string]: string } = {};
-    if (!form.ho_ten.trim()) newErrors.ho_ten = 'Họ tên không được để trống';
-    if (!form.email.trim()) newErrors.email = 'Email không được để trống';
-    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = 'Email không hợp lệ';
-    if (!form.mat_khau.trim()) newErrors.mat_khau = 'Mật khẩu không được để trống';
-    if (!form.so_dien_thoai.trim()) newErrors.so_dien_thoai = 'SĐT không được để trống';
-    if (!form.dia_chi.trim()) newErrors.dia_chi = 'Địa chỉ không được để trống';
-    if (!form.vai_tro.trim()) newErrors.vai_tro = 'Vai trò không được để trống';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    // Xoá lỗi khi người dùng sửa đúng
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
-    }
-  };
-
-  const handleSubmit = () => {
-    if (!validate()) {
-      return;
-    }
-    if (editingId) {
-      updateCustomer(editingId, form).then(() => {
-        fetchCustomers();
-        resetForm();
-      });
-    } else {
-      createCustomer(form).then(() => {
-        fetchCustomers();
-        resetForm();
-      });
-    }
-  };
-
-  const handleEdit = (c: Customer) => {
-    setForm(c);
-    setEditingId(c.id);
-  };
 
   const handleDelete = (id: number) => {
     if (window.confirm('Bạn có chắc muốn xoá khách hàng này?')) {
-      deleteCustomer(id).then(fetchCustomers);
+      deleteCustomer(id).then(() => {
+        setCustomers(prev => prev.filter(c => c.id !== id));
+      });
     }
   };
 
-  const resetForm = () => {
-    setForm(initialCustomerForm);
-    setEditingId(null);
-    setErrors({});
-  };
+  const totalPages = Math.ceil(customers.length / perPage);
+  const startIndex = (currentPage - 1) * perPage;
+  const currentCustomers = customers.slice(startIndex, startIndex + perPage);
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Quản lý khách hàng</h2>
-
-      <div className="card mb-4">
-        <div className="card-body">
-          <h5 className="card-title">{editingId ? 'Cập nhật khách hàng' : 'Thêm khách hàng mới'}</h5>
-
-          <div className="row g-3">
-            <div className="col-md-6">
-              <input
-                className={`form-control ${errors.ho_ten ? 'is-invalid' : ''}`}
-                name="ho_ten"
-                value={form.ho_ten}
-                onChange={handleChange}
-                placeholder="Họ tên"
-              />
-              {errors.ho_ten && <div className="invalid-feedback">{errors.ho_ten}</div>}
-            </div>
-            <div className="col-md-6">
-              <input
-                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="Email"
-              />
-              {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-            </div>
-            <div className="col-md-6">
-              <input
-                className={`form-control ${errors.mat_khau ? 'is-invalid' : ''}`}
-                name="mat_khau"
-                value={form.mat_khau}
-                onChange={handleChange}
-                placeholder="Mật khẩu"
-              />
-              {errors.mat_khau && <div className="invalid-feedback">{errors.mat_khau}</div>}
-            </div>
-            <div className="col-md-6">
-              <input
-                className={`form-control ${errors.so_dien_thoai ? 'is-invalid' : ''}`}
-                name="so_dien_thoai"
-                value={form.so_dien_thoai}
-                onChange={handleChange}
-                placeholder="Số điện thoại"
-              />
-              {errors.so_dien_thoai && <div className="invalid-feedback">{errors.so_dien_thoai}</div>}
-            </div>
-            <div className="col-md-6">
-              <input
-                className={`form-control ${errors.dia_chi ? 'is-invalid' : ''}`}
-                name="dia_chi"
-                value={form.dia_chi}
-                onChange={handleChange}
-                placeholder="Địa chỉ"
-              />
-              {errors.dia_chi && <div className="invalid-feedback">{errors.dia_chi}</div>}
-            </div>
-            <div className="col-md-6">
-              <input
-                className={`form-control ${errors.vai_tro ? 'is-invalid' : ''}`}
-                name="vai_tro"
-                value={form.vai_tro}
-                onChange={handleChange}
-                placeholder="Vai trò"
-              />
-              {errors.vai_tro && <div className="invalid-feedback">{errors.vai_tro}</div>}
-            </div>
-          </div>
-
-          <div className="mt-3">
-            <button className="btn btn-primary me-2" onClick={handleSubmit}>
-              {editingId ? 'Cập nhật' : 'Thêm mới'}
-            </button>
-            <button className="btn btn-secondary" onClick={resetForm}>
-              Reset
-            </button>
-          </div>
-        </div>
+      <h2 className="mb-3">Quản lý khách hàng</h2>
+      <div className="text-end mb-3">
+        <Link to="/admin/customer/add" className="btn btn-success">+ Thêm khách hàng</Link>
       </div>
 
       <table className="table table-bordered table-hover">
@@ -171,7 +46,7 @@ export default function CustomerPage() {
           </tr>
         </thead>
         <tbody>
-          {customers.map((c) => (
+          {currentCustomers.map(c => (
             <tr key={c.id}>
               <td>{c.ho_ten}</td>
               <td>{c.email}</td>
@@ -179,9 +54,7 @@ export default function CustomerPage() {
               <td>{c.dia_chi}</td>
               <td>{c.vai_tro}</td>
               <td>
-                <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(c)}>
-                  Sửa
-                </button>
+                {/* Bạn có thể làm trang sửa riêng nếu cần */}
                 <button className="btn btn-sm btn-danger" onClick={() => handleDelete(c.id)}>
                   Xoá
                 </button>
@@ -190,13 +63,24 @@ export default function CustomerPage() {
           ))}
           {customers.length === 0 && (
             <tr>
-              <td colSpan={6} className="text-center">
-                Không có khách hàng nào
-              </td>
+              <td colSpan={6} className="text-center">Không có khách hàng nào</td>
             </tr>
           )}
         </tbody>
       </table>
+
+      {/* Phân trang */}
+      <nav className="d-flex justify-content-center">
+        <ul className="pagination">
+          {[...Array(totalPages)].map((_, index) => (
+            <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => setCurrentPage(index + 1)}>
+                {index + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 }
