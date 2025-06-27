@@ -16,7 +16,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link className="nav-link text-dark" to="/admin/article">👤 Bài Viết</Link>
             <Link className="nav-link text-dark" to="/admin/orders">🛒 Đơn hàng</Link>
             <Link className="nav-link text-dark" to="/admin/comments">💬 Bình luận</Link>
-            <Link className="nav-link text-dark" to="/admin/statistics">📊 Thống kê</Link>
           </nav>
         </aside>
 

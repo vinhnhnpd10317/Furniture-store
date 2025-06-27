@@ -6,6 +6,7 @@ import HeaderAdmin from "../components/HeaderAdmin";
 import Categories from "../components/Admin/Categories";
 import Products from "../components/Admin/Products";
 import Customer from "../components/Admin/Customer";
+import Addcustomer from "../components/Admin/Addcustomer";
 
 import AdminArticle from "../components/Admin/Article";
 
@@ -35,6 +36,7 @@ export default function AdminRoutes() {
             <Route path="products" element={<Products/>}/>
             <Route path="products/addproduct" element={<AddProductWrapper />} />
             <Route path="products/edit/:id" element={<EditProductWrapper />} />
+            <Route path="customer/add" element={<Addcustomer/>}/>
             <Route path="customer" element={<Customer/>}/>
             <Route path="article" element={<AdminArticle/>}/>
           </Routes>
