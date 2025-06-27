@@ -1,4 +1,6 @@
+// ✅ src/pages/admin/AdminArticle.tsx
 import React, { useEffect, useState } from 'react';
+import { imageOptions } from '../../data/imgList';
 import {
   getArticles,
   createArticle,
@@ -22,7 +24,7 @@ const AdminArticle = () => {
     setArticles(data);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -34,14 +36,17 @@ const AdminArticle = () => {
         .slice(0, 19)
         .replace('T', ' ');
 
-      const payload = { ...formData, ngay_dang: formattedDate };
+      const payload = {
+        ...formData,
+        ngay_dang: formattedDate,
+      };
 
       if (editingId !== null) {
         await updateArticle(editingId, payload);
-         alert('✅ Cập nhật bài viết thành công!');
+        alert('✅ Cập nhật bài viết thành công!');
       } else {
         await createArticle(payload);
-         alert('✅ Thêm bài viết thành công!');
+        alert('✅ Thêm bài viết thành công!');
       }
 
       setFormData(initialArticleForm);
@@ -49,22 +54,19 @@ const AdminArticle = () => {
       loadArticles();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      alert('Lỗi khi lưu bài viết!');
+      alert('❌ Lỗi khi lưu bài viết!');
     }
   };
 
   const handleEdit = (article: Article) => {
-        setEditingId(article.id);
-        setFormData({
-          tieu_de: article.tieu_de,
-          noi_dung: article.noi_dung,
-          hinh_anh: article.hinh_anh,
-          ngay_dang: article.ngay_dang
-            ? new Date(article.ngay_dang).toISOString().slice(0, 16)
-            : '',
-        });
-      };
-
+    setEditingId(article.id);
+    setFormData({
+      tieu_de: article.tieu_de,
+      noi_dung: article.noi_dung,
+      hinh_anh: article.hinh_anh,
+      ngay_dang: article.ngay_dang ? new Date(article.ngay_dang).toISOString().slice(0, 16) : '',
+    });
+  };
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Bạn có chắc muốn xoá bài viết này?')) {
@@ -97,14 +99,18 @@ const AdminArticle = () => {
           onChange={handleChange}
           required
         />
-        <input
-          type="text"
+        <select
           name="hinh_anh"
-          placeholder="Link hình ảnh"
           className="form-control mb-2"
           value={formData.hinh_anh}
           onChange={handleChange}
-        />
+          required
+        >
+          <option value="">-- Chọn ảnh từ thư mục /img/imgproduct/ --</option>
+          {imageOptions.map((img) => (
+            <option key={img} value={img}>{img}</option>
+          ))}
+        </select>
         <input
           type="datetime-local"
           name="ngay_dang"
@@ -119,10 +125,14 @@ const AdminArticle = () => {
           {editingId !== null ? 'Cập nhật' : 'Thêm'}
         </button>
         {editingId !== null && (
-          <button type="button" className="btn btn-secondary" onClick={() => {
-            setFormData(initialArticleForm);
-            setEditingId(null);
-          }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => {
+              setFormData(initialArticleForm);
+              setEditingId(null);
+            }}
+          >
             Huỷ
           </button>
         )}
@@ -143,7 +153,11 @@ const AdminArticle = () => {
             <tr key={article.id}>
               <td>{article.tieu_de}</td>
               <td>
-                <img src={article.hinh_anh} alt="Ảnh" width={100} />
+                <img
+                  src={`/img/imgproduct/${article.hinh_anh}`}
+                  alt="Ảnh"
+                  width={100}
+                />
               </td>
               <td>{article.noi_dung}</td>
               <td>{new Date(article.ngay_dang).toLocaleString()}</td>

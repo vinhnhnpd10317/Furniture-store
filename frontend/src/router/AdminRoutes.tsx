@@ -9,7 +9,6 @@ import Customer from "../components/Admin/Customer";
 import Addcustomer from "../components/Admin/Addcustomer";
 
 import AdminArticle from "../components/Admin/Article";
-
 import ProductForm from "../components/Admin/Product/ProductForm";
 
 // Wrapper components
@@ -22,8 +21,6 @@ function EditProductWrapper() {
   const navigate = useNavigate();
   return <ProductForm onDone={() => navigate("/admin/products")} />;
 }
-
-
 
 export default function AdminRoutes() {
   return (
