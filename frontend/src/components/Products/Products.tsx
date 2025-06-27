@@ -20,7 +20,7 @@ export default function Product() {
     const { addToCart } = useCart();
 
 
-      const handleAddToCart = (item: ProductItem) => {
+    const handleAddToCart = (item: ProductItem) => {
         addToCart({
             id: item.id,
             name: item.ten_san_pham,

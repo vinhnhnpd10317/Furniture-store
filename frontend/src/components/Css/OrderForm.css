@@ -1,0 +1,24 @@
+.checkout-page .form-label {
+  font-weight: 500;
+}
+
+.payment-box {
+  min-width: 220px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-box:hover {
+  background-color: #f8f9fa;
+  border-color: #000;
+}
+
+.summary-box h6 {
+  font-size: 1.1rem;
+}
+
+.summary-box .img-thumbnail {
+  border: none;
+  padding: 0;
+}
