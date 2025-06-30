@@ -2,7 +2,7 @@
 export const imageOptions = [
   "camhung1.webp",
   "camhung2.webp",
-  "camhung3.webp",
+  "camhung3.jpg",
   "camhung4.jpg",
   "camhung5.jpg",
   "camhung6.jpg",
