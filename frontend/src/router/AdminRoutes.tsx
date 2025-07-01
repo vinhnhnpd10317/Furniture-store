@@ -8,6 +8,8 @@ import Products from "../components/Admin/Products";
 import Customer from "../components/Admin/Customer";
 import Addcustomer from "../components/Admin/Addcustomer";
 
+import Orders from "../components/Admin/Orders"; 
+
 import AdminArticle from "../components/Admin/Article";
 import ProductForm from "../components/Admin/Product/ProductForm";
 
@@ -36,6 +38,7 @@ export default function AdminRoutes() {
             <Route path="customer/add" element={<Addcustomer/>}/>
             <Route path="customer" element={<Customer/>}/>
             <Route path="article" element={<AdminArticle/>}/>
+            <Route path="orders" element={<Orders/>}/>
           </Routes>
         </AdminLayout>
     </>
