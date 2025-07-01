@@ -29,7 +29,9 @@ const Header = () => {
           <Link to="/productcart" className="text-muted"><i className="bi bi-bag"></i></Link>
            {user ? (
             <div className="d-flex align-items-center gap-2">
-              <span className="fw-semibold text-dark">Xin chào, {user.name}</span>
+              <Link to="/userorder" className="fw-semibold text-dark text-decoration-none">
+                Xin chào, {user.name}
+              </Link>
               <button className="btn btn-sm btn-outline-dark" onClick={logout}>Đăng xuất</button>
             </div>
           ) : (
