@@ -8,9 +8,10 @@ import Products from "../components/Admin/Products";
 import Customer from "../components/Admin/Customer";
 import Addcustomer from "../components/Admin/Addcustomer";
 import Orders from "../components/Admin/Orders";
-import AdminArticle from "../components/Admin/Article";
 import ProductForm from "../components/Admin/Product/ProductForm";
 import CommentManager from "../components/Admin/CommentManager";
+import ArticleList from "../components/Admin/ArticleList";
+import ArticleForm from "../components/Admin/ArticleForm";
 
 
 // Wrapper components
@@ -38,7 +39,9 @@ export default function AdminRoutes() {
             <Route path="products/edit/:id" element={<EditProductWrapper />} />
             <Route path="customer/add" element={<Addcustomer/>}/>
             <Route path="customer" element={<Customer/>}/>
-            <Route path="article" element={<AdminArticle/>}/>
+            <Route path="article" element={<ArticleList />} />
+            <Route path="article/add" element={<ArticleForm />} />
+            <Route path="article/edit/:id" element={<ArticleForm />} />
             <Route path="orders" element={<Orders/>}/>
           </Routes>
         </AdminLayout>
