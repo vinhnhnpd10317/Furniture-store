@@ -10,6 +10,8 @@ import Addcustomer from "../components/Admin/Addcustomer";
 import Orders from "../components/Admin/Orders";
 import AdminArticle from "../components/Admin/Article";
 import ProductForm from "../components/Admin/Product/ProductForm";
+import CommentManager from "../components/Admin/CommentManager";
+
 
 // Wrapper components
 function AddProductWrapper() {
@@ -28,6 +30,7 @@ export default function AdminRoutes() {
       <HeaderAdmin />
         <AdminLayout>
           <Routes>
+            <Route path="comments" element={<CommentManager />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="categories" element={<Categories/>}/>
             <Route path="products" element={<Products/>}/>
