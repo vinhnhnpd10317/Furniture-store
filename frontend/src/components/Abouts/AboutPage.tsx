@@ -1,16 +1,8 @@
 import "../Css/About.css";
-import { useEffect } from 'react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 export default function AboutPage() {
-    useEffect(() => {
-        AOS.init({
-          duration: 1000, // values from 0 to 3000, with step 50ms
-          easing: 'ease-out-back', // default easing for AOS animations
-        });
-      }, []);
-    return (
+  return (
     <>
       {/* Banner */}
       <section className="banner-wrapper text-center py-5 fw-bold">
@@ -23,7 +15,7 @@ export default function AboutPage() {
       </section>
 
       {/* Giới thiệu */}
-      <section className="intro-section" data-aos="fade-up">
+      <section className="intro-section">
         <div className="container">
           <p className="intro-text">
             Chào mừng bạn đến với PRIME SEVEN – nơi hội tụ của nghệ thuật thiết kế nội thất hiện đại. Chúng tôi cung cấp các sản phẩm nội thất cao cấp, tinh tế, và tiện nghi với sứ mệnh tạo nên không gian sống lý tưởng cho mỗi khách hàng.
@@ -34,36 +26,29 @@ export default function AboutPage() {
       {/* Phong cách */}
       <section className="style-section bg-light">
         <div className="container">
-          <h2 className="section-title" data-aos="fade-down">🎨 Phong Cách Thiết Kế</h2>
+          <h2 className="section-title">🎨 Phong Cách Thiết Kế</h2>
 
           {[
             {
               title: 'Phong Cách Hiện Đại',
               description: 'Sự kết hợp giữa công năng và thẩm mỹ, tối giản đường nét nhưng vẫn đầy đủ tiện nghi.',
               image: 'https://housedesign.vn/wp-content/uploads/2019/12/noi-that-hien-dai.jpg',
-              aos: 'fade-right',
               reverse: false,
             },
             {
               title: 'Phong Cách Scandinavian',
               description: 'Gam màu nhẹ nhàng, vật liệu tự nhiên, ánh sáng chan hòa – mang đến sự ấm áp và giản dị.',
               image: 'https://file.hstatic.net/1000400963/file/phong-cach-noi-that-scandinavian-1_115425c0727a4330833b1fa7bd1d5010.jpg',
-              aos: 'fade-left',
               reverse: true,
             },
             {
               title: 'Phong Cách Tối Giản (Minimalism)',
               description: 'Loại bỏ chi tiết thừa, tập trung vào trải nghiệm không gian tinh gọn và hiện đại.',
               image: 'https://housedesign.vn/wp-content/uploads/2019/12/phong-cach-minimalism.jpg',
-              aos: 'fade-up',
               reverse: false,
             },
           ].map((style, idx) => (
-            <div
-              className="row align-items-center mb-5"
-              key={idx}
-              data-aos={style.aos}
-            >
+            <div className="row align-items-center mb-5" key={idx}>
               <div className={`col-md-6 ${style.reverse ? 'order-md-2' : ''}`}>
                 <h4>{style.title}</h4>
                 <p>{style.description}</p>
@@ -152,9 +137,9 @@ export default function AboutPage() {
       </section>
 
       {/* Bộ sưu tập */}
-      <section className="gallery-section" data-aos="fade-up">
+      <section className="gallery-section">
         <div className="container">
-          <h2 className="section-title" data-aos="fade-down">🖼️ Bộ Sưu Tập Hình Ảnh</h2>
+          <h2 className="section-title">🖼️ Bộ Sưu Tập Hình Ảnh</h2>
           <div className="row gallery gx-4 gy-4">
             {[
               'https://images.pexels.com/photos/13044790/pexels-photo-13044790.png',
@@ -164,12 +149,7 @@ export default function AboutPage() {
               'https://images.pexels.com/photos/2343465/pexels-photo-2343465.jpeg',
               'https://images.pexels.com/photos/1957478/pexels-photo-1957478.jpeg',
             ].map((img, idx) => (
-              <div
-                className="col-md-4 col-12"
-                key={idx}
-                data-aos="zoom-in"
-                data-aos-delay={idx * 100}
-              >
+              <div className="col-md-4 col-12" key={idx}>
                 <img src={img} alt={`Interior ${idx + 1}`} className="gallery-img" />
               </div>
             ))}
@@ -178,4 +158,4 @@ export default function AboutPage() {
       </section>
     </>
   );
-};
+}
