@@ -4,7 +4,7 @@ import { useCart } from "../Products/CartContext";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-import { Offcanvas } from "bootstrap";
+import Offcanvas from "bootstrap/js/dist/offcanvas";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
