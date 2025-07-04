@@ -31,6 +31,7 @@ export default function AdminRoutes() {
       <HeaderAdmin />
         <AdminLayout>
           <Routes>
+            <Route index element={<Dashboard/>}/>
             <Route path="comments" element={<CommentManager />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="categories" element={<Categories/>}/>
