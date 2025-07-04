@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation  } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -7,7 +7,25 @@ import "./Css/Header.css";
 import { useAuth } from "../components/AuthContext";
 
 const Header = () => {
-   const { user, logout } = useAuth();
+    const { user, logout } = useAuth();
+
+    const [keyword, setKeyword] = useState("");
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const search = params.get("search") || "";
+        setKeyword(search);
+    }, [location]);
+
+    const handleSearch = () => {
+        const trimmed = keyword.trim();
+        if (!trimmed) return;                    
+        navigate(`/products?search=${encodeURIComponent(trimmed)}`);
+        setKeyword("");
+    };
+
   return (
     <>
       <header className="sticky-top shadow-sm">
@@ -104,12 +122,28 @@ const Header = () => {
 
               {/* Search (desktop only) */}
               <div className="d-none d-md-block" style={{ width: "200px" }}>
-                <input type="text" className="form-control" placeholder="Tìm kiếm sản phẩm" />
+                <input
+                  value={keyword}
+                  onChange={e => setKeyword(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === "Enter") handleSearch();
+                  }}
+                  type="text"
+                  className="form-control"
+                  placeholder="Tìm kiếm sản phẩm"
+                />
               </div>
 
               {/* Mobile: Search + Đăng nhập */}
               <div className="d-md-none w-100 mt-3 px-2">
-                <input type="text" className="form-control mb-2" placeholder="Tìm kiếm sản phẩm" />
+                <input
+                  type="text"
+                  value={keyword}
+                  onChange={e => setKeyword(e.target.value)}
+                  onKeyDown={e => { if (e.key === "Enter") handleSearch(); }}
+                  className="form-control mb-2"
+                  placeholder="Tìm kiếm sản phẩm"
+                />
                 <Link to="/login" className="btn btn-outline-dark w-100 d-flex justify-content-center align-items-center">
                   Đăng nhập <i className="bi bi-person ms-2"></i>
                 </Link>

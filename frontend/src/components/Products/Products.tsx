@@ -5,7 +5,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import Offcanvas from "bootstrap/js/dist/offcanvas";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { fetchProducts, type ProductItem } from "../../api/ProductApi";
@@ -13,12 +13,24 @@ import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
 
 export default function Product() {
     const navigate = useNavigate();
-    const [products, setProducts] = useState<ProductItem[]>([]);
-    const [categories, setCategories] = useState<CategoryItem[]>([]);
-    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-    const [likedList, setLikedList] = useState<boolean[]>([]);
     const { addToCart } = useCart();
 
+    const [products, setProducts] = useState<ProductItem[]>([]);
+    const [categories, setCategories] = useState<CategoryItem[]>([]);
+    const [likedList, setLikedList] = useState<boolean[]>([]);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const categoryIdParam = searchParams.get("categoryId");
+    const searchKeyword = searchParams.get("search") || undefined;
+    const selectedCategoryId = categoryIdParam ? +categoryIdParam : null;
+
+    const showAllProducts = () => {
+        setSearchParams({});
+    };
+
+    const handleCategoryClick = (id: number) => {
+        setSearchParams({ categoryId: String(id) });
+    };
 
     const handleAddToCart = (item: ProductItem) => {
         addToCart({
@@ -27,45 +39,38 @@ export default function Product() {
             price: Number(item.gia),
             quantity: 1,
             image: item.hinh_anh_dai_dien
-            ? `/img/imgproduct/${item.hinh_anh_dai_dien}`
-            : "/img/imgproduct/default.jpg",
-            material: item.vat_lieu || 'N/A',
-            texture: item.chat_lieu || 'N/A',
+                ? `/img/imgproduct/${item.hinh_anh_dai_dien}`
+                : "/img/imgproduct/default.jpg",
+            material: item.vat_lieu || "N/A",
+            texture: item.chat_lieu || "N/A",
         });
         alert("Đã thêm vào giỏ hàng!");
     };
 
-
-    useEffect(() => {
-        fetchProducts()
-            .then((data) => {
-                setProducts(data);
-                setLikedList(new Array(data.length).fill(false));
-            })
-            .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
-
-        fetchCategories()
-            .then((data) => setCategories(data))
-            .catch((err) => console.error("Lỗi khi tải danh mục:", err));
-    }, []);
-
-    useEffect(() => {
-        // Tải sản phẩm theo danh mục (nếu có)
-        fetchProducts(selectedCategoryId ?? undefined)
-            .then((data) => {
-                setProducts(data);
-                setLikedList(new Array(data.length).fill(false));
-            })
-            .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
-    }, [selectedCategoryId]);
-
-    
     const toggleLike = (index: number) => {
         const updated = [...likedList];
         updated[index] = !updated[index];
         setLikedList(updated);
     };
-    
+
+    useEffect(() => {
+        fetchCategories()
+            .then(setCategories)
+            .catch((err) => console.error("Lỗi khi tải danh mục:", err));
+    }, []);
+
+    useEffect(() => {
+        fetchProducts({
+            categoryId: selectedCategoryId ?? undefined,
+            search: searchKeyword,
+        })
+            .then((data) => {
+                setProducts(data);
+                setLikedList(new Array(data.length).fill(false));
+            })
+            .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
+    }, [searchKeyword, searchParams, selectedCategoryId]);
+
     return (
         <>
             {/* Banner */}
@@ -111,7 +116,7 @@ export default function Product() {
 
             <div className="container my-4">
                 <div className="row align-items-stretch">
-                    {/* Offcanvas cho mobile */}
+                    {/* Sidebar Mobile */}
                     <div className="col-md-3 mb-md-0">
                         <div
                             className="offcanvas offcanvas-start d-md-none"
@@ -124,16 +129,14 @@ export default function Product() {
                                     <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                 </div>
                                 <h5 className="fw-bold mb-3">Danh Mục</h5>
-
                                 <ul className="list-unstyled ps-0">
                                     <li>
                                         <a
                                             href="#"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                setSelectedCategoryId(null); // Hiển thị tất cả sản phẩm
-                                                
-                                                // Ẩn offcanvas sau khi chọn danh mục (mobile)
+                                                showAllProducts();
+
                                                 const sidebarElement = document.getElementById("categorySidebar");
                                                 if (sidebarElement) {
                                                     const bsOffcanvas = Offcanvas.getInstance(sidebarElement) || new Offcanvas(sidebarElement);
@@ -151,9 +154,8 @@ export default function Product() {
                                                 href="#"
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    setSelectedCategoryId(cat.id);
+                                                    handleCategoryClick(cat.id);
 
-                                                    // Ẩn offcanvas sau khi chọn danh mục (mobile)
                                                     const sidebarElement = document.getElementById("categorySidebar");
                                                     if (sidebarElement) {
                                                         const bsOffcanvas = Offcanvas.getInstance(sidebarElement) || new Offcanvas(sidebarElement);
@@ -167,22 +169,10 @@ export default function Product() {
                                         </li>
                                     ))}
                                 </ul>
-
-
-                                <h5 className="fw-bold mt-4 mb-3">Màu sắc</h5>
-                                <ul className="list-unstyled ps-0">
-                                    {["Màu trắng", "Màu be", "Màu đỏ", "Màu nâu cafe", "Màu xanh lá", "Màu vàng"].map((color, index) => (
-                                        <li key={index}>
-                                            <a href="#" className="d-block py-1 text-decoration-none text-dark product-sidebar-link">
-                                                {color}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
                             </div>
                         </div>
 
-                        {/* Sidebar desktop */}
+                        {/* Sidebar Desktop */}
                         <div className="d-none d-md-block products-sidebar">
                             <h5 className="fw-bold mb-3">Danh Mục</h5>
                             <ul className="list-unstyled ps-0">
@@ -191,7 +181,7 @@ export default function Product() {
                                         href="#"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            setSelectedCategoryId(null); // Hiển thị tất cả sản phẩm
+                                            showAllProducts();
                                         }}
                                         className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link"
                                     >
@@ -200,12 +190,12 @@ export default function Product() {
                                 </li>
                                 {categories.map((cat) => (
                                     <li key={cat.id}>
-                                        <a 
-                                            href="#"  
-                                            onClick={(e) => { 
-                                                e.preventDefault();  
-                                                setSelectedCategoryId(cat.id);
-                                            }} 
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleCategoryClick(cat.id);
+                                            }}
                                             className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link"
                                         >
                                             {cat.ten_danh_muc}
@@ -213,7 +203,6 @@ export default function Product() {
                                     </li>
                                 ))}
                             </ul>
-
 
                             <h5 className="fw-bold mt-4 mb-3">Màu sắc</h5>
                             <ul className="list-unstyled ps-0">
@@ -228,7 +217,7 @@ export default function Product() {
                         </div>
                     </div>
 
-                    {/* Products */}
+                    {/* Danh sách sản phẩm */}
                     <div className="col-md-9">
                         <div className="row">
                             {products.map((item, idx) => (
@@ -238,10 +227,7 @@ export default function Product() {
                                             src={item.hinh_anh_dai_dien ? `/img/imgproduct/${item.hinh_anh_dai_dien}` : "img/imgproduct/product.png"}
                                             alt={item.ten_san_pham}
                                             className="img-fluid"
-                                            style={{
-                                                height: "135px",    
-                                                objectFit: "cover",   
-                                            }}
+                                            style={{ height: "135px", objectFit: "cover" }}
                                         />
                                         <div className="d-flex justify-content-between align-items-start mt-2">
                                             <h6 className="mb-1">{item.ten_san_pham}</h6>
@@ -251,7 +237,7 @@ export default function Product() {
                                                     style={{
                                                         fontSize: "1.2rem",
                                                         color: likedList[idx] ? "red" : "#999",
-                                                        cursor: "pointer"
+                                                        cursor: "pointer",
                                                     }}
                                                     onClick={() => toggleLike(idx)}
                                                 />
@@ -261,7 +247,9 @@ export default function Product() {
                                             </div>
                                         </div>
                                         <div className="btn-group d-flex justify-content-center mt-3 product-btn-group">
-                                            <button className="btn btn-outline-dark btn-sm" onClick={() => handleAddToCart(item)}>THÊM VÀO GIỎ</button>
+                                            <button className="btn btn-outline-dark btn-sm" onClick={() => handleAddToCart(item)}>
+                                                THÊM VÀO GIỎ
+                                            </button>
                                             <button className="btn btn-dark btn-sm" onClick={() => navigate(`/productdetail/${item.id}`)}>
                                                 XEM THÊM
                                             </button>

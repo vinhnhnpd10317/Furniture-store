@@ -3,13 +3,31 @@ import db from '../db.js';
 
 const router = express.Router();
 
-// Lấy tất cả sản phẩm
-// router.get('/', (req, res) => {
-//     db.query('SELECT * FROM san_pham', (err, result) => {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.json(result);
-//     });
-// });
+router.get('/', (req, res) => {
+    const { categoryId, search } = req.query;
+
+    let sql = 'SELECT * FROM san_pham';
+    const params = [];
+
+    let conditions = [];
+    if (categoryId) {
+        conditions.push('danh_muc_id = ?');
+        params.push(categoryId);
+    }
+    if (search) {
+        conditions.push('ten_san_pham LIKE ?');
+        params.push(`%${search}%`);
+    }
+
+    if (conditions.length > 0) {
+        sql += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    db.query(sql, params, (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(result);
+    });
+});
 
 
 // GET /products => tất cả sản phẩm hoặc theo danh mục
