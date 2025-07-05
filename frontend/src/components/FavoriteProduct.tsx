@@ -3,6 +3,8 @@ import { getFavoritesByUser } from "../api/FavoriteApi";
 import { useAuth } from "../components/AuthContext";
 import { useCart } from "../components/Products/CartContext";
 import { useNavigate } from "react-router-dom";
+import { deleteFavorite } from "../api/FavoriteApi";
+
 
 interface FavoriteItem {
   id: number;
@@ -40,6 +42,19 @@ export default function FavoriteProducts() {
     alert("Đã thêm vào giỏ hàng!");
   };
 
+  const handleDeleteFavorite = async (san_pham_id: number) => {
+  if (!user?.id) return;
+  if (!window.confirm("Bạn có chắc muốn xoá sản phẩm khỏi yêu thích không?")) return;
+
+  try {
+    await deleteFavorite(user.id, san_pham_id);
+    // Cập nhật lại danh sách yêu thích sau khi xoá
+    setFavorites(prev => prev.filter(item => item.san_pham_id !== san_pham_id));
+  } catch (err) {
+    console.error("Lỗi khi xoá sản phẩm yêu thích:", err);
+  }
+};
+
   return (
     <div className="container my-5">
       <h2 className="mb-4">🧡 Sản phẩm yêu thích</h2>
@@ -72,6 +87,13 @@ export default function FavoriteProducts() {
                     >
                       Xem thêm
                     </button>
+                    <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDeleteFavorite(item.san_pham_id)}
+                    >
+                    Xoá
+                    </button>
+
                   </div>
                 </div>
               </div>

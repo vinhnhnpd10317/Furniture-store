@@ -58,4 +58,24 @@ router.post('/', (req, res) => {
   });
 });
 
+// Xoá khỏi yêu thích
+router.delete('/', (req, res) => {
+  const { nguoi_dung_id, san_pham_id } = req.body;
+
+  if (!nguoi_dung_id || !san_pham_id) {
+    return res.status(400).json({ error: 'Thiếu thông tin cần xoá' });
+  }
+
+  const sqlDelete = 'DELETE FROM yeu_thich WHERE nguoi_dung_id = ? AND san_pham_id = ?';
+  connection.query(sqlDelete, [nguoi_dung_id, san_pham_id], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Lỗi khi xoá yêu thích' });
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Không tìm thấy sản phẩm để xoá' });
+    }
+
+    res.json({ message: 'Đã xoá khỏi yêu thích' });
+  });
+});
+
 export default router;

@@ -19,9 +19,11 @@ export const addFavorite = async (userId: number, productId: number) => {
   return res.data;
 };
 
-export const deleteFavorite = async (id: number) => {
-  const res = await axios.delete(`http://localhost:3001/favorites/${id}`);
-  return res.data;
+// ✅ GIỮ DUY NHẤT phiên bản delete chính xác
+export const deleteFavorite = async (nguoi_dung_id: number, san_pham_id: number) => {
+  return await axios.delete("http://localhost:3001/favorites", {
+    data: { nguoi_dung_id, san_pham_id },
+  });
 };
 
 export const getFavoritesByUser = async (userId: number) => {
