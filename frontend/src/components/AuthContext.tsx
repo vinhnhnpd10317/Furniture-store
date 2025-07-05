@@ -1,5 +1,5 @@
-// === 1. AuthContext.tsx ===
-import React, { createContext, useContext, useState, useEffect } from 'react';
+// AuthContext.tsx
+import { createContext, useContext, useState, type ReactNode,  } from "react";
 
 interface User {
   id: number;
@@ -9,30 +9,30 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (userData: User) => void;
+  login: (user: User) => void;
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  login: () => {},
+  logout: () => {},
+});
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
-  const login = (userData: User) => {
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser(userData);
+  const login = (user: User) => {
+    setUser(user);
+    localStorage.setItem("user", JSON.stringify(user)); // Lưu vào localStorage
   };
 
   const logout = () => {
-    localStorage.removeItem('user');
     setUser(null);
+    localStorage.removeItem("user");
   };
 
   return (
@@ -42,8 +42,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error('AuthContext phải được sử dụng trong AuthProvider');
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);
