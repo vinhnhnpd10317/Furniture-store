@@ -3,7 +3,8 @@ import "../Css/Product.css";
 import { useCart } from "../Products/CartContext";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import { addFavorite } from "../../api/FavoriteApi";
+import { useAuth } from "../../components/AuthContext"; // chỉnh path nếu cần
 import Offcanvas from "bootstrap/js/dist/offcanvas";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -47,12 +48,6 @@ export default function Product() {
         alert("Đã thêm vào giỏ hàng!");
     };
 
-    const toggleLike = (index: number) => {
-        const updated = [...likedList];
-        updated[index] = !updated[index];
-        setLikedList(updated);
-    };
-
     useEffect(() => {
         fetchCategories()
             .then(setCategories)
@@ -70,6 +65,38 @@ export default function Product() {
             })
             .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
     }, [searchKeyword, searchParams, selectedCategoryId]);
+
+    const { user } = useAuth();
+    const nguoi_dung_id = user?.id; 
+
+   const toggleLike = async (index: number, productId: number) => {
+    const updated = [...likedList];
+    updated[index] = !updated[index];
+    setLikedList(updated);
+
+    if (!nguoi_dung_id) {
+        alert("Vui lòng đăng nhập để thêm vào yêu thích!");
+        return;
+    }
+
+    try {
+        if (updated[index]) {
+        await addFavorite(nguoi_dung_id, productId);
+        alert("Đã thêm vào danh sách yêu thích!");
+        } else {
+        // TODO: Xử lý khi bỏ thích nếu muốn
+        // await deleteFavoriteByUserAndProduct(nguoi_dung_id, productId);
+        }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        if (error.response?.status === 409) {
+        alert("Sản phẩm này đã có trong danh sách yêu thích!");
+        } else {
+        console.error("Lỗi khi lưu mục yêu thích:", error);
+        alert("Có lỗi xảy ra khi lưu yêu thích!");
+        }
+    }
+    };
 
     return (
         <>
@@ -239,7 +266,7 @@ export default function Product() {
                                                         color: likedList[idx] ? "red" : "#999",
                                                         cursor: "pointer",
                                                     }}
-                                                    onClick={() => toggleLike(idx)}
+                                                    onClick={() => toggleLike(idx, item.id)}
                                                 />
                                                 <div className="product-price mt-1" style={{ fontSize: 14 }}>
                                                     {item.gia.toLocaleString("vi-VN")}₫
