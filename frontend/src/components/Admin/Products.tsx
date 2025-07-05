@@ -2,16 +2,25 @@ import ProductActions from "./Product/ProductActions";
 import type { ProductItem } from "../../api/ProductApi";
 import type { CategoryItem } from "../../api/CategoryApi";
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import "./CSS/ProductAdmin.css"
+import { Link, useLocation } from "react-router-dom";
+import "./CSS/ProductAdmin.css";
+
+function useQuery() {
+  const { search } = useLocation();
+  return new URLSearchParams(search);
+}
 
 export default function Products() {
     const [products, setProducts] = useState<ProductItem[]>([]);
     const [categories, setCategories] = useState<CategoryItem[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10;                    
+    // const [searchParams] = useSearchParams();
+    const pageSize = 10;
 
-    //Lấy dữ liệu
+    const query = useQuery();
+    const searchText = query.get("search")?.toLowerCase() || "";
+
+    // Lấy dữ liệu ban đầu
     useEffect(() => {
         fetch("http://localhost:3001/products")
             .then(res => res.json())
@@ -22,23 +31,29 @@ export default function Products() {
             .then(setCategories);
     }, []);
 
-    // Xử lý xóa sp 
     const handleDeleted = (id: number) => {
         const newProducts = products.filter(p => p.id !== id);
         setProducts(newProducts);
-
-        // Nếu vừa xoá item cuối ở trang cuối thì lùi về trang trước
         const lastPage = Math.max(1, Math.ceil(newProducts.length / pageSize));
         if (currentPage > lastPage) setCurrentPage(lastPage);
     };
 
-    // Phân trang
-    const totalPages = Math.max(1, Math.ceil(products.length / pageSize));
+    const filteredProducts = useMemo(() => {
+        if (!searchText) return products;
+        return products.filter(p =>
+            p.ten_san_pham.toLowerCase().includes(searchText) ||
+            p.mo_ta?.toLowerCase().includes(searchText) ||
+            p.vat_lieu?.toLowerCase().includes(searchText) ||
+            p.chat_lieu?.toLowerCase().includes(searchText) 
+        );
+    }, [products, searchText]);
+
+    const totalPages = Math.max(1, Math.ceil(filteredProducts.length / pageSize));
 
     const currentProducts = useMemo(() => {
         const start = (currentPage - 1) * pageSize;
-        return products.slice(start, start + pageSize);
-    }, [products, currentPage]);
+        return filteredProducts.slice(start, start + pageSize);
+    }, [filteredProducts, currentPage]);
 
     const goToPage = (page: number) => setCurrentPage(page);
 
@@ -49,9 +64,7 @@ export default function Products() {
         <div className="container py-4">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2 className="fw-bold">📦 Quản lý sản phẩm</h2>
-                <Link to="addproduct" className="btn btn-success">
-                    ➕ Thêm sản phẩm
-                </Link>
+                <Link to="addproduct" className="btn btn-success">➕ Thêm sản phẩm</Link>
             </div>
 
             <div className="table-responsive shadow rounded bg-white">
@@ -119,41 +132,30 @@ export default function Products() {
                                 </td>
                             </tr>
                         ))}
+                        {currentProducts.length === 0 && (
+                            <tr>
+                                <td colSpan={11} className="text-muted text-center py-4">
+                                    Không tìm thấy sản phẩm nào.
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
 
-            {/* Thanh Pagination */}
             {totalPages > 1 && (
                 <nav aria-label="pagination" className="mt-3">
                     <ul className="pagination justify-content-center mb-0">
                         <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-                            <button
-                                className="page-link"
-                                onClick={() => goToPage(currentPage - 1)}
-                            >
-                                &laquo;
-                            </button>
+                            <button className="page-link" onClick={() => goToPage(currentPage - 1)}>&laquo;</button>
                         </li>
-
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
-                            <li
-                                key={n}
-                                className={`page-item ${currentPage === n && "active"}`}
-                            >
-                                <button className="page-link" onClick={() => goToPage(n)}>
-                                    {n}
-                                </button>
+                            <li key={n} className={`page-item ${currentPage === n && "active"}`}>
+                                <button className="page-link" onClick={() => goToPage(n)}>{n}</button>
                             </li>
                         ))}
-
                         <li className={`page-item ${currentPage === totalPages && "disabled"}`}>
-                            <button
-                                className="page-link"
-                                onClick={() => goToPage(currentPage + 1)}
-                            >
-                                &raquo;
-                            </button>
+                            <button className="page-link" onClick={() => goToPage(currentPage + 1)}>&raquo;</button>
                         </li>
                     </ul>
                 </nav>
