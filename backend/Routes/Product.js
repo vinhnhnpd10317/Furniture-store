@@ -3,6 +3,7 @@ import db from '../db.js';
 
 const router = express.Router();
 
+// Tìm kiếm sản phẩm
 router.get('/', (req, res) => {
     const { categoryId, search } = req.query;
 

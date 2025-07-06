@@ -44,4 +44,22 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+router.get('/', (req, res) => {
+    const search = req.query.search?.toString().trim();
+
+    let sql = 'SELECT * FROM danh_muc';
+    const values = [];
+
+    if (search) {
+        sql += ' WHERE ten_danh_muc LIKE ? OR mo_ta LIKE ?';
+        const likeSearch = `%${search}%`;
+        values.push(likeSearch, likeSearch);
+    }
+
+    db.query(sql, values, (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(result);
+    });
+});
+
 export default router;

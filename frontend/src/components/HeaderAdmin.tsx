@@ -1,15 +1,42 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function HeaderAdmin() {
-    return (
+    const navigate = useNavigate();
+    // const location = useLocation();
+    const [searchText, setSearchText] = useState("");
+    const [searchType, setSearchType] = useState("products"); 
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        const trimmed = searchText.trim();
+        if (!trimmed) return;
+
+        let path = "";
+        switch (searchType) {
+        case "products":
+            path = "/admin/products";
+            break;
+        case "categories":
+            path = "/admin/categories";
+            break;
+        case "customer":
+            path = "/admin/customer";
+            break;
+        default:
+            path = "/admin/products";
+        }
+
+        navigate(`${path}?search=${encodeURIComponent(trimmed)}`);
+    };
+
+  return (
         <nav className="navbar navbar-expand-lg bg-white shadow-sm">
             <div className="container">
-                {/* Logo */}
                 <Link className="navbar-brand" to="/">
-                    <img src="../public/img/logog7.jpg" alt="Logo" style={{ height: "60px" }} />
+                    <img src="/img/logog7.jpg" alt="Logo" style={{ height: "60px" }} />
                 </Link>
 
-                {/* Toggle menu cho mobile */}
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -19,46 +46,48 @@ export default function HeaderAdmin() {
                     <span className="navbar-toggler-icon" />
                 </button>
 
-                {/* Menu */}
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav mx-auto">
                         <li className="nav-item me-5">
-                            <Link className="nav-link fw-semibold active" to="/">
-                                TRANG CHỦ
-                            </Link>
+                            <Link className="nav-link fw-semibold active" to="/">TRANG CHỦ</Link>
                         </li>
                         <li className="nav-item me-5">
-                            <Link className="nav-link fw-semibold" to="/admin/dashboard">
-                                DASHBOARD
-                            </Link>
+                            <Link className="nav-link fw-semibold" to="/admin/dashboard">DASHBOARD</Link>
                         </li>
                         <li className="nav-item me-5">
-                            <Link className="nav-link fw-semibold" to="/">
-                                USER
-                            </Link>
+                            <Link className="nav-link fw-semibold" to="/admin/users">USER</Link>
                         </li>
                         <li className="nav-item me-5">
-                            <Link className="nav-link fw-semibold" to="/">
-                                SETTING
-                            </Link>
+                            <Link className="nav-link fw-semibold" to="/">SETTING</Link>
                         </li>
                     </ul>
                 </div>
 
-                {/* Form tìm kiếm */}
-                <form action="" className="d-flex me-3">
+                {/* Form tìm kiếm nâng cao */}
+                <form className="d-flex align-items-center me-3" onSubmit={handleSearch}>
+                    <select
+                        className="form-select me-2"
+                        value={searchType}
+                        onChange={(e) => setSearchType(e.target.value)}
+                    >
+                        <option value="products">Sản phẩm</option>
+                        <option value="categories">Danh mục</option>
+                        <option value="customer">Người dùng</option>
+                    </select>
+
                     <input
                         type="search"
                         className="form-control me-2"
-                        placeholder="Tìm kiếm..."
-                        aria-label="Search"
+                        placeholder={`Tìm ${searchType === "products" ? "sản phẩm" : searchType === "categories" ? "danh mục" : "người dùng"}...`}
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
                     />
                     <button className="btn btn-outline-primary" type="submit">
                         <i className="bi bi-search"></i>
                     </button>
                 </form>
 
-                {/* Avatar + dropdown */}
+                {/* Avatar */}
                 <div className="dropdown">
                     <button
                         className="btn dropdown-toggle p-0 border-0 bg-transparent"
@@ -67,18 +96,17 @@ export default function HeaderAdmin() {
                         aria-expanded="false"
                     >
                         <img
-                            src="../public/img/admin.jpg"
-                            alt="User Avatar"
-                            className="rounded-circle"
-                            style={{ height: "40px", width: "40px", objectFit: "cover" }}
+                        src="/img/admin.jpg"
+                        alt="User Avatar"
+                        className="rounded-circle"
+                        style={{ height: "40px", width: "40px", objectFit: "cover" }}
                         />
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
                         <li>
-                            <Link className="dropdown-item" to="/profile">
-                                Trang cá nhân
-                            </Link>
+                            <Link className="dropdown-item" to="/profile">Trang cá nhân</Link>
                         </li>
+
                         <li>
                             <button className="dropdown-item" onClick={() => alert("Đăng xuất thành công!")}>
                                 Đăng xuất
@@ -88,5 +116,5 @@ export default function HeaderAdmin() {
                 </div>
             </div>
         </nav>
-    );
+  );
 }

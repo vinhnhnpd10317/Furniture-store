@@ -6,6 +6,7 @@ import ArticleRoutes from './Routes/Article.js';
 import cartRoutes from './Routes/cart.js';
 import CustomerRoutes from './Routes/Customer.js';
 import OrderRoutes from './Routes/Order.js';
+import FavoriteRoutes from './Routes/Favorite.js';
 import path from 'path';
 import multer from 'multer';
 import { fileURLToPath } from 'url';
@@ -36,6 +37,7 @@ app.use('/customer', CustomerRoutes);
 app.use('/orders', OrderRoutes);
 app.use('/uploads', express.static('uploads'));
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+app.use('/favorites', FavoriteRoutes);
 
 // Sử dụng middleware upload cho route /products
 // Cập nhật middleware cho nhiều ảnh

@@ -17,6 +17,7 @@ import NewsSection from "../components/article";
 // import InspirationDetail from "../components/Inspiration/InspirationDetail";
 import InspirationRouter from "./InspirationRouter";
 import OrderForm from "../components/OrderForm";
+import FavoriteProducts from "../components/FavoriteProduct";
 
 export default function AppRoutes() {
   return (
@@ -38,6 +39,7 @@ export default function AppRoutes() {
         <Route path="/userorder" element={<UserOrders />} />
         <Route path="/orderform" element={<OrderForm />} />
         <Route path="/article" element={<NewsSection />} />
+        <Route path="/favorites" element={<FavoriteProducts />} />
       </Routes>
       <Footer />
     </>
