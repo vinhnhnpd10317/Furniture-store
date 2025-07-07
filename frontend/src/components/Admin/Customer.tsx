@@ -1,19 +1,28 @@
 // src/pages/CustomerList.tsx
 import { useEffect, useState } from 'react';
 import { getCustomer, deleteCustomer, type Customer } from '../../api/Customer';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
+function useQuery() {
+  const { search } = useLocation();
+  return new URLSearchParams(search);
+}
 
 export default function CustomerList() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 10;
 
+  const query = useQuery();
+  const searchText = query.get("search")?.toLowerCase() || "";
+
   useEffect(() => {
-    getCustomer().then(data => {
-      const sorted = [...data].sort((a, b) => b.id - a.id); // Mới nhất lên đầu
-      setCustomers(sorted);
-    });
-  }, []);
+    getCustomer(searchText || undefined)
+      .then(data => {
+        const sorted = [...data].sort((a, b) => b.id - a.id); // Mới nhất lên đầu
+        setCustomers(sorted);
+      });
+  }, [searchText]);
 
   const handleDelete = (id: number) => {
     if (window.confirm('Bạn có chắc muốn xoá khách hàng này?')) {

@@ -21,9 +21,9 @@ export const initialArticleForm: Omit<Article, 'id'> = {
 const API_URL = 'http://localhost:3001/articles';
 
 // API
-export const getArticles = async (): Promise<Article[]> => {
-  const res = await axios.get(API_URL);
-  return res.data;
+export const getArticles = async (search?: string): Promise<Article[]> => {
+  const url = search ? `${API_URL}?search=${encodeURIComponent(search)}` : API_URL;
+  return (await axios.get(url)).data;
 };
 
 export const createArticle = async (payload: Omit<Article, 'id'>) => {

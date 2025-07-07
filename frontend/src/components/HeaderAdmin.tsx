@@ -23,6 +23,12 @@ export default function HeaderAdmin() {
         case "customer":
             path = "/admin/customer";
             break;
+        case "article":
+            path = "/admin/article";
+            break;
+        case "orders":
+            path = "/admin/orders";
+            break;
         default:
             path = "/admin/products";
         }
@@ -73,12 +79,24 @@ export default function HeaderAdmin() {
                         <option value="products">Sản phẩm</option>
                         <option value="categories">Danh mục</option>
                         <option value="customer">Người dùng</option>
+                        <option value="article">Bài viết</option>
+                        <option value="orders">Đơn hàng</option>
                     </select>
 
                     <input
                         type="search"
                         className="form-control me-2"
-                        placeholder={`Tìm ${searchType === "products" ? "sản phẩm" : searchType === "categories" ? "danh mục" : "người dùng"}...`}
+                        placeholder={`Tìm ${
+                            searchType === "products"
+                            ? "sản phẩm"
+                            : searchType === "categories"
+                            ? "danh mục"
+                            : searchType === "customer"
+                            ? "người dùng"
+                            : searchType === "orders"
+                            ? "dơn hàng"
+                            : "bài viết"    
+                        }...`}
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
                     />

@@ -3,28 +3,28 @@ import db from '../db.js';
 
 const router = express.Router();
 
-// Tìm kiếm sản phẩm
+// Lấy danh sách sản phẩm và tìm kiếm sản phẩm
 router.get('/', (req, res) => {
     const { categoryId, search } = req.query;
 
     let sql = 'SELECT * FROM san_pham';
-    const params = [];
+    const values = [];
 
     let conditions = [];
     if (categoryId) {
         conditions.push('danh_muc_id = ?');
-        params.push(categoryId);
+        values.push(categoryId);
     }
     if (search) {
         conditions.push('ten_san_pham LIKE ?');
-        params.push(`%${search}%`);
+        values.push(`%${search}%`);
     }
 
     if (conditions.length > 0) {
         sql += ' WHERE ' + conditions.join(' AND ');
     }
 
-    db.query(sql, params, (err, result) => {
+    db.query(sql, values, (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(result);
     });
