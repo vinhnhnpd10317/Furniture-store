@@ -1,3 +1,5 @@
+// server.js
+
 import express from 'express';
 import cors from 'cors';
 import ProductRoutes from './Routes/Product.js';
@@ -7,6 +9,7 @@ import cartRoutes from './Routes/cart.js';
 import CustomerRoutes from './Routes/Customer.js';
 import OrderRoutes from './Routes/Order.js';
 import FavoriteRoutes from './Routes/Favorite.js';
+import CommentRoutes from './Routes/Comment.js';
 import path from 'path';
 import multer from 'multer';
 import { fileURLToPath } from 'url';
@@ -30,6 +33,7 @@ const upload = multer({ storage: storage });
 
 app.use(cors());
 app.use(express.json());
+app.use('/comments', CommentRoutes);
 app.use('/categorys', CategorytRoutes);
 app.use('/articles', ArticleRoutes);
 app.use('/cart', cartRoutes);
