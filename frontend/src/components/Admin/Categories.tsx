@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 interface Category {
   id: number;
@@ -7,22 +8,23 @@ interface Category {
   ngay_tao: string;
 }
 
+function useQuery() {
+  const { search } = useLocation();
+  return new URLSearchParams(search);
+}
+
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
-
   const [tenDanhMuc, setTenDanhMuc] = useState("");
   const [moTa, setMoTa] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  // Biến phân trang 
+  const query = useQuery();
+  const searchText = query.get("search")?.toLowerCase() || "";
+
+  // Phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
-  const totalPages = Math.max(1, Math.ceil(categories.length / pageSize));
-
-  const currentCategories = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return categories.slice(start, start + pageSize);
-  }, [categories, currentPage]);
 
   // Load danh mục
   useEffect(() => {
@@ -32,7 +34,23 @@ export default function Categories() {
       .catch(err => console.error("Lỗi khi tải danh mục:", err));
   }, []);
 
-  // Form thêm / sửa 
+  // Lọc theo search (nếu có)
+  const filteredCategories = useMemo(() => {
+    if (!searchText) return categories;
+    return categories.filter(cat =>
+      cat.ten_danh_muc.toLowerCase().includes(searchText) ||
+      cat.mo_ta.toLowerCase().includes(searchText)
+    );
+  }, [categories, searchText]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredCategories.length / pageSize));
+
+  const currentCategories = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredCategories.slice(start, start + pageSize);
+  }, [filteredCategories, currentPage]);
+
+  // Thêm/sửa danh mục
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const body = JSON.stringify({ ten_danh_muc: tenDanhMuc, mo_ta: moTa });
@@ -43,14 +61,11 @@ export default function Categories() {
 
     try {
       await fetch(url, { method, headers: { "Content-Type": "application/json" }, body });
-
       const list = await fetch("http://localhost:3001/categorys").then(r => r.json());
       setCategories(list);
-
       setTenDanhMuc("");
       setMoTa("");
       setEditingId(null);
-
       if (!editingId) {
         setCurrentPage(Math.ceil((list.length || 1) / pageSize));
       }
@@ -72,7 +87,6 @@ export default function Categories() {
       await fetch(`http://localhost:3001/categorys/${id}`, { method: "DELETE" });
       const list = await fetch("http://localhost:3001/categorys").then(r => r.json());
       setCategories(list);
-
       const lastPage = Math.max(1, Math.ceil(list.length / pageSize));
       if (currentPage > lastPage) setCurrentPage(lastPage);
     } catch (err) {
@@ -84,7 +98,7 @@ export default function Categories() {
   const goToPage = (n: number) => setCurrentPage(n);
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 shadow">
       <form onSubmit={handleSubmit} className="p-3 border rounded bg-light mb-4">
         <h5>{editingId ? "Cập nhật danh mục" : "Thêm Danh Mục"}</h5>
         <div className="mb-3">
@@ -152,17 +166,15 @@ export default function Categories() {
           ))}
           {currentCategories.length === 0 && (
             <tr>
-              <td colSpan={5} className="text-center">
-                Không có danh mục nào.
-              </td>
+              <td colSpan={5} className="text-center">Không có danh mục nào.</td>
             </tr>
           )}
         </tbody>
       </table>
 
-      {/* phân trang */}
+      {/* Phân trang */}
       {totalPages > 1 && (
-        <nav aria-label="Pagination" className="mt-3">
+        <nav className="mt-3">
           <ul className="pagination justify-content-center mb-0">
             <li className={`page-item ${currentPage === 1 && "disabled"}`}>
               <button className="page-link" onClick={() => goToPage(currentPage - 1)}>

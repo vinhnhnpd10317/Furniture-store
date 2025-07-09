@@ -3,14 +3,44 @@ import db from '../db.js';
 
 const router = express.Router();
 
-// Lấy tất cả sản phẩm
-// router.get('/', (req, res) => {
-//     db.query('SELECT * FROM san_pham', (err, result) => {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.json(result);
-//     });
-// });
+// Lấy danh sách sản phẩm và tìm kiếm sản phẩm
+router.get('/', (req, res) => {
+    const { categoryId, search } = req.query;
 
+    let sql = 'SELECT * FROM san_pham';
+    const values = [];
+
+    let conditions = [];
+    if (categoryId) {
+        conditions.push('danh_muc_id = ?');
+        values.push(categoryId);
+    }
+    if (search) {
+        conditions.push('ten_san_pham LIKE ?');
+        values.push(`%${search}%`);
+    }
+
+    if (conditions.length > 0) {
+        sql += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    db.query(sql, values, (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(result);
+    });
+});
+
+// Lấy 3 sản phẩm mới nhất
+router.get('/latest', (req, res) =>{
+    const sql = 'SELECT * FROM san_pham ORDER BY ngay_tao DESC LIMIT 3 ';
+    db.query(sql, (err, result)=>{
+        if(err){
+            console.error('Lỗi khi lấy sản phẩm mới nhất', err);
+            return res.status(500).json({error: "Lỗi server"});
+        }
+        res.json(result);
+    });
+});
 
 // GET /products => tất cả sản phẩm hoặc theo danh mục
 router.get('/', (req, res) => {

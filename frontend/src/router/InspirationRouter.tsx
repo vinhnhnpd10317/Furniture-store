@@ -1,4 +1,4 @@
-    import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import InspirationDetail1 from "../components/Inspiration/InspirationDetail1";
 import InspirationDetail2 from "../components/Inspiration/InspirationDetail2";
 import InspirationDetail3 from "../components/Inspiration/InspirationDetail3";

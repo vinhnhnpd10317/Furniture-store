@@ -11,17 +11,30 @@ export interface ProductItem {
     ngay_tao: string;
 }
 
-export const fetchProducts = async (categoryId?: number): Promise<ProductItem[]> => {
-    const url = categoryId
-        ? `http://localhost:3001/products?categoryId=${categoryId}`
-        : `http://localhost:3001/products`;
+export async function fetchProducts(
+    // chấp nhận number | undefined | object
+    categoryOrOptions?: number | { categoryId?: number; search?: string }
+): Promise<ProductItem[]> {
+    let categoryId: number | undefined;
+    let search: string | undefined;
 
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error("Không thể tải sản phẩm");
+    if (typeof categoryOrOptions === "number" || categoryOrOptions === undefined) {
+        categoryId = categoryOrOptions;
+    } else {
+        ({ categoryId, search } = categoryOrOptions);
     }
-    return await response.json();
+
+    const params = new URLSearchParams();
+    if (categoryId !== undefined) params.append("categoryId", String(categoryId));
+    if (search) params.append("search", search);
+
+    const response = await fetch(
+        `http://localhost:3001/products?${params.toString()}`
+    );
+    if (!response.ok) throw new Error("Không thể tải sản phẩm");
+    return response.json();
 }
+
 
 export async function fetchProductById(id: string): Promise<ProductItem> {
     const response = await fetch(`http://localhost:3001/products/${id}`);
@@ -29,4 +42,11 @@ export async function fetchProductById(id: string): Promise<ProductItem> {
         throw new Error("Không thể tải sản phẩm");
     }
     return await response.json();
+}
+
+// gọi 3 sản phẩm mới nhất
+export async function fetchLatestProducts(): Promise<ProductItem[]> {
+    const response = await fetch(`http://localhost:3001/products/latest`);
+    if (!response.ok) throw new Error("Không thể tải sản phẩm mới nhất");
+    return response.json();
 }

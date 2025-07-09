@@ -12,6 +12,7 @@ import ProductForm from "../components/Admin/Product/ProductForm";
 import CommentManager from "../components/Admin/CommentManager";
 import ArticleList from "../components/Admin/ArticleList";
 import ArticleForm from "../components/Admin/ArticleForm";
+import Favorites from "../components/Admin/Favorites";
 
 
 // Wrapper components
@@ -31,6 +32,7 @@ export default function AdminRoutes() {
       <HeaderAdmin />
         <AdminLayout>
           <Routes>
+            <Route index element={<Dashboard/>}/>
             <Route path="comments" element={<CommentManager />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="categories" element={<Categories/>}/>
@@ -43,6 +45,7 @@ export default function AdminRoutes() {
             <Route path="article/add" element={<ArticleForm />} />
             <Route path="article/edit/:id" element={<ArticleForm />} />
             <Route path="orders" element={<Orders/>}/>
+            <Route path="favorites" element={<Favorites />} />
           </Routes>
         </AdminLayout>
     </>

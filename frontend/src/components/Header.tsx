@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -7,9 +7,52 @@ import "./Css/Header.css";
 import { useAuth } from "../components/AuthContext";
 
 const Header = () => {
-   const { user, logout } = useAuth();
+  const { user, logout } = useAuth();
+
+  const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get("search") || "";
+    setKeyword(search);
+  }, [location]);
+
+  const handleSearch = () => {
+    const trimmed = keyword.trim();
+    if (!trimmed) return;
+    navigate(`/products?search=${encodeURIComponent(trimmed)}`);
+    setKeyword("");
+  };
+
   return (
     <>
+      <style>{`
+    .nav-item.dropdown:hover .dropdown-menu {
+      display: block;
+      margin-top: 0.3rem;
+    }
+
+    .navbar .dropdown-menu {
+      top: 100%;
+      margin-top: 0;
+      transition: all 0.2s ease-in-out;
+      z-index: 9999;
+    }
+
+    .dropdown-menu {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .nav-item.dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+  `}</style>
+
       <header className="sticky-top shadow-sm">
         {/* TOP BAR */}
         <div className="bg-light border-bottom small px-3 py-2 d-none d-md-flex justify-content-between align-items-center">
@@ -48,29 +91,29 @@ const Header = () => {
           <div className="container-fluid">
 
             {/* Toggle Button - nằm TRƯỚC logo */}
-              <button
-                  className="navbar-toggler me-2 p-1"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#mainNavbar"
-                  aria-controls="mainNavbar"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                  >
-                  <span className="navbar-toggler-icon"></span>
-              </button>
+            <button
+              className="navbar-toggler me-2 p-1"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#mainNavbar"
+              aria-controls="mainNavbar"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
 
-              {/* Logo + Text */}
-              <Link to="/" className="navbar-brand d-flex align-items-center">
+            {/* Logo + Text */}
+            <Link to="/" className="navbar-brand d-flex align-items-center">
               {/* Logo nhỏ cho mobile */}
               <img src="/img/logo.png" alt="Logo" width="40" className="me-2 d-block d-md-none" />
-              
+
               {/* Logo lớn cho desktop */}
               <img src="/img/logo.png" alt="Logo" width="70" className="me-2 d-none d-md-block" />
 
               {/* Text: co lại font-size trên mobile */}
               <span className="fw-bold fs-6 fs-md-4">PRIME SEVEN</span>
-              </Link>
+            </Link>
 
 
             {/* NAV CONTENT */}
@@ -82,8 +125,16 @@ const Header = () => {
                 <li className="nav-item px-2">
                   <Link className="nav-link text-dark fw-semibold" to="/products">SẢN PHẨM</Link>
                 </li>
-                <li className="nav-item px-2">
-                  <Link className="nav-link text-dark fw-semibold" to="#">PHÒNG</Link>
+                <li className="nav-item dropdown px-2">
+                  <a href="#" className="nav-link text-dark fw-semibold" role="button" data-bs-toggle="dropdown" aria-expanded="false">PHÒNG</a>
+                  <ul className="dropdown-menu">
+                    <li><Link className="dropdown-item fw-light" to="/rooms/living-room">PHÒNG KHÁCH</Link></li>
+                    <li><Link className="dropdown-item fw-light" to="/rooms/kitchen">PHÒNG BẾP</Link></li>
+                    <li><Link className="dropdown-item fw-light" to="/rooms/bedroom">PHÒNG NGỦ</Link></li>
+                    <li><Link className="dropdown-item fw-light" to="/rooms/bathroom">PHÒNG TẮM</Link></li>
+                    <li><Link className="dropdown-item fw-light" to="/rooms/workspace">PHÒNG LÀM VIỆC</Link></li>
+                    <li><Link className="dropdown-item fw-light" to="/rooms/kids-room">PHÒNG TRẺ EM</Link></li>
+                  </ul>
                 </li>
                 <li className="nav-item px-2">
                   <Link className="nav-link text-dark fw-semibold" to="/aboutpage">GIỚI THIỆU</Link>
@@ -97,6 +148,9 @@ const Header = () => {
                 <li className="nav-item px-2">
                   <Link className="nav-link text-dark fw-semibold" to="/contact">LIÊN HỆ</Link>
                 </li>
+                <li className="nav-item px-2">
+                  <Link className="nav-link text-dark fw-semibold" to="/favorites">YÊU THÍCH</Link>
+                </li>
                 {/* <li className="nav-item px-2">
                   <Link className="nav-link text-dark fw-semibold" to="/article">BÀI VIẾT</Link>
                 </li> */}
@@ -104,12 +158,28 @@ const Header = () => {
 
               {/* Search (desktop only) */}
               <div className="d-none d-md-block" style={{ width: "200px" }}>
-                <input type="text" className="form-control" placeholder="Tìm kiếm sản phẩm" />
+                <input
+                  value={keyword}
+                  onChange={e => setKeyword(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === "Enter") handleSearch();
+                  }}
+                  type="text"
+                  className="form-control"
+                  placeholder="Tìm kiếm sản phẩm"
+                />
               </div>
 
               {/* Mobile: Search + Đăng nhập */}
               <div className="d-md-none w-100 mt-3 px-2">
-                <input type="text" className="form-control mb-2" placeholder="Tìm kiếm sản phẩm" />
+                <input
+                  type="text"
+                  value={keyword}
+                  onChange={e => setKeyword(e.target.value)}
+                  onKeyDown={e => { if (e.key === "Enter") handleSearch(); }}
+                  className="form-control mb-2"
+                  placeholder="Tìm kiếm sản phẩm"
+                />
                 <Link to="/login" className="btn btn-outline-dark w-100 d-flex justify-content-center align-items-center">
                   Đăng nhập <i className="bi bi-person ms-2"></i>
                 </Link>

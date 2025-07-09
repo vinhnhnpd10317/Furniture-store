@@ -14,10 +14,22 @@ const upload = multer({ storage });
 const router = express.Router();
 
 
-// 📰 Lấy tất cả bài viết
+// 📰 Lấy tất cả bài viết và tìm kiếm
 router.get('/', (req, res) => {
-  const sql = 'SELECT * FROM bai_viet ORDER BY ngay_dang DESC';
-  db.query(sql, (err, results) => {
+  const search = req.query.search?.toString().trim();
+
+  let sql = 'SELECT * FROM bai_viet';
+  const values = [];
+
+  if (search) {
+    sql += ' WHERE tieu_de LIKE ?';
+    const likeSearch = `%${search}%`;
+    values.push(likeSearch);
+  }
+
+  sql += ' ORDER BY ngay_dang DESC';
+
+  db.query(sql, values, (err, results) => {
     if (err) return res.status(500).json({ error: err });
     res.json(results);
   });

@@ -4,13 +4,25 @@ import db from '../db.js';
 
 const router = express.Router();
 
-// Lấy tất cả danh mục
+// Lấy tất cả danh mục và tìm kiếm
 router.get('/', (req, res) => {
-    db.query('SELECT * FROM danh_muc', (err, result) => {
-        if (err) return res.status(500).json({ error: err });
+    const search = req.query.search?.toString().trim();
+
+    let sql = 'SELECT * FROM danh_muc';
+    const values = [];
+
+    if (search) {
+        sql += ' WHERE ten_danh_muc LIKE ? OR mo_ta LIKE ?';
+        const likeSearch = `%${search}%`;
+        values.push(likeSearch, likeSearch);
+    }
+
+    db.query(sql, values, (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
         res.json(result);
     });
 });
+
 
 // Thêm danh mục
 router.post('/', (req, res) => {

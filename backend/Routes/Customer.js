@@ -2,12 +2,23 @@ import express from 'express';
 const router = express.Router();
 import db from '../db.js';
 
-// lấy danh sách khách hàng
-router.get('/', (req, res ) =>{
-    db.query('SELECT * FROM nguoi_dung', (err, results)=>{
-        if(err) return res.status(500).json({error: err});
+// Lấy danh sách người dùng và tìm kiếm
+router.get("/", (req, res) => {
+    const search = req.query.search?.toString().trim();
+
+    let sql = "SELECT * FROM nguoi_dung";
+    const values = [];
+
+    if (search) {
+        sql += " WHERE ho_ten LIKE ? OR email LIKE ? OR so_dien_thoai LIKE ?";
+        const likeSearch = `%${search}%`;
+        values.push(likeSearch, likeSearch, likeSearch);
+    }
+
+    db.query(sql, values, (err, results) => {
+        if (err) return res.status(500).json({ error: err });
         res.json(results);
-    })
+    });
 });
 
 // thêm mới khách hàng

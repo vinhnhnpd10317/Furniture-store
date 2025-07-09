@@ -8,12 +8,19 @@ export interface OrderItem {
 }
 
 // Lấy danh sách đơn hàng
-export const getOrders = async (): Promise<OrderItem[]> => {
-    const response = await fetch("http://localhost:3001/orders");
+export const getOrders = async (search?: string): Promise<OrderItem[]> => {
+    const url  = new URL("http://localhost:3001/orders");
+
+    if (search && search.trim()) {
+        url.searchParams.set("search", search.trim());
+    }
+    
+    const response = await fetch(url.toString());
+
     if (!response.ok) {
         throw new Error("Lỗi khi tải danh sách đơn hàng");
     }
-    return await response.json();
+    return response.json();
 };
 
 // Cập nhật trạng thái đơn hàng

@@ -2,13 +2,25 @@ import express from 'express';
 const router = express.Router();
 import db from '../db.js';
 
-// Lấy tất cả đơn hàng
+// Lấy tất cả đơn hàng và tim kiếm đơn hàng
 router.get('/', (req, res) => {
-    db.query('SELECT * FROM don_hang', (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json(results);
+    const search = req.query.search?.toString().trim();
+
+    let sql = 'SELECT * FROM don_hang';
+    const values = [];
+
+    if (search) {
+        sql += ' WHERE nguoi_dung_id LIKE ? OR id LIKE ?';
+        const likeSearch = `%${search}%`;
+        values.push(likeSearch, likeSearch);
+    }
+
+    db.query(sql, values, (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(result);
     });
 });
+
 
 // Lấy đơn hàng theo ID
 router.get('/:id', (req, res) => {
