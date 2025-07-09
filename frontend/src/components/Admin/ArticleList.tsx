@@ -43,8 +43,8 @@ const ArticleList = () => {
         </button>
       </div>
 
-      <table className="table table-bordered table-striped">
-        <thead className="table-dark">
+      <table className="table table-bordered shadow table-striped">
+        <thead className="table-light">
           <tr>
             <th>Tiêu đề</th>
             <th>Ảnh</th>

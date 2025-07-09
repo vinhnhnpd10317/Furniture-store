@@ -69,7 +69,7 @@ export default function Products() {
 
             <div className="table-responsive shadow rounded bg-white">
                 <table className="table table-bordered table-hover align-middle text-center mb-0">
-                    <thead className="table-dark">
+                    <thead className="table-light">
                         <tr>
                             <th>#</th>
                             <th>Tên sản phẩm</th>

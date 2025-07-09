@@ -43,3 +43,10 @@ export async function fetchProductById(id: string): Promise<ProductItem> {
     }
     return await response.json();
 }
+
+// gọi 3 sản phẩm mới nhất
+export async function fetchLatestProducts(): Promise<ProductItem[]> {
+    const response = await fetch(`http://localhost:3001/products/latest`);
+    if (!response.ok) throw new Error("Không thể tải sản phẩm mới nhất");
+    return response.json();
+}

@@ -98,7 +98,7 @@ export default function Categories() {
   const goToPage = (n: number) => setCurrentPage(n);
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 shadow">
       <form onSubmit={handleSubmit} className="p-3 border rounded bg-light mb-4">
         <h5>{editingId ? "Cập nhật danh mục" : "Thêm Danh Mục"}</h5>
         <div className="mb-3">

@@ -37,7 +37,7 @@ export default function CustomerList() {
   const currentCustomers = customers.slice(startIndex, startIndex + perPage);
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 shadow">
       <h2 className="mb-3">Quản lý khách hàng</h2>
       <div className="text-end mb-3">
         <Link to="/admin/customer/add" className="btn btn-success">+ Thêm khách hàng</Link>
@@ -50,7 +50,6 @@ export default function CustomerList() {
             <th>Email</th>
             <th>SĐT</th>
             <th>Địa chỉ</th>
-            <th>Vai trò</th>
             <th>Hành động</th>
           </tr>
         </thead>
@@ -61,7 +60,6 @@ export default function CustomerList() {
               <td>{c.email}</td>
               <td>{c.so_dien_thoai}</td>
               <td>{c.dia_chi}</td>
-              <td>{c.vai_tro}</td>
               <td>
                 {/* Bạn có thể làm trang sửa riêng nếu cần */}
                 <button className="btn btn-sm btn-danger" onClick={() => handleDelete(c.id)}>

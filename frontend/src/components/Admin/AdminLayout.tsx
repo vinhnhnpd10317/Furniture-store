@@ -16,7 +16,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link className="nav-link text-dark" to="/admin/article">👤 Bài Viết</Link>
             <Link className="nav-link text-dark" to="/admin/orders">🛒 Đơn hàng</Link>
             <Link className="nav-link text-dark" to="/admin/comments">💬 Bình luận</Link>
-            <Link className="nav-link text-dark" to="/admin/favorites"> Yêu thích</Link>
+            <Link className="nav-link text-dark" to="/admin/favorites">❤️ Yêu thích</Link>
           </nav>
         </aside>
 
@@ -29,7 +29,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* Footer */}
-      <footer className="bg-dark text-light text-center py-2">
+      <footer className="bg-light + border text-dark text-center py-2">
         © 2025 Admin Panel - All rights reserved
       </footer>
     </div>

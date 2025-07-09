@@ -41,7 +41,7 @@ export default function Order() {
   const goToPage = (n: number) => setCurrentPage(n);
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 shadow">
       <h4 className="mb-3">Danh sách đơn hàng</h4>
 
       <table className="table table-bordered">

@@ -35,7 +35,7 @@ export default function AdminFavorites() {
     <div className="container my-5">
       <h3 className="mb-4 text-center">Danh sách sản phẩm được yêu thích</h3>
       <table className="table table-bordered">
-        <thead className="table-dark">
+        <thead className="table-light">
           <tr>
             <th>Người dùng</th>
             <th>Sản phẩm</th>

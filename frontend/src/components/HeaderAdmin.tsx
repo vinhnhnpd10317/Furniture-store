@@ -37,7 +37,7 @@ export default function HeaderAdmin() {
     };
 
   return (
-        <nav className="navbar navbar-expand-lg bg-white shadow-sm">
+        <nav className="navbar sticky-top navbar-expand-lg bg-white shadow-sm">
             <div className="container">
                 <Link className="navbar-brand" to="/">
                     <img src="/img/logog7.jpg" alt="Logo" style={{ height: "60px" }} />
@@ -61,7 +61,7 @@ export default function HeaderAdmin() {
                             <Link className="nav-link fw-semibold" to="/admin/dashboard">DASHBOARD</Link>
                         </li>
                         <li className="nav-item me-5">
-                            <Link className="nav-link fw-semibold" to="/admin/users">USER</Link>
+                            <Link className="nav-link fw-semibold" to="/admin/customer">USER</Link>
                         </li>
                         <li className="nav-item me-5">
                             <Link className="nav-link fw-semibold" to="/">SETTING</Link>

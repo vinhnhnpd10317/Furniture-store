@@ -30,6 +30,17 @@ router.get('/', (req, res) => {
     });
 });
 
+// Lấy 3 sản phẩm mới nhất
+router.get('/latest', (req, res) =>{
+    const sql = 'SELECT * FROM san_pham ORDER BY ngay_tao DESC LIMIT 3 ';
+    db.query(sql, (err, result)=>{
+        if(err){
+            console.error('Lỗi khi lấy sản phẩm mới nhất', err);
+            return res.status(500).json({error: "Lỗi server"});
+        }
+        res.json(result);
+    });
+});
 
 // GET /products => tất cả sản phẩm hoặc theo danh mục
 router.get('/', (req, res) => {
