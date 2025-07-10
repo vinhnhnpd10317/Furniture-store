@@ -1,4 +1,4 @@
-import React, { useState, useRef, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useRef, type ChangeEvent, type FormEvent } from 'react';
 import emailjs from '@emailjs/browser';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

@@ -50,3 +50,19 @@ export async function fetchLatestProducts(): Promise<ProductItem[]> {
     if (!response.ok) throw new Error("Không thể tải sản phẩm mới nhất");
     return response.json();
 }
+
+// Gọi 4 sản phẩm liên quan cùng danh mục, trừ sản phẩm hiện tại
+export const fetchRelatedProducts = async (id: number, categoryId: number): Promise<ProductItem[]> => {
+    const url = new URL(`http://localhost:3001/products/related/${id}`);
+    url.searchParams.append("categoryId", categoryId.toString());
+
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+        throw new Error("Không thể tải sản phẩm liên quan");
+    }
+
+    return await response.json();
+};
+
+
+

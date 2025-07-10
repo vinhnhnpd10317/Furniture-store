@@ -169,5 +169,26 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+// Lấy 4 sản phẩm mới nhất trong cùng danh mục (trừ sản phẩm hiện tại)
+router.get('/related/:id', (req, res) => {
+    const productId = parseInt(req.params.id);
+    const { categoryId } = req.query;
+
+    if (!categoryId) {
+        return res.status(400).json({ error: "Thiếu categoryId" });
+    }
+
+    const sql = `
+        SELECT * FROM san_pham 
+        WHERE danh_muc_id = ? AND id != ?
+        ORDER BY ngay_tao DESC 
+        LIMIT 4
+    `;
+
+    db.query(sql, [categoryId, productId], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(result);
+    });
+});
 
 export default router;
