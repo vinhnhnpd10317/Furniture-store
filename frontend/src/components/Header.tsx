@@ -140,7 +140,7 @@ const Header = () => {
                   <Link className="nav-link text-dark fw-semibold" to="/aboutpage">GIỚI THIỆU</Link>
                 </li>
                 <li className="nav-item px-2">
-                  <Link className="nav-link text-dark fw-semibold" to="#">THIẾT KẾ NỘI THẤT</Link>
+                  <Link className="nav-link text-dark fw-semibold" to="/interior-design">THIẾT KẾ NỘI THẤT</Link>
                 </li>
                 <li className="nav-item px-2">
                   <Link className="nav-link text-dark fw-semibold" to="/inspiration">GÓC CẢM HỨNG</Link>
