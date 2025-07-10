@@ -69,4 +69,41 @@ router.post('/', (req, res) => {
   });
 });
 
+
+
+
+// GET - Lấy danh sách bình luận, có thể lọc theo sản phẩm
+router.get('/', (req, res) => {
+  const sanPhamId = req.query.san_pham_id;
+
+  let sql = `
+    SELECT 
+      bl.id, 
+      bl.noi_dung, 
+      bl.ngay_binh_luan, 
+      nd.ho_ten AS ten_nguoi_dung,
+      sp.ten_san_pham,
+      sp.hinh_anh_dai_dien AS san_pham_anh
+    FROM binh_luan bl
+    JOIN nguoi_dung nd ON bl.nguoi_dung_id = nd.id
+    JOIN san_pham sp ON bl.san_pham_id = sp.id
+  `;
+
+  const params = [];
+
+  if (sanPhamId) {
+    sql += ` WHERE bl.san_pham_id = ?`;
+    params.push(sanPhamId);
+  }
+
+  sql += ` ORDER BY bl.ngay_binh_luan DESC`;
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      console.error("❌ Lỗi khi truy vấn bình luận:", err);
+      return res.status(500).json({ message: "Lỗi server khi lấy bình luận" });
+    }
+    res.json(result);
+  });
+});
 export default router;

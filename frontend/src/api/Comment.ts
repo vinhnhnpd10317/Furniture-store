@@ -44,3 +44,11 @@ export const postComment = async (data: {
     throw new Error(error.response?.data?.message || "Lỗi khi gửi bình luận");
   }
 };
+export const fetchCommentsByProductId = async (san_pham_id: number): Promise<BinhLuan[]> => {
+  try {
+    const response = await axios.get<BinhLuan[]>(`${API_URL}?san_pham_id=${san_pham_id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Lỗi khi tải bình luận sản phẩm");
+  }
+};
