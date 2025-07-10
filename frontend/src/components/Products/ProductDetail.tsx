@@ -7,10 +7,13 @@ import { useParams } from "react-router-dom";
 import { fetchProductById, fetchRelatedProducts, type ProductItem } from "../../api/ProductApi";
 import type { CategoryItem } from "../../api/CategoryApi";
 import { useCart } from "../Products/CartContext";
+import { useAuth } from "../../components/AuthContext";
+import { addFavorite, deleteFavorite, getFavoritesByUser } from "../../api/FavoriteApi";
+
 
 
 export default function ProductDetail() {
-    const [likedList, setLikedList] = useState<boolean[]>(Array(8).fill(false));
+    // const [likedList, setLikedList] = useState<boolean[]>(Array(8).fill(false));
     const { id } = useParams<{ id: string }>(); // Lấy ID từ URL
     const [product, setProduct] = useState<ProductItem | null>(null);
     const [categories, setCategories] = useState<CategoryItem[]>([]);
@@ -20,7 +23,44 @@ export default function ProductDetail() {
     const [mainImage, setMainImage] = useState<string>("");
     const { addToCart } = useCart();
     const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>([]);
-    
+    const { user } = useAuth(); // lấy thông tin user đăng nhập
+    const [favoriteProductIds, setFavoriteProductIds] = useState<number[]>([]);
+
+    //yêu thích trong chi tiết sản phẩm 
+    // Lấy danh sách sản phẩm yêu thích của người dùng
+    useEffect(() => {
+        if (user?.id) {
+            getFavoritesByUser(user.id)
+            .then((data) => {
+                const ids = data.map((fav: { san_pham_id: number }) => fav.san_pham_id);
+                setFavoriteProductIds(ids);
+            })
+            .catch((err) => console.error("Lỗi khi tải yêu thích:", err));
+        }
+        }, [user]);
+
+        const handleToggleFavorite = async (productId: number) => {
+    if (!user?.id) {
+        alert("Bạn cần đăng nhập để sử dụng chức năng này.");
+        return;
+    }
+
+    try {
+        if (favoriteProductIds.includes(productId)) {
+        await deleteFavorite(user.id, productId);
+        setFavoriteProductIds((prev) => prev.filter((id) => id !== productId));
+        alert("Đã xóa khỏi danh sách yêu thích!");
+        } else {
+        await addFavorite(user.id, productId);
+        setFavoriteProductIds((prev) => [...prev, productId]);
+        alert("Đã thêm vào danh sách yêu thích!");
+        }
+    } catch (error) {
+        console.error("Lỗi khi xử lý yêu thích:", error);
+    }
+    };
+
+
     // Thêm vào giỏ hàng
     const handleAddToCart = (item: ProductItem) => {
         addToCart({
@@ -39,11 +79,11 @@ export default function ProductDetail() {
 
 
     // Hàm thay đổi trạng thái thích
-    const toggleLike = (index: number) => {
-        const updated = [...likedList];
-        updated[index] = !updated[index];
-        setLikedList(updated);
-    };
+    // const toggleLike = (index: number) => {
+    //     const updated = [...likedList];
+    //     updated[index] = !updated[index];
+    //     setLikedList(updated);
+    // };
 
     // Tải dữ liệu sản phẩm theo ID
     useEffect(() => {
@@ -203,7 +243,7 @@ export default function ProductDetail() {
             <div className="mt-5 d-none d-md-block">
                 <h4 className="mb-4 fw-bold text-center">Sản phẩm bạn có thể thích</h4>
                 <div className="row g-4">
-                    {relatedProducts.map((item, idx) => (
+                    {relatedProducts.map((item) => (
                         <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={item.id}>
                             <div className="product-cards h-100 d-flex flex-column justify-content-between">
                                 <img
@@ -216,14 +256,16 @@ export default function ProductDetail() {
                                     <h6 className="mb-1">{item.ten_san_pham}</h6>
                                     <div className="text-end">
                                         <i
-                                            className={`bi ${likedList[idx] ? "bi-heart-fill" : "bi-heart"} product-heart-icon`}
-                                            style={{
-                                                fontSize: "1.2rem",
-                                                color: likedList[idx] ? "red" : "#999",
-                                                cursor: "pointer",
-                                            }}
-                                            onClick={() => toggleLike(idx)}
+                                        className={`bi ${
+                                            favoriteProductIds.includes(item.id) ? "bi-heart-fill text-danger" : "bi-heart"
+                                        } product-heart-icon`}
+                                        style={{
+                                            fontSize: "1.2rem",
+                                            cursor: "pointer",
+                                        }}
+                                        onClick={() => handleToggleFavorite(item.id)}
                                         />
+
                                         <div className="product-price mt-1" style={{ fontSize: 14 }}>
                                             {Number(item.gia).toLocaleString("vi-VN")}₫
                                         </div>
