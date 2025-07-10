@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation } from 'react-router-dom';
-import { getOrders } from "../../api/OrderApi";
+import { useLocation } from "react-router-dom";
+import { getOrders, updateOrderStatus } from "../../api/OrderApi";
+
+type OrderStatus = "cho_xu_ly" | "dang_xu_ly" | "da_giao" | "da_huy";
 
 interface Order {
   id: number;
@@ -8,7 +10,7 @@ interface Order {
   ngay_dat: string;
   tong_tien: number;
   phuong_thuc_thanh_toan: string;
-  trang_thai: string;
+  trang_thai: OrderStatus;
 }
 
 function useQuery() {
@@ -24,11 +26,10 @@ export default function Order() {
   const query = useQuery();
   const searchText = query.get("search")?.toLowerCase() || "";
 
-  // Lấy dữ liệu khi searchText thay đổi
   useEffect(() => {
     getOrders(searchText)
       .then(setOrders)
-      .catch((err) => console.error("Lỗi khi tải đơn hàng:", err));
+      .catch((err: unknown) => console.error("Lỗi khi tải đơn hàng:", err));
   }, [searchText]);
 
   const totalPages = Math.max(1, Math.ceil(orders.length / pageSize));
@@ -40,8 +41,26 @@ export default function Order() {
 
   const goToPage = (n: number) => setCurrentPage(n);
 
+  const handleStatusChange = (orderId: number, newStatus: OrderStatus) => {
+    const confirm = window.confirm("Bạn có chắc muốn thay đổi trạng thái đơn hàng này?");
+    if (!confirm) return;
+
+    updateOrderStatus(orderId, newStatus)
+      .then(() => {
+        setOrders(prev =>
+          prev.map(order =>
+            order.id === orderId ? { ...order, trang_thai: newStatus } : order
+          )
+        );
+      })
+      .catch((err) => {
+        alert("Cập nhật thất bại");
+        console.error(err);
+      });
+  };
+
   return (
-    <div className="container mt-4 shadow">
+    <div className="container mt-4">
       <h4 className="mb-3">Danh sách đơn hàng</h4>
 
       <table className="table table-bordered">
@@ -64,12 +83,16 @@ export default function Order() {
               <td>{order.tong_tien.toLocaleString("vi-VN")} ₫</td>
               <td>{order.phuong_thuc_thanh_toan === "tien_mat" ? "Tiền mặt" : "Chuyển khoản"}</td>
               <td>
-                {{
-                  cho_xu_ly: "Chờ xử lý",
-                  dang_xu_ly: "Đang xử lý",
-                  da_giao: "Đã giao",
-                  da_huy: "Đã hủy"
-                }[order.trang_thai] || order.trang_thai}
+                <select
+                  className="form-select form-select-sm"
+                  value={order.trang_thai}
+                  onChange={(e) => handleStatusChange(order.id, e.target.value as OrderStatus)}
+                >
+                  <option value="cho_xu_ly">Chờ xử lý</option>
+                  <option value="dang_xu_ly">Đang xử lý</option>
+                  <option value="da_giao">Đã giao</option>
+                  <option value="da_huy">Đã hủy</option>
+                </select>
               </td>
             </tr>
           ))}
@@ -89,13 +112,11 @@ export default function Order() {
             <li className={`page-item ${currentPage === 1 && "disabled"}`}>
               <button className="page-link" onClick={() => goToPage(currentPage - 1)}>&laquo;</button>
             </li>
-
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
               <li key={n} className={`page-item ${currentPage === n && "active"}`}>
                 <button className="page-link" onClick={() => goToPage(n)}>{n}</button>
               </li>
             ))}
-
             <li className={`page-item ${currentPage === totalPages && "disabled"}`}>
               <button className="page-link" onClick={() => goToPage(currentPage + 1)}>&raquo;</button>
             </li>

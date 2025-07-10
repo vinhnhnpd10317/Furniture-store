@@ -13,6 +13,7 @@ import CommentManager from "../components/Admin/CommentManager";
 import ArticleList from "../components/Admin/ArticleList";
 import ArticleForm from "../components/Admin/ArticleForm";
 import Favorites from "../components/Admin/Favorites";
+import Checkout from "../components/Admin/CheckOut";
 
 
 // Wrapper components
@@ -46,6 +47,7 @@ export default function AdminRoutes() {
             <Route path="article/edit/:id" element={<ArticleForm />} />
             <Route path="orders" element={<Orders/>}/>
             <Route path="favorites" element={<Favorites />} />
+            <Route path="checkout" element={<Checkout/>}/>
           </Routes>
         </AdminLayout>
     </>

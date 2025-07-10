@@ -144,9 +144,24 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // 7. Xoá toàn bộ
-  const clearCart = () => {
-    setCartItems([]);
-    if (!user) localStorage.removeItem('cart');
+  const clearCart = async () => {
+    if (user) {
+      try {
+        // Lấy danh sách cartItemId hiện có
+        const ids = cartItems.map(item => item.cartItemId).filter(Boolean) as number[];
+
+        // Xoá từng mục trong DB
+        for (const id of ids) {
+          await deleteCartItemFromDB(id);
+        }
+      } catch (error) {
+        console.error("❌ Lỗi khi xoá toàn bộ giỏ hàng trong DB:", error);
+      }
+    } else {
+      localStorage.removeItem('cart');
+    }
+
+    setCartItems([]); // Cập nhật UI
   };
 
   return (
