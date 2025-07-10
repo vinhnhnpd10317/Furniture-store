@@ -1,37 +1,41 @@
+// CommentManager.tsx
 import React, { useEffect, useState } from 'react';
+import { fetchComments, deleteComment, type BinhLuan } from '../../api/Comment';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-type BinhLuan = {
-  id: number;
-  noi_dung: string;
-  ngay_binh_luan: string;
-  ten_nguoi_dung: string;
-  ten_san_pham: string;
-  san_pham_anh: string;
-};
-
-const formatDate = (isoString: string) => {
-  const date = new Date(isoString);
-  return date.toLocaleString('vi-VN');
-};
 
 const CommentManager: React.FC = () => {
   const [comments, setComments] = useState<BinhLuan[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/comments')
-      .then(res => res.json())
-      .then(data => {
-        console.log("✔️ Dữ liệu trả về:", data);
-        setComments(data);
-      })
-      .catch(err => console.error('❌ Lỗi khi load bình luận:', err));
+    loadComments();
   }, []);
+
+  const loadComments = () => {
+    fetchComments()
+      .then(data => setComments(data))
+      .catch(err => console.error('❌ Lỗi khi load bình luận:', err));
+  };
+
+  const handleDelete = async (id: number) => {
+    if (window.confirm("Bạn có chắc muốn xóa bình luận này không?")) {
+      try {
+        await deleteComment(id);
+        loadComments(); // Tải lại danh sách sau khi xóa
+      } catch (error) {
+        console.error("❌ Lỗi khi xóa bình luận:", error);
+        alert("Không thể xóa bình luận");
+      }
+    }
+  };
+
+  const formatDate = (isoString: string) => {
+    const date = new Date(isoString);
+    return date.toLocaleString('vi-VN');
+  };
 
   return (
     <div className="container py-5">
       <h2 className="text-center mb-4">📝 Quản lý bình luận</h2>
-
       <div className="row gy-4">
         {comments.map((comment) => (
           <div key={comment.id} className="col-12">
@@ -52,7 +56,10 @@ const CommentManager: React.FC = () => {
                   <p className="mb-1 text-secondary"><em>Bình luận về:</em> {comment.ten_san_pham}</p>
                   <p className="mb-3 white-space-pre-line">{comment.noi_dung}</p>
                   <div className="d-flex justify-content-end">
-                    <button className="btn btn-outline-danger btn-sm">
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => handleDelete(comment.id)}
+                    >
                       🗑️ Xóa
                     </button>
                   </div>
