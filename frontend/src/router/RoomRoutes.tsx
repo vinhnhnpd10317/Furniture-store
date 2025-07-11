@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import LivingRoom from "../components/Roomcomponent/Livingroom";
+import LivingRoom from "../components/Roomcomponent/LivingRoom";
 
 export default function RoomRoutes(){
     return(
