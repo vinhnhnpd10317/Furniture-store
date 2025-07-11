@@ -215,56 +215,6 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      {/* Sản phẩm liên quan */}
-            <div className="mt-5 d-none d-md-block">
-                <h4 className="mb-4 fw-bold text-center">Sản phẩm bạn có thể thích</h4>
-                <div className="row g-4">
-                    {relatedProducts.map((item, idx) => (
-                        <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={item.id}>
-                            <div className="product-cards h-100 d-flex flex-column justify-content-between">
-                                <img
-                                    src={`/img/imgproduct/${item.hinh_anh_dai_dien || "default.jpg"}`}
-                                    alt={item.ten_san_pham}
-                                    className="img-fluid"
-                                    style={{ height: 180, objectFit: "cover" }}
-                                />
-                                <div className="d-flex justify-content-between align-items-start mt-2">
-                                    <h6 className="mb-1">{item.ten_san_pham}</h6>
-                                    <div className="text-end">
-                                        <i
-                                            className={`bi ${likedList[idx] ? "bi-heart-fill" : "bi-heart"} product-heart-icon`}
-                                            style={{
-                                                fontSize: "1.2rem",
-                                                color: likedList[idx] ? "red" : "#999",
-                                                cursor: "pointer",
-                                            }}
-                                            onClick={() => toggleLike(idx)}
-                                        />
-                                        <div className="product-price mt-1" style={{ fontSize: 14 }}>
-                                            {Number(item.gia).toLocaleString("vi-VN")}₫
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="btn-group d-flex justify-content-center mt-3 product-btn-group">
-                                    <button
-                                        className="btn btn-outline-dark btn-sm"
-                                        onClick={() => handleAddToCart(item)}
-                                    >
-                                        THÊM VÀO GIỎ
-                                    </button>
-                                    <button
-                                        className="btn btn-dark btn-sm"
-                                        onClick={() => window.location.href = `/productdetail/${item.id}`}
-                                    >
-                                        XEM THÊM
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
       {/* Phần bình luận */}
       <div className="mt-5">
         <h5 className="fw-bold mb-4">Bình luận</h5>
