@@ -1,6 +1,7 @@
 import React, { useState, useRef, type ChangeEvent, type FormEvent } from 'react';
 import emailjs from '@emailjs/browser';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect } from "react";
 
 interface FormData {
   name: string;
@@ -21,6 +22,10 @@ export default function Contact() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+      window.scrollTo(0, 0);
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

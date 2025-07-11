@@ -7,6 +7,10 @@ const InspirationPage = () => {
   const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     const fetchArticles = async () => {
       try {
         const data = await getArticles();

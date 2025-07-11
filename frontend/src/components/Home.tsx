@@ -6,6 +6,10 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function App() {
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     function createInspirationSlider(container: Element) {
       const dots = container.querySelectorAll(".dot");
       const groups = container.querySelectorAll(".inspiration-group");
