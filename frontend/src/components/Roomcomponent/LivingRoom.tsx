@@ -19,7 +19,7 @@ export default function LivingRoom() {
 
                 {/* nội dung tĩnh */}
                 <div className="row g-4">
-                    <div className="col-md-8 my-5">
+                    <div className="col-md-8">
                         <img src="../public/img/img-room/img-living-room/h4.avif" alt="hinh4" className="card-img-top shadow" style={{ height: "500px", borderRadius: "5px" }} />
                     </div>
 
@@ -69,7 +69,7 @@ export default function LivingRoom() {
                                 <div className="col-md-4 mb-4" key={product.id}>
                                     <div className="card shadow h-100">
                                         <img
-                                            src={`/uploads/${product.hinh_anh_dai_dien}`}
+                                            src={`/img/imgproduct/${product.hinh_anh_dai_dien}`}
                                             alt={product.ten_san_pham}
                                             className="card-img-top"
                                             style={{ height: "250px", objectFit: "cover" }}
