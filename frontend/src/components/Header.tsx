@@ -5,6 +5,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./Css/Header.css";
 import { useAuth } from "../components/AuthContext";
+import { getFavoritesByUser } from "../api/FavoriteApi"; // import API
+
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -12,6 +14,26 @@ const Header = () => {
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const [favoriteCount, setFavoriteCount] = useState(0);
+
+//hiển thị số yêu thích
+useEffect(() => {
+  const loadFavorites = async () => {
+    if (user?.id) {
+      try {
+        const favorites = await getFavoritesByUser(user.id);
+        setFavoriteCount(favorites.length);
+      } catch (err) {
+        console.error("Lỗi khi lấy danh sách yêu thích:", err);
+      }
+    } else {
+      setFavoriteCount(0); // Nếu chưa đăng nhập thì reset
+    }
+  };
+
+  loadFavorites();
+}, [user]);
+
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -69,7 +91,14 @@ const Header = () => {
           {/* Desktop Icons */}
           <div className="d-none d-md-flex align-items-center gap-3 text-muted">
             <i className="bi bi-geo-alt"></i>
-            <i className="bi bi-heart"></i>
+            <Link to="/favorites" className="text-muted position-relative">
+              <i className="bi bi-heart fs-6"></i>
+              {favoriteCount > 0 && (
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {favoriteCount}
+                </span>
+              )}
+            </Link>
             <Link to="/productcart" className="text-muted"><i className="bi bi-bag"></i></Link>
             {user ? (
               <div className="d-flex align-items-center gap-2">
@@ -148,9 +177,9 @@ const Header = () => {
                 <li className="nav-item px-2">
                   <Link className="nav-link text-dark fw-semibold" to="/contact">LIÊN HỆ</Link>
                 </li>
-                <li className="nav-item px-2">
+                {/* <li className="nav-item px-2">
                   <Link className="nav-link text-dark fw-semibold" to="/favorites">YÊU THÍCH</Link>
-                </li>
+                </li> */}
                 {/* <li className="nav-item px-2">
                   <Link className="nav-link text-dark fw-semibold" to="/article">BÀI VIẾT</Link>
                 </li> */}

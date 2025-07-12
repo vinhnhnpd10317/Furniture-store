@@ -13,6 +13,10 @@ const UserOrders = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (!user) return;
     getOrdersByUserId(user.id).then(setOrders).catch(console.error);
   }, [user]);

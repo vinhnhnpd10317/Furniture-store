@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "../Css/Productcart.css";
 import { useCart } from "../Products/CartContext";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +25,10 @@ export default function ProductCart() {
     removeFromCart(id); // CartContext sẽ lo gọi API xóa DB
     alert("Sản phẩm đã được xoá khỏi giỏ hàng!");
     };
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const total = subtotal;

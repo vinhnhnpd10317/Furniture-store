@@ -22,6 +22,10 @@ export default function FavoriteProducts() {
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (user?.id) {
       getFavoritesByUser(user.id)
         .then(setFavorites)
