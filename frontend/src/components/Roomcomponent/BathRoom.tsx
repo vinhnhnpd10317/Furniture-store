@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getFavoritesLatest, type FavoriteItem } from "../../api/FavoriteApi";
+
 
 export default function BathRoom() {
+
+    const [fvrpro, setFvrPro] = useState<FavoriteItem[]>([]);
+    useEffect(()=>{
+        getFavoritesLatest().then(setFvrPro).catch((error)=> console.error("Lỗi khi load 4 sản phẩm yêu thích nhất", error));
+    },[]);
+
     return (
         <div className="container-fluid px-0">
             <img src="../public/img/img-room/img-bathroom/h11.avif" alt="" className="img-fluid w-100 mb-4" />
@@ -55,6 +63,43 @@ export default function BathRoom() {
                             Các chi tiết kim loại mạ vàng đồng ánh kim như vòi nước, tay cầm, và gương khung mảnh tạo điểm nhấn sang trọng nhưng không phô trương. Tủ gỗ sồi tự nhiên cùng mặt bàn đá trắng càng tôn thêm vẻ hài hòa và ấm cúng.
                         </p>
                     </div>
+
+                    <h3 className="text-uppercase text-success text-center fw-light">
+                        những sản phẩm được yêu thích gần đây
+                    </h3>
+
+                    {/* load 4 sản phẩm được yêu thích gần đây */}
+                    <div className="row shadow mt-4">
+                        {fvrpro.map((farvoritePro)=>(
+                            <div className="col-md-3" key={farvoritePro.id}>
+                                <div className="card shadow">
+                                    <img src={`/img/imgproduct/${farvoritePro.hinh_anh_dai_dien}`} 
+                                    className="card-img-top"
+                                    style={{height:"250px", objectFit: "cover"}}
+                                    />
+                                    <div className="card-body">
+                                        <h5 className="card-title text-success text-center fw-light">
+                                            {farvoritePro.ten_san_pham}
+                                        </h5>
+                                        <p className="text-center text-danger fw-semibold">
+                                            {farvoritePro.gia.toLocaleString('vi-VN')} ₫
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* 1 hình to 3 hình nhỏ xếp chồng lên nhau. */}
+                    <div className="col-md-8">
+                        <img src="../public/img/img-room/img-bathroom/h3.png" alt="" className="card-img-top shadow" style={{borderRadius: "3px", height: "900px"}} />
+                    </div>
+                    <div className="col-md-4 d-flex flex-column justify-content-between">
+                        <img src="../public/img/img-room/img-bathroom/h5.jpg" alt="" className="card-img-top shadow" style={{borderRadius: "3px", height: "280px"}} />
+                        <img src="../public/img/img-room/img-bathroom/h12.avif" alt="" className="card-img-top shadow" style={{borderRadius: "3px", height: "280px"}} />
+                        <img src="../public/img/img-room/img-bathroom/h13.avif" alt="" className="card-img-top shadow" style={{borderRadius: "3px", height: "280px"}} />
+                    </div>
+
                 </div>
             </div>
         </div>
