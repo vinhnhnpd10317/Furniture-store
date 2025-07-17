@@ -4,10 +4,10 @@ import { useCart } from "../Products/CartContext";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { addFavorite } from "../../api/FavoriteApi";
-import { useAuth } from "../../components/AuthContext"; // chỉnh path nếu cần
+import { useAuth } from "../../components/AuthContext";
 import Offcanvas from "bootstrap/js/dist/offcanvas";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { fetchProducts, type ProductItem } from "../../api/ProductApi";
 import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
@@ -15,23 +15,24 @@ import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
 export default function Product() {
     const navigate = useNavigate();
     const { addToCart } = useCart();
+    const { user } = useAuth();
+    const nguoi_dung_id = user?.id;
 
     const [products, setProducts] = useState<ProductItem[]>([]);
     const [categories, setCategories] = useState<CategoryItem[]>([]);
     const [likedList, setLikedList] = useState<boolean[]>([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const productsPerPage = 15;
+    const productListRef = useRef<HTMLDivElement>(null);
+
     const categoryIdParam = searchParams.get("categoryId");
     const searchKeyword = searchParams.get("search") || undefined;
     const selectedCategoryId = categoryIdParam ? +categoryIdParam : null;
 
-    const showAllProducts = () => {
-        setSearchParams({});
-    };
-
-    const handleCategoryClick = (id: number) => {
-        setSearchParams({ categoryId: String(id) });
-    };
+    const showAllProducts = () => setSearchParams({});
+    const handleCategoryClick = (id: number) => setSearchParams({ categoryId: String(id) });
 
     const handleAddToCart = (item: ProductItem) => {
         addToCart({
@@ -66,41 +67,47 @@ export default function Product() {
             .then((data) => {
                 setProducts(data);
                 setLikedList(new Array(data.length).fill(false));
+                setCurrentPage(1); // reset về trang đầu khi lọc mới
             })
             .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
     }, [searchKeyword, searchParams, selectedCategoryId]);
 
-    const { user } = useAuth();
-    const nguoi_dung_id = user?.id; 
+    useEffect(() => {
+        if (productListRef.current) {
+            productListRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [currentPage]);
 
     const toggleLike = async (index: number, productId: number) => {
-    const updated = [...likedList];
-    updated[index] = !updated[index];
-    setLikedList(updated);
+        const updated = [...likedList];
+        updated[index] = !updated[index];
+        setLikedList(updated);
 
-    if (!nguoi_dung_id) {
-        alert("Vui lòng đăng nhập để thêm vào yêu thích!");
-        return;
-    }
+        if (!nguoi_dung_id) {
+            alert("Vui lòng đăng nhập để thêm vào yêu thích!");
+            return;
+        }
 
-    try {
-        if (updated[index]) {
-        await addFavorite(nguoi_dung_id, productId);
-        alert("Đã thêm vào danh sách yêu thích!");
-        } else {
-        // TODO: Xử lý khi bỏ thích nếu muốn
-        // await deleteFavoriteByUserAndProduct(nguoi_dung_id, productId);
+        try {
+            if (updated[index]) {
+                await addFavorite(nguoi_dung_id, productId);
+                alert("Đã thêm vào danh sách yêu thích!");
+            }
+        } catch (error: any) {
+            if (error.response?.status === 409) {
+                alert("Sản phẩm này đã có trong danh sách yêu thích!");
+            } else {
+                console.error("Lỗi khi lưu mục yêu thích:", error);
+                alert("Có lỗi xảy ra khi lưu yêu thích!");
+            }
         }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-        if (error.response?.status === 409) {
-        alert("Sản phẩm này đã có trong danh sách yêu thích!");
-        } else {
-        console.error("Lỗi khi lưu mục yêu thích:", error);
-        alert("Có lỗi xảy ra khi lưu yêu thích!");
-        }
-    }
     };
+
+    const totalPages = Math.ceil(products.length / productsPerPage);
+    const currentProducts = products.slice(
+        (currentPage - 1) * productsPerPage,
+        currentPage * productsPerPage
+    );
 
     return (
         <>
@@ -145,7 +152,7 @@ export default function Product() {
                 </button>
             </div>
 
-            <div className="container my-4">
+            <div className="container my-4" ref={productListRef}>
                 <div className="row align-items-stretch">
                     {/* Sidebar Mobile */}
                     <div className="col-md-3 mb-md-0">
@@ -167,7 +174,6 @@ export default function Product() {
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 showAllProducts();
-
                                                 const sidebarElement = document.getElementById("categorySidebar");
                                                 if (sidebarElement) {
                                                     const bsOffcanvas = Offcanvas.getInstance(sidebarElement) || new Offcanvas(sidebarElement);
@@ -186,7 +192,6 @@ export default function Product() {
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     handleCategoryClick(cat.id);
-
                                                     const sidebarElement = document.getElementById("categorySidebar");
                                                     if (sidebarElement) {
                                                         const bsOffcanvas = Offcanvas.getInstance(sidebarElement) || new Offcanvas(sidebarElement);
@@ -234,24 +239,13 @@ export default function Product() {
                                     </li>
                                 ))}
                             </ul>
-
-                            <h5 className="fw-bold mt-4 mb-3">Màu sắc</h5>
-                            <ul className="list-unstyled ps-0">
-                                {["Màu trắng", "Màu be", "Màu đỏ", "Màu nâu cafe", "Màu xanh lá", "Màu vàng"].map((color, index) => (
-                                    <li key={index}>
-                                        <a href="#" className="d-block py-1 text-decoration-none text-dark product-sidebar-link">
-                                            {color}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
                     </div>
 
                     {/* Danh sách sản phẩm */}
                     <div className="col-md-9">
                         <div className="row">
-                            {products.map((item, idx) => (
+                            {currentProducts.map((item, idx) => (
                                 <div className="col-12 col-sm-6 col-md-4 mb-desktop-48" key={item.id}>
                                     <div className="product-cards h-100 d-flex flex-column justify-content-between">
                                         <img
@@ -289,6 +283,29 @@ export default function Product() {
                                 </div>
                             ))}
                         </div>
+
+                        {/* Phân trang */}
+                        {totalPages > 1 && (
+                            <nav className="mt-4 d-flex justify-content-center">
+                                <ul className="pagination gap-2">
+                                    {[...Array(totalPages)].map((_, i) => (
+                                        <li key={i} className="page-item">
+                                            <button
+                                                className={`page-link border rounded px-3 py-2 ${
+                                                    currentPage === i + 1
+                                                        ? "bg-secondary text-white fw-bold"
+                                                        : "bg-light text-dark"
+                                                }`}
+                                                style={{ borderRadius: "6px", border: "1px solid #ccc" }}
+                                                onClick={() => setCurrentPage(i + 1)}
+                                            >
+                                                {i + 1}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </nav>
+                        )}
                     </div>
                 </div>
             </div>

@@ -6,60 +6,176 @@ export default function AboutPage() {
     <>
       {/* Banner */}
       <section className="banner-wrapper text-center py-5 fw-bold">
-        <h1 className="display-4 mb-4">🛋️ Cửa Hàng PRIME SEVEN</h1>
         <img
-          src="https://thietkemyb.com.vn/wp-content/uploads/2022/10/banner-noi-that.jpg"
+          src="https://anhdoan.vn/images/img-banner-detail.png"
           alt="Banner Discover"
-          className="banner-img img-fluid rounded"
+          className="img-fluid rounded"
+          style={{
+            width: '100%',
+            maxWidth: 'none',
+            display: 'block',
+            margin: '0 auto',
+          }}
         />
+        <h1 className="display-4 mb-4 mt-5">🛋️ Cửa Hàng PRIME SEVEN</h1>
+
       </section>
 
-      {/* Giới thiệu */}
-      <section className="intro-section">
+     {/* Giới thiệu */}
+<section className="intro-section py-5 bg-white">
+  <div className="container">
+    <p className="intro-text lead text-center fw-semibold">
+      Chào mừng bạn đến với <strong>PRIME SEVEN</strong> – nơi hội tụ của nghệ thuật thiết kế nội thất hiện đại.
+      Với tâm huyết và sự sáng tạo không ngừng nghỉ, chúng tôi tự hào mang đến những giải pháp thiết kế đột phá,
+      giúp mỗi không gian sống không chỉ đẹp mắt mà còn phản ánh cá tính riêng của gia chủ.
+    </p>
+    <p className="text-center mt-3 text-muted">
+      Từ căn hộ nhỏ xinh đến biệt thự sang trọng, PRIME SEVEN đồng hành cùng bạn kiến tạo nên một nơi chốn đáng mơ ước –
+      nơi thẩm mỹ và công năng được dung hòa hoàn hảo.
+    </p>
+  </div>
+  
+      {/* Bộ sưu tập ảnh */}
+      <section className="intro-gallery py-4">
         <div className="container">
-          <p className="intro-text">
-            Chào mừng bạn đến với PRIME SEVEN – nơi hội tụ của nghệ thuật thiết kế nội thất hiện đại. Chúng tôi cung cấp các sản phẩm nội thất cao cấp, tinh tế, và tiện nghi với sứ mệnh tạo nên không gian sống lý tưởng cho mỗi khách hàng.
-          </p>
+          <div className="custom-grid-gallery">
+            {[
+              'https://kfa.vn/wp-content/uploads/2020/04/ban-tho-dep-1.jpg',   
+              'https://danam.com.vn/wp-content/uploads/2025/06/pt-vl.jpg',
+              'https://noithatgiakhanh.com/wp-content/uploads/2019/10/bo-phong-lam-viec-go-tan-co-dien-mbk303lv.jpg', 
+              'https://noithatmanhhe.vn/media/22203/ban-ghe-go-ong-nghiep-noi-that-manh-he.jpg',
+              
+            ].map((img, idx) => (
+              <div className={`gallery-item item-${idx + 1}`} key={idx}>
+                <div className="gallery-frame">
+                  <img src={img} alt={`Ảnh ${idx + 1}`} />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Phong cách */}
-      <section className="style-section bg-light">
-        <div className="container">
-          <h2 className="section-title">🎨 Phong Cách Thiết Kế</h2>
+      {/* CSS nội bộ */}
+      <style>{`
+        .custom-grid-gallery {
+          display: grid;
+          grid-template-areas:
+            "a b"
+            "c d"
+            "e f";
+          gap: 20px;
+        }
 
-          {[
-            {
-              title: 'Phong Cách Hiện Đại',
-              description: 'Sự kết hợp giữa công năng và thẩm mỹ, tối giản đường nét nhưng vẫn đầy đủ tiện nghi.',
-              image: 'https://housedesign.vn/wp-content/uploads/2019/12/noi-that-hien-dai.jpg',
-              reverse: false,
-            },
-            {
-              title: 'Phong Cách Scandinavian',
-              description: 'Gam màu nhẹ nhàng, vật liệu tự nhiên, ánh sáng chan hòa – mang đến sự ấm áp và giản dị.',
-              image: 'https://file.hstatic.net/1000400963/file/phong-cach-noi-that-scandinavian-1_115425c0727a4330833b1fa7bd1d5010.jpg',
-              reverse: true,
-            },
-            {
-              title: 'Phong Cách Tối Giản (Minimalism)',
-              description: 'Loại bỏ chi tiết thừa, tập trung vào trải nghiệm không gian tinh gọn và hiện đại.',
-              image: 'https://housedesign.vn/wp-content/uploads/2019/12/phong-cach-minimalism.jpg',
-              reverse: false,
-            },
-          ].map((style, idx) => (
-            <div className="row align-items-center mb-5" key={idx}>
-              <div className={`col-md-6 ${style.reverse ? 'order-md-2' : ''}`}>
-                <h4>{style.title}</h4>
-                <p>{style.description}</p>
-              </div>
-              <div className={`col-md-6 ${style.reverse ? 'order-md-1' : ''} image-block`}>
-                <img src={style.image} alt={style.title} />
-              </div>
-            </div>
-          ))}
+        .gallery-item {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+          transform: scale(1.03);
+          z-index: 2;
+        }
+
+        .gallery-frame {
+          border: 10px solid #fff;
+          background: #f0f0f0;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+        }
+
+        .gallery-frame img {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+          display: block;
+        }
+
+        .item-1 { grid-area: a; }
+        .item-2 { grid-area: b; }
+        .item-3 { grid-area: c; }
+        .item-4 { grid-area: d; }
+        .item-5 { grid-area: e; }
+        .item-6 { grid-area: f; }
+
+        @media (min-width: 768px) {
+          .custom-grid-gallery {
+            grid-template-areas:
+              "a b"
+              "c b"
+              "c d"
+              "e f";
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+          `}</style>
+
+</section>
+
+{/* Phong cách thiết kế */}
+<section className="style-section py-5 bg-light">
+  <div className="container">
+    <h2 className="section-title text-center mb-5">🎨 Các Phong Cách Thiết Kế Nổi Bật</h2>
+
+    {[
+      {
+        title: "✨ Phong Cách Hiện Đại",
+        description:
+          "Là sự giao thoa tinh tế giữa hình khối rõ ràng, đường nét tối giản và tiện nghi vượt trội. Nội thất hiện đại tập trung vào công năng sử dụng, ánh sáng tự nhiên và các gam màu trung tính như trắng, xám, đen – mang lại cảm giác rộng rãi, thoáng đãng.",
+        image:
+          "https://housedesign.vn/wp-content/uploads/2019/12/noi-that-hien-dai.jpg",
+        reverse: false,
+      },
+      {
+        title: "🌿 Phong Cách Scandinavian",
+        description:
+          "Lấy cảm hứng từ thiên nhiên vùng Bắc Âu, phong cách Scandinavian sử dụng vật liệu gỗ mộc, vải lanh, len dệt kết hợp với ánh sáng tự nhiên để tạo nên không gian ấm áp, giản dị và đầy thi vị. Phù hợp với những ai yêu thích sự tối giản nhưng đầy chất thơ.",
+        image:
+          "https://file.hstatic.net/1000400963/file/phong-cach-noi-that-scandinavian-1_115425c0727a4330833b1fa7bd1d5010.jpg",
+        reverse: true,
+      },
+      {
+        title: "🧘‍♀️ Phong Cách Tối Giản (Minimalism)",
+        description:
+          "“Less is more” – nguyên tắc cốt lõi của Minimalism. Mỗi chi tiết đều có lý do tồn tại, tránh rườm rà, tạo nên sự tĩnh lặng, tinh tế và cân bằng. Màu sắc thường là trắng, be hoặc đen kết hợp đồ nội thất mảnh, gọn để tối ưu không gian.",
+        image:
+          "https://housedesign.vn/wp-content/uploads/2019/12/phong-cach-minimalism.jpg",
+        reverse: false,
+      },
+      {
+        title: "🏛️ Phong Cách Tân Cổ Điển",
+        description:
+          "Là sự tái hiện của nét cổ điển sang trọng nhưng được tinh chỉnh lại phù hợp với nhịp sống hiện đại. Trần cao, phào chỉ tỉ mỉ, nội thất uốn cong kết hợp gam màu như vàng champagne, trắng ngọc – tất cả tạo nên vẻ đẹp vĩnh cửu.",
+        image:
+          "https://mant.vn/wp-content/uploads/2021/05/102354823_729434377861237_8429523191001072357_n.jpg",
+        reverse: true,
+      },
+      {
+        title: "🏕️ Phong Cách Rustic – Mộc Mạc",
+        description:
+          "Phong cách Rustic mang hơi thở thiên nhiên với chất liệu gỗ thô, đá tự nhiên, ánh sáng vàng ấm áp. Không gian Rustic mang lại cảm giác bình yên, gần gũi, đặc biệt phù hợp với các khu nghỉ dưỡng, homestay hoặc biệt thự vùng quê.",
+        image:
+          "https://file.hstatic.net/1000380248/article/phong-cach-rustic-tho-moc-moc-mac-gan-gui-thien-nhien_4f5e55d503554323ad5ea28d4017e82c.jpg",
+        reverse: false,
+      },
+    ].map((style, idx) => (
+      <div className="row align-items-center mb-5" key={idx}>
+        <div className={`col-md-6 ${style.reverse ? "order-md-2" : ""}`}>
+          <h4 className="fw-bold mb-3">{style.title}</h4>
+          <p className="text-muted">{style.description}</p>
         </div>
-      </section>
+        <div className={`col-md-6 ${style.reverse ? "order-md-1" : ""} image-block`}>
+          <img
+            src={style.image}
+            alt={style.title}
+            className="img-fluid rounded shadow-sm"
+            style={{ maxHeight: 300, objectFit: "cover", width: "100%" }}
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
 
       {/* Thành viên nhóm */}
       <section className="team-section bg-light">
