@@ -21,6 +21,7 @@ import FavoriteProducts from "../components/FavoriteProduct";
 import RoomRoutes from "./RoomRoutes";
 import InteriorDesign from "../components/Design/InteriorDesign";
 import StoreMap from "../components/StoreMap"; // đường dẫn đúng
+import ProjectDetail from "../components/Design/ProjectDetail";
 
 export default function AppRoutes() {
   return (
@@ -45,6 +46,7 @@ export default function AppRoutes() {
         <Route path="/favorites" element={<FavoriteProducts />} />
         <Route path="/interior-design" element={<InteriorDesign />} />
         <Route path="/store-map" element={<StoreMap />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
       </Routes>
 
       <RoomRoutes/>
