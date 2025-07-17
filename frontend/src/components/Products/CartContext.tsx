@@ -25,6 +25,7 @@ interface CartContextType {
   updateQuantity: (id: number, quantity: number) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
+  cartCount: number; // ✅ Thêm cartCount vào kiểu context
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -32,6 +33,9 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { user } = useAuth();
+
+  // ✅ Tính tổng số lượng sản phẩm
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   // 1. Lấy cart từ localStorage nếu chưa login
   useEffect(() => {
@@ -42,7 +46,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (Array.isArray(parsed)) setCartItems(parsed);
       } catch (err) {
         console.error('Lỗi khi đọc localStorage:', err);
-        localStorage.removeItem('cart'); // xoá nếu lỗi
+        localStorage.removeItem('cart');
       }
     }
   }, [user]);
@@ -56,32 +60,29 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // 3. Khi user login: đồng bộ cart từ localStorage lên DB và load từ DB
   useEffect(() => {
-   const syncLocalCartToDB = async () => {
-  if (user) {
-    const stored = localStorage.getItem('cart');
-    if (stored) {
-      try {
-        const localCart: CartItem[] = JSON.parse(stored);
-        
-        // ✅ Duyệt tuần tự, không chạy song song
-        for (const item of localCart) {
-          await saveCartItemToDB(user.id, item.id, item.quantity);
+    const syncLocalCartToDB = async () => {
+      if (user) {
+        const stored = localStorage.getItem('cart');
+        if (stored) {
+          try {
+            const localCart: CartItem[] = JSON.parse(stored);
+            for (const item of localCart) {
+              await saveCartItemToDB(user.id, item.id, item.quantity);
+            }
+            localStorage.removeItem('cart');
+          } catch (err) {
+            console.error('Lỗi khi đồng bộ giỏ hàng từ localStorage:', err);
+          }
         }
 
-        localStorage.removeItem('cart');
-      } catch (err) {
-        console.error('Lỗi khi đồng bộ giỏ hàng từ localStorage:', err);
+        try {
+          const dbCart = await fetchCartFromDB(user.id);
+          setCartItems(dbCart);
+        } catch (err) {
+          console.error('Lỗi khi tải giỏ hàng từ DB:', err);
+        }
       }
-    }
-
-    try {
-      const dbCart = await fetchCartFromDB(user.id);
-      setCartItems(dbCart);
-    } catch (err) {
-      console.error('Lỗi khi tải giỏ hàng từ DB:', err);
-    }
-  }
-};
+    };
 
     syncLocalCartToDB();
   }, [user]);
@@ -147,10 +148,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const clearCart = async () => {
     if (user) {
       try {
-        // Lấy danh sách cartItemId hiện có
         const ids = cartItems.map(item => item.cartItemId).filter(Boolean) as number[];
-
-        // Xoá từng mục trong DB
         for (const id of ids) {
           await deleteCartItemFromDB(id);
         }
@@ -161,12 +159,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.removeItem('cart');
     }
 
-    setCartItems([]); // Cập nhật UI
+    setCartItems([]);
   };
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, updateQuantity, removeFromCart, clearCart }}
+      value={{ cartItems, addToCart, updateQuantity, removeFromCart, clearCart, cartCount }}
     >
       {children}
     </CartContext.Provider>
