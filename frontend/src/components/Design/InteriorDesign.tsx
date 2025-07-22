@@ -57,7 +57,7 @@ const InteriorDesign = () => {
           Hẹn gặp ngay đội ngũ chuyên nghiệp và giàu kinh nghiệm từ Nhà Xinh để
           được tư vấn những giải pháp hoàn thiện nội thất cho ngôi nhà của bạn.
         </p>
-        <Link to="/contact" className="btn btn-success btn-lg mt-3">
+        <Link to="/contact" className="btn btn-success btn-lg my-5">
           Liên hệ ngay: 0906904114
         </Link>
         <img
