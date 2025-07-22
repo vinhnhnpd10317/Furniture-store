@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import "../Css/Productcart.css";
 import { useCart } from "../Products/CartContext";
 import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 export default function ProductCart() {
     const { cartItems, updateQuantity, removeFromCart  } = useCart();
@@ -90,7 +91,7 @@ export default function ProductCart() {
                             <p className="text-warning mt-2">Cửa hàng gần bạn</p>
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-between">
-                            <button className="btn btn-outline-dark">← TIẾP TỤC MUA HÀNG</button>
+                            <Link to="/products" className='btn btn-outline-dark fw-semibold text-success'>Tiếp tục mua hàng</Link>
                             <button className="btn btn-dark"  onClick={() => navigate(`/orderform`)}>ĐẶT HÀNG</button>
                         </div>
                     </div>
