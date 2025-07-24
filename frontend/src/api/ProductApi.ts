@@ -12,21 +12,29 @@ export interface ProductItem {
 }
 
 export async function fetchProducts(
-    // chấp nhận number | undefined | object
-    categoryOrOptions?: number | { categoryId?: number; search?: string }
+    categoryOrOptions?: number | {
+        categoryId?: number;
+        search?: string;
+        minPrice?: number;
+        maxPrice?: number;
+    }
 ): Promise<ProductItem[]> {
     let categoryId: number | undefined;
     let search: string | undefined;
+    let minPrice: number | undefined;
+    let maxPrice: number | undefined;
 
     if (typeof categoryOrOptions === "number" || categoryOrOptions === undefined) {
         categoryId = categoryOrOptions;
     } else {
-        ({ categoryId, search } = categoryOrOptions);
+        ({ categoryId, search, minPrice, maxPrice } = categoryOrOptions);
     }
 
     const params = new URLSearchParams();
     if (categoryId !== undefined) params.append("categoryId", String(categoryId));
     if (search) params.append("search", search);
+    if (minPrice !== undefined) params.append("minPrice", String(minPrice));
+    if (maxPrice !== undefined) params.append("maxPrice", String(maxPrice));
 
     const response = await fetch(
         `http://localhost:3001/products?${params.toString()}`
@@ -34,6 +42,7 @@ export async function fetchProducts(
     if (!response.ok) throw new Error("Không thể tải sản phẩm");
     return response.json();
 }
+
 
 
 export async function fetchProductById(id: string): Promise<ProductItem> {

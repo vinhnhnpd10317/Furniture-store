@@ -8,7 +8,6 @@ import { useAuth } from "../../components/AuthContext";
 import Offcanvas from "bootstrap/js/dist/offcanvas";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-
 import { fetchProducts, type ProductItem } from "../../api/ProductApi";
 import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
 
@@ -33,6 +32,16 @@ export default function Product() {
 
     const showAllProducts = () => setSearchParams({});
     const handleCategoryClick = (id: number) => setSearchParams({ categoryId: String(id) });
+
+    // lọc sản phẩm theo giá
+    const minPriceParam = searchParams.get("minPrice");
+    const maxPriceParam = searchParams.get("maxPrice");
+
+    const selectedMinPrice = minPriceParam ? parseInt(minPriceParam) : undefined;
+    const selectedMaxPrice = maxPriceParam ? parseInt(maxPriceParam) : undefined;
+
+    const [minPrice, setMinPrice] = useState<number | undefined>();
+    const [maxPrice, setMaxPrice] = useState<number | undefined>();
 
     const handleAddToCart = (item: ProductItem) => {
         addToCart({
@@ -63,6 +72,8 @@ export default function Product() {
         fetchProducts({
             categoryId: selectedCategoryId ?? undefined,
             search: searchKeyword,
+            minPrice: selectedMinPrice,
+            maxPrice: selectedMaxPrice,
         })
             .then((data) => {
                 setProducts(data);
@@ -70,7 +81,7 @@ export default function Product() {
                 setCurrentPage(1); // reset về trang đầu khi lọc mới
             })
             .catch((err) => console.error("Lỗi khi tải sản phẩm:", err));
-    }, [searchKeyword, searchParams, selectedCategoryId]);
+    }, [searchKeyword, searchParams, selectedCategoryId, selectedMaxPrice, selectedMinPrice]);
 
     useEffect(() => {
         if (productListRef.current) {
@@ -239,6 +250,86 @@ export default function Product() {
                                     </li>
                                 ))}
                             </ul>
+
+                            <div className="mt-4">
+                                <h5 className="fw-bold mb-3">Lọc theo giá</h5>
+
+                                {/* Bộ lọc nhanh */}
+                                <div className="d-flex flex-column gap-2 mb-3">
+                                    <button
+                                        className="btn btn-outline-secondary btn-sm"
+                                        onClick={() => {
+                                            const params = new URLSearchParams(searchParams);
+                                            params.set("minPrice", "100000");
+                                            params.set("maxPrice", "1000000");
+                                            setSearchParams(params);
+                                            setMinPrice(100000);
+                                            setMaxPrice(1000000);
+                                        }}
+                                    >
+                                        Từ 100k - 1 triệu
+                                    </button>
+                                    <button
+                                        className="btn btn-outline-secondary btn-sm"
+                                        onClick={() => {
+                                            const params = new URLSearchParams(searchParams);
+                                            params.set("minPrice", "1000000");
+                                            params.set("maxPrice", "10000000");
+                                            setSearchParams(params);
+                                            setMinPrice(1000000);
+                                            setMaxPrice(10000000);
+                                        }}
+                                    >
+                                        Từ 1 triệu - 10 triệu
+                                    </button>
+                                    <button
+                                        className="btn btn-outline-secondary btn-sm"
+                                        onClick={() => {
+                                            const params = new URLSearchParams(searchParams);
+                                            params.set("minPrice", "10000000");
+                                            params.delete("maxPrice");
+                                            setSearchParams(params);
+                                            setMinPrice(10000000);
+                                            setMaxPrice(undefined);
+                                        }}
+                                    >
+                                        Trên 10 triệu
+                                    </button>
+                                </div>
+
+                                {/* Tùy chọn giá */}
+                                <div className="mb-2">
+                                    <label className="form-label">Giá từ:</label>
+                                    <input
+                                    type="number"
+                                    className="form-control"
+                                    value={minPrice ?? ""}
+                                    onChange={(e) => setMinPrice(e.target.value ? Number(e.target.value) : undefined)}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Đến:</label>
+                                    <input
+                                    type="number"
+                                    className="form-control"
+                                    value={maxPrice ?? ""}
+                                    onChange={(e) => setMaxPrice(e.target.value ? Number(e.target.value) : undefined)}
+                                    />
+                                </div>
+                                <button
+                                    className="btn btn-dark w-100"
+                                    onClick={() => {
+                                    const params = new URLSearchParams(searchParams);
+                                    if (minPrice !== undefined) params.set("minPrice", String(minPrice));
+                                    else params.delete("minPrice");
+                                    if (maxPrice !== undefined) params.set("maxPrice", String(maxPrice));
+                                    else params.delete("maxPrice");
+                                    setSearchParams(params);
+                                    }}
+                                >
+                                    Áp dụng
+                                </button>
+                            </div>
                         </div>
                     </div>
 
