@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { getOrdersByUserId, getOrderById, type OrderItem, OrderStatusMap } from "../api/OrderApi";
+import {
+  getOrdersByUserId,
+  getOrderById,
+  type OrderItem,
+  OrderStatusMap,
+} from "../api/OrderApi";
 import { useAuth } from "../components/AuthContext";
 import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
@@ -32,7 +37,8 @@ const UserOrders = () => {
   };
 
   const formatMoney = (amount: number) => `${amount.toLocaleString("vi-VN")} ₫`;
-  const formatDate = (date: string) => new Date(date).toLocaleDateString("vi-VN");
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString("vi-VN");
 
   return (
     <div className="container py-5">
@@ -84,19 +90,33 @@ const UserOrders = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {orders.map((order) => (
-                        <tr key={order.id}>
-                          <td>#{order.id}</td>
-                          <td>{formatDate(order.ngay_dat)}</td>
-                          <td>{formatMoney(order.tong_tien)}</td>
-                          <td><span className={OrderStatusMap[order.trang_thai].badgeClass}>{OrderStatusMap[order.trang_thai].label}</span></td>
-                          <td>
-                            <button onClick={() => openModal(order.id)} className="btn btn-sm btn-outline-dark">
-                              <i className="bi bi-eye"></i> Xem
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
+                      {orders.map((order) => {
+                        const status = OrderStatusMap[order.trang_thai];
+                        return (
+                          <tr key={order.id}>
+                            <td>#{order.id}</td>
+                            <td>{formatDate(order.ngay_dat)}</td>
+                            <td>{formatMoney(order.tong_tien)}</td>
+                            <td>
+                              <span
+                                className={
+                                  status?.badgeClass || "badge bg-secondary"
+                                }
+                              >
+                                {status?.label || "Không xác định"}
+                              </span>
+                            </td>
+                            <td>
+                              <button
+                                onClick={() => openModal(order.id)}
+                                className="btn btn-sm btn-outline-dark"
+                              >
+                                <i className="bi bi-eye"></i> Xem
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -125,14 +145,28 @@ const UserOrders = () => {
                 </tr>
                 <tr>
                   <th>Phương thức</th>
-                  <td>{selectedOrder.phuong_thuc_thanh_toan === "tien_mat" ? "Tiền mặt" : "Chuyển khoản"}</td>
+                  <td>
+                    {selectedOrder.phuong_thuc_thanh_toan === "tien_mat"
+                      ? "Tiền mặt"
+                      : "Chuyển khoản"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Trạng thái</th>
                   <td>
-                    <span className={OrderStatusMap[selectedOrder.trang_thai].badgeClass}>
-                      {OrderStatusMap[selectedOrder.trang_thai].label}
-                    </span>
+                    {(() => {
+                      const status =
+                        OrderStatusMap[selectedOrder.trang_thai];
+                      return (
+                        <span
+                          className={
+                            status?.badgeClass || "badge bg-secondary"
+                          }
+                        >
+                          {status?.label || "Không xác định"}
+                        </span>
+                      );
+                    })()}
                   </td>
                 </tr>
               </tbody>

@@ -1,6 +1,12 @@
-export type OrderStatus = "cho_xu_ly" | "dang_xu_ly" | "da_giao" | "da_huy";
+export type OrderStatus =
+  | "cho_xu_ly"
+  | "dang_xu_ly"
+  | "dang_van_chuyen" 
+  | "da_giao"
+  | "da_huy";
 
 export interface OrderItem {
+    chi_tiet: unknown;
     id: number;
     nguoi_dung_id: number;
     ngay_dat: string;
@@ -47,17 +53,18 @@ export interface CheckoutPayload {
 }
 
 // ======================= UI SUPPORT ========================
-export const OrderStatusMap: Record<OrderStatus, { label: string; badgeClass: string }> = {
-    cho_xu_ly: { label: "Chờ xử lý", badgeClass: "badge bg-warning text-dark" },
-    dang_xu_ly: { label: "Đang xử lý", badgeClass: "badge bg-info text-dark" },
-    da_giao: { label: "Đã giao", badgeClass: "badge bg-success" },
-    da_huy: { label: "Đã huỷ", badgeClass: "badge bg-danger" },
+export const OrderStatusMap: Record<string, { label: string; badgeClass: string }> = {
+  cho_xu_ly: { label: "Chờ xử lý", badgeClass: "badge bg-warning" },
+  dang_xu_ly: { label: "Đang xử lý", badgeClass: "badge bg-primary" },
+  dang_van_chuyen: { label: "Đang vận chuyển", badgeClass: "badge bg-info" },
+  da_giao: { label: "Đã giao", badgeClass: "badge bg-success" },
+  da_huy: { label: "Đã huỷ", badgeClass: "badge bg-danger" },
 };
+
 
 // ======================= API ========================
 const BASE_URL = "http://localhost:3001/orders";
 
-// ✅ Lấy danh sách đơn hàng (tất cả hoặc có tìm kiếm)
 export const getOrders = async (search?: string): Promise<OrderItem[]> => {
     try {
         const url = new URL(BASE_URL);
@@ -73,21 +80,20 @@ export const getOrders = async (search?: string): Promise<OrderItem[]> => {
     }
 };
 
-// ✅ Cập nhật trạng thái đơn hàng
 export const updateOrderStatus = async (
     id: number,
     trang_thai: OrderStatus
 ): Promise<void> => {
     try {
         const response = await fetch(`${BASE_URL}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ trang_thai }),
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ trang_thai }),
         });
 
         if (!response.ok) {
-        const message = await response.text();
-        throw new Error(message || "Lỗi khi cập nhật trạng thái đơn hàng");
+            const message = await response.text();
+            throw new Error(message || "Lỗi khi cập nhật trạng thái đơn hàng");
         }
     } catch (error) {
         console.error("updateOrderStatus error:", error);
@@ -95,7 +101,6 @@ export const updateOrderStatus = async (
     }
 };
 
-// ✅ Lấy đơn hàng theo người dùng
 export const getOrdersByUserId = async (userId: number): Promise<OrderItem[]> => {
     try {
         const response = await fetch(`${BASE_URL}/user/${userId}`);
@@ -108,7 +113,6 @@ export const getOrdersByUserId = async (userId: number): Promise<OrderItem[]> =>
     }
 };
 
-// ✅ Lấy chi tiết đơn hàng
 export const getOrderById = async (id: number): Promise<OrderDetailResponse> => {
     try {
         const response = await fetch(`${BASE_URL}/${id}/detail`);
@@ -121,7 +125,6 @@ export const getOrderById = async (id: number): Promise<OrderDetailResponse> => 
     }
 };
 
-// ✅ Lấy danh sách thanh toán
 export const getPayments = async (search?: string): Promise<PaymentItem[]> => {
     const url = new URL("http://localhost:3001/api/thanh-toan");
     if (search?.trim()) url.searchParams.set("search", search.trim());
@@ -131,7 +134,6 @@ export const getPayments = async (search?: string): Promise<PaymentItem[]> => {
     return res.json();
 };
 
-// ✅ Tạo đơn hàng và thanh toán
 export const createOrderWithPayment = async (
     payload: CheckoutPayload
 ): Promise<{ don_hang_id: number }> => {
@@ -147,4 +149,19 @@ export const createOrderWithPayment = async (
     }
 
     return response.json(); // { don_hang_id: 123 }
+};
+
+export const getOrdersByStatus = async (status: OrderStatus): Promise<OrderItem[]> => {
+    try {
+        const url = new URL(BASE_URL);
+        url.searchParams.set("trang_thai", status);
+
+        const response = await fetch(url.toString());
+        if (!response.ok) throw new Error("Lỗi khi lọc đơn hàng theo trạng thái");
+
+        return await response.json();
+    } catch (error) {
+        console.error("getOrdersByStatus error:", error);
+        throw error;
+    }
 };

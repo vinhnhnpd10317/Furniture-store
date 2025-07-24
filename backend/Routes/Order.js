@@ -86,7 +86,9 @@ router.put('/:id', (req, res) => {
   const { id } = req.params;
   const { trang_thai } = req.body;
 
-  if (!["cho_xu_ly", "dang_xu_ly", "da_giao", "da_huy"].includes(trang_thai)) {
+  const allowedStatuses = ["cho_xu_ly", "dang_xu_ly", "dang_van_chuyen", "da_giao", "da_huy"];
+
+  if (!allowedStatuses.includes(trang_thai)) {
     return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
   }
 

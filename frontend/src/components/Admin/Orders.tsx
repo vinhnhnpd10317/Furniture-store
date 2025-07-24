@@ -1,17 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getOrders, updateOrderStatus } from "../../api/OrderApi";
-
-type OrderStatus = "cho_xu_ly" | "dang_xu_ly" | "da_giao" | "da_huy";
-
-interface Order {
-  id: number;
-  nguoi_dung_id: number;
-  ngay_dat: string;
-  tong_tien: number;
-  phuong_thuc_thanh_toan: string;
-  trang_thai: OrderStatus;
-}
+import OrderStatusTabs, { type OrderStatus } from "./OrderStatusTabs";
+import OrderTable, { type Order } from "./OrderTable";
 
 function useQuery() {
   const { search } = useLocation();
@@ -21,6 +12,7 @@ function useQuery() {
 export default function Order() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedStatus, setSelectedStatus] = useState<OrderStatus>("cho_xu_ly");
   const pageSize = 10;
 
   const query = useQuery();
@@ -29,15 +21,20 @@ export default function Order() {
   useEffect(() => {
     getOrders(searchText)
       .then(setOrders)
-      .catch((err: unknown) => console.error("Lỗi khi tải đơn hàng:", err));
+      .catch((err) => console.error("Lỗi khi tải đơn hàng:", err));
   }, [searchText]);
 
-  const totalPages = Math.max(1, Math.ceil(orders.length / pageSize));
+  const filteredOrders = useMemo(
+    () => orders.filter((order) => order.trang_thai === selectedStatus),
+    [orders, selectedStatus]
+  );
+
+  const totalPages = Math.max(1, Math.ceil(filteredOrders.length / pageSize));
 
   const currentOrders = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
-    return orders.slice(start, start + pageSize);
-  }, [orders, currentPage]);
+    return filteredOrders.slice(start, start + pageSize);
+  }, [filteredOrders, currentPage]);
 
   const goToPage = (n: number) => setCurrentPage(n);
 
@@ -47,8 +44,8 @@ export default function Order() {
 
     updateOrderStatus(orderId, newStatus)
       .then(() => {
-        setOrders(prev =>
-          prev.map(order =>
+        setOrders((prev) =>
+          prev.map((order) =>
             order.id === orderId ? { ...order, trang_thai: newStatus } : order
           )
         );
@@ -63,62 +60,35 @@ export default function Order() {
     <div className="container mt-4">
       <h4 className="mb-3">Danh sách đơn hàng</h4>
 
-      <table className="table table-bordered">
-        <thead className="table-light">
-          <tr>
-            <th>ID</th>
-            <th>Người dùng ID</th>
-            <th>Ngày đặt</th>
-            <th>Tổng tiền</th>
-            <th>Phương thức</th>
-            <th>Trạng thái</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentOrders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.nguoi_dung_id}</td>
-              <td>{new Date(order.ngay_dat).toLocaleString()}</td>
-              <td>{order.tong_tien.toLocaleString("vi-VN")} ₫</td>
-              <td>{order.phuong_thuc_thanh_toan === "tien_mat" ? "Tiền mặt" : "Chuyển khoản"}</td>
-              <td>
-                <select
-                  className="form-select form-select-sm"
-                  value={order.trang_thai}
-                  onChange={(e) => handleStatusChange(order.id, e.target.value as OrderStatus)}
-                >
-                  <option value="cho_xu_ly">Chờ xử lý</option>
-                  <option value="dang_xu_ly">Đang xử lý</option>
-                  <option value="da_giao">Đã giao</option>
-                  <option value="da_huy">Đã hủy</option>
-                </select>
-              </td>
-            </tr>
-          ))}
-          {currentOrders.length === 0 && (
-            <tr>
-              <td colSpan={6} className="text-center">
-                Không có đơn hàng nào.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <OrderStatusTabs
+        selectedStatus={selectedStatus}
+        onChange={(status) => {
+          setSelectedStatus(status);
+          setCurrentPage(1);
+        }}
+      />
+
+      <OrderTable orders={currentOrders} onStatusChange={handleStatusChange} />
 
       {totalPages > 1 && (
         <nav aria-label="Pagination" className="mt-3">
           <ul className="pagination justify-content-center mb-0">
             <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-              <button className="page-link" onClick={() => goToPage(currentPage - 1)}>&laquo;</button>
+              <button className="page-link" onClick={() => goToPage(currentPage - 1)}>
+                &laquo;
+              </button>
             </li>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
               <li key={n} className={`page-item ${currentPage === n && "active"}`}>
-                <button className="page-link" onClick={() => goToPage(n)}>{n}</button>
+                <button className="page-link" onClick={() => goToPage(n)}>
+                  {n}
+                </button>
               </li>
             ))}
             <li className={`page-item ${currentPage === totalPages && "disabled"}`}>
-              <button className="page-link" onClick={() => goToPage(currentPage + 1)}>&raquo;</button>
+              <button className="page-link" onClick={() => goToPage(currentPage + 1)}>
+                &raquo;
+              </button>
             </li>
           </ul>
         </nav>
