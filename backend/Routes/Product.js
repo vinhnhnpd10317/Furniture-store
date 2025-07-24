@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Lấy danh sách sản phẩm và tìm kiếm sản phẩm
 router.get('/', (req, res) => {
-    const { categoryId, search } = req.query;
+    const { categoryId, search, minPrice, maxPrice } = req.query;
 
     let sql = 'SELECT * FROM san_pham';
     const values = [];
@@ -15,6 +15,17 @@ router.get('/', (req, res) => {
         conditions.push('danh_muc_id = ?');
         values.push(categoryId);
     }
+
+    if (minPrice) {
+        conditions.push('gia >= ?');
+        values.push(minPrice);
+    }
+
+    if (maxPrice) {
+        conditions.push('gia <= ?');
+        values.push(maxPrice);
+    }
+
     if (search) {
         conditions.push('ten_san_pham LIKE ?');
         values.push(`%${search}%`);
@@ -43,22 +54,22 @@ router.get('/latest', (req, res) =>{
 });
 
 // GET /products => tất cả sản phẩm hoặc theo danh mục
-router.get('/', (req, res) => {
-    const { categoryId } = req.query;
+// router.get('/', (req, res) => {
+//     const { categoryId } = req.query;
 
-    let sql = 'SELECT * FROM san_pham';
-    const params = [];
+//     let sql = 'SELECT * FROM san_pham';
+//     const params = [];
 
-    if (categoryId) {
-        sql += ' WHERE danh_muc_id = ?';
-        params.push(categoryId);
-    }
+//     if (categoryId) {
+//         sql += ' WHERE danh_muc_id = ?';
+//         params.push(categoryId);
+//     }
 
-    db.query(sql, params, (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(result);
-    });
-});
+//     db.query(sql, params, (err, result) => {
+//         if (err) return res.status(500).json({ error: err.message });
+//         res.json(result);
+//     });
+// });
 
 // Thêm sản phẩm mới
 router.post('/', (req, res) => {
