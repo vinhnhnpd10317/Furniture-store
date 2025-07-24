@@ -10,6 +10,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { fetchProducts, type ProductItem } from "../../api/ProductApi";
 import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
+import { getFavoritesByUser } from "../../api/FavoriteApi";
 
 export default function Product() {
     const navigate = useNavigate();
@@ -119,6 +120,20 @@ export default function Product() {
         (currentPage - 1) * productsPerPage,
         currentPage * productsPerPage
     );
+    
+    useEffect(() => {
+        if (!nguoi_dung_id || products.length === 0) return;
+
+        getFavoritesByUser(nguoi_dung_id)
+            .then((favorites) => {
+                const likedProductIds = favorites.map((fav: any) => fav.san_pham_id);
+                const updatedLikedList = products.map((product) => likedProductIds.includes(product.id));
+                setLikedList(updatedLikedList);
+            })
+            .catch((err) => {
+                console.error("Lỗi khi tải danh sách yêu thích:", err);
+            });
+    }, [products, nguoi_dung_id]);
 
     return (
         <>
