@@ -43,3 +43,7 @@ export const loginUser = async (email: string, password: string) => {
     if (user) return user;
     else throw new Error("Email hoặc mật khẩu không đúng");
 };
+
+export const getCustomerById = async (id: number): Promise<Customer> => {
+  return (await axios.get(`${API_URL}/${id}`)).data;
+};
