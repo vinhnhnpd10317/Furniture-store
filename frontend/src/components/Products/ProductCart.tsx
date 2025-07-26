@@ -3,8 +3,26 @@ import "../Css/Productcart.css";
 import { useCart } from "../Products/CartContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 export default function ProductCart() {
+
+    const {user} = useAuth();
+
+    const handleCheckout = () =>{
+        if(user && user.id){
+            navigate("/orderform",{
+                state:{
+                    userId: user.id,
+                    cartItems: cartItems 
+                }
+            });
+        }else{
+            alert("Vui lòng đăng nhập để đặt hàng.");
+            navigate("/login");
+        }
+    };
+
     const { cartItems, updateQuantity, removeFromCart  } = useCart();
     const navigate = useNavigate();
 
@@ -92,7 +110,7 @@ export default function ProductCart() {
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-between">
                             <Link to="/products" className='btn btn-outline-dark fw-semibold text-success'>Tiếp tục mua hàng</Link>
-                            <button className="btn btn-dark"  onClick={() => navigate(`/orderform`)}>ĐẶT HÀNG</button>
+                            <button className="btn btn-dark"  onClick={handleCheckout}>ĐẶT HÀNG</button>
                         </div>
                     </div>
                 </div>

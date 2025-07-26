@@ -10,12 +10,15 @@ import {
 import { useAuth } from "../components/AuthContext";
 import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
+import { getCustomer, type Customer } from "../api/Customer";
 
 const UserOrders = () => {
+
   const { user } = useAuth();
   const [orders, setOrders] = useState<OrderItem[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<OrderItem | null>(null);
   const [showModal, setShowModal] = useState(false);
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
