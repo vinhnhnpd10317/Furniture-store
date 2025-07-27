@@ -10,6 +10,7 @@ import { useCart } from "../Products/CartContext";
 import { fetchComments, postComment, type BinhLuan } from "../../api/Comment";
 import { useAuth } from "../../components/AuthContext";
 import { addFavorite, deleteFavorite, getFavoritesByUser } from "../../api/FavoriteApi";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductDetail() {
     // const [likedList, setLikedList] = useState<boolean[]>(Array(8).fill(false));
@@ -27,6 +28,8 @@ export default function ProductDetail() {
     const [commentList, setCommentList] = useState<BinhLuan[]>([]);
     const { user } = useAuth(); // lấy thông tin user đăng nhập
     const [favoriteProductIds, setFavoriteProductIds] = useState<number[]>([]);
+
+    const navigate = useNavigate();
 
     // Lấy danh sách sản phẩm yêu thích của người dùng
     useEffect(() => {
@@ -77,14 +80,6 @@ export default function ProductDetail() {
         alert(`Đã thêm ${quantity} sản phẩm vào giỏ hàng!`);
     };
 
-
-    // Hàm thay đổi trạng thái thích
-    // const toggleLike = (index: number) => {
-    //     const updated = [...likedList];
-    //     updated[index] = !updated[index];
-    //     setLikedList(updated);
-    // };
-
     // Tải dữ liệu sản phẩm theo ID
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -123,6 +118,23 @@ export default function ProductDetail() {
             .then(setCategories);
     }, []);
 
+    // Mua ngay
+    const handleBuyNow = (item: ProductItem) => {
+      const productToBuy = {
+        id: item.id,
+        name: item.ten_san_pham,
+        price: Number(item.gia),
+        quantity: quantity,
+        image: item.hinh_anh_dai_dien
+          ? `/img/imgproduct/${item.hinh_anh_dai_dien}`
+          : "/img/imgproduct/default.jpg",
+        material: item.vat_lieu || 'N/A',
+        texture: item.chat_lieu || 'N/A',
+      };
+
+      navigate("/orderform", { state: { buyNowItem: productToBuy } });
+    };
+
     // Load comment
     useEffect(() => {
       const loadComments = async () => {
@@ -154,7 +166,7 @@ export default function ProductDetail() {
         }
     };
 
-    // bìn luận
+    // bình luận
     const handleSendComment = async () => {
       const user = JSON.parse(localStorage.getItem("user") || "null");
 
@@ -259,7 +271,7 @@ export default function ProductDetail() {
                     </div>
 
                     <div className="d-flex gap-2 flex-wrap">
-                        <button className="btn btn-dark">MUA NGAY</button>
+                        <button className="btn btn-dark" onClick={() => handleBuyNow(product)}>MUA NGAY</button>
                         <button className="btn btn-outline-dark" onClick={() => handleAddToCart(product)}>THÊM VÀO GIỎ</button>
                     </div>
                 </div>

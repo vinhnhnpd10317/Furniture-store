@@ -1,21 +1,31 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { createOrderWithPayment } from "../api/CheckOutApi";
 import { useCart } from "../components/Products/CartContext";
+import { useAuth } from "../components/AuthContext";
+import OrderForminfo from "./Products/OderForminfo";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import OrderForminfo from "./Products/OderForminfo";
-import { useAuth } from "../components/AuthContext";
 
 // Hàm xử lý giờ Việt Nam
 function getVietnamTimeString(): string {
     const now = new Date();
-    const offset = 7 * 60 * 60 * 1000; 
+    const offset = 7 * 60 * 60 * 1000;
     const vietnamTime = new Date(now.getTime() + offset);
     return vietnamTime.toISOString().slice(0, 19).replace('T', ' ');
 }
 
-const Checkout = () => {
+export default function OrderForm() {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { user } = useAuth();
+    const { cartItems, clearCart } = useCart();
+
+    // Nếu được gọi từ "MUA NGAY", state.buyNowItem sẽ có
+    const buyNowItem = location.state?.buyNowItem || null;
+    const itemsToOrder = buyNowItem ? [buyNowItem] : cartItems;
+    const subtotal = itemsToOrder.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -25,40 +35,31 @@ const Checkout = () => {
     });
     const [paymentMethod, setPaymentMethod] = useState<"tien_mat" | "chuyen_khoan">("tien_mat");
 
-    const { cartItems, clearCart } = useCart();
-    const navigate = useNavigate();
-
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-    const { user } = useAuth();
-
     const handleSubmit = async () => {
         if (!user) {
             alert("Vui lòng đăng nhập để đặt hàng");
             return;
         }
-
         try {
             const payload = {
-                nguoi_dung_id: user?.id, 
-                ngay_dat: getVietnamTimeString(), 
+                nguoi_dung_id: user.id,
+                ngay_dat: getVietnamTimeString(),
                 tong_tien: subtotal,
                 phuong_thuc_thanh_toan: paymentMethod,
                 trang_thai: "cho_xu_ly" as const,
                 ghi_chu: form.note,
-                chi_tiet_don_hang: cartItems.map((item) => ({
+                chi_tiet_don_hang: itemsToOrder.map(item => ({
                     san_pham_id: item.id,
                     so_luong: item.quantity,
                     don_gia: item.price,
                 })),
             };
-
             const result = await createOrderWithPayment(payload);
             alert("✅ Đặt hàng thành công! Mã đơn: " + result.don_hang_id);
-            clearCart();
+            if (!buyNowItem) clearCart();
             navigate("/userorder");
         } catch (err) {
-            alert("❌ Lỗi khi đặt hàng. Chi tiết console.");
+            alert("❌ Lỗi khi đặt hàng.");
             console.error(err);
         }
     };
@@ -71,17 +72,23 @@ const Checkout = () => {
                     <div className="card-body">
                         <OrderForminfo form={form} setForm={setForm} />
                     </div>
-
-                    <h6 className="fw-bold">PHƯƠNG THỨC THANH TOÁN</h6>
+                    <h6 className="fw-bold mt-4">PHƯƠNG THỨC THANH TOÁN</h6>
                     <div className="d-flex gap-3 mt-2">
-                        <div className={`p-3 rounded border ${paymentMethod === "tien_mat" ? "bg-dark text-white" : ""}`} style={{ cursor: "pointer" }} onClick={() => setPaymentMethod("tien_mat")}>
-                            <i className="bi bi-cash me-2"></i> Tiền mặt
+                        <div
+                            className={`p-3 rounded border ${paymentMethod === "tien_mat" ? "bg-dark text-white" : ""}`}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => setPaymentMethod("tien_mat")}
+                        >
+                            <i className="bi bi-cash me-2" /> Tiền mặt
                         </div>
-                        <div className={`p-3 rounded border ${paymentMethod === "chuyen_khoan" ? "bg-dark text-white" : ""}`} style={{ cursor: "pointer" }} onClick={() => setPaymentMethod("chuyen_khoan")}>
-                            <i className="bi bi-bank2 me-2"></i> Chuyển khoản
+                        <div
+                            className={`p-3 rounded border ${paymentMethod === "chuyen_khoan" ? "bg-dark text-white" : ""}`}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => setPaymentMethod("chuyen_khoan")}
+                        >
+                            <i className="bi bi-bank2 me-2" /> Chuyển khoản
                         </div>
                     </div>
-
                     {paymentMethod === "chuyen_khoan" && (
                         <div className="mt-3">
                             <strong>Ngân hàng Vietcombank</strong><br />
@@ -90,7 +97,6 @@ const Checkout = () => {
                         </div>
                     )}
                 </div>
-
                 <div className="col-lg-4">
                     <div className="p-4 bg-light rounded shadow-sm">
                         <h6 className="fw-bold">Tóm tắt đơn hàng</h6>
@@ -99,10 +105,15 @@ const Checkout = () => {
                             <strong>{subtotal.toLocaleString()}₫</strong>
                         </div>
                         <hr />
-                        <strong>Sản phẩm ({cartItems.length}):</strong>
-                        {cartItems.map(item => (
+                        <strong>Sản phẩm ({itemsToOrder.length}):</strong>
+                        {itemsToOrder.map(item => (
                             <div key={item.id} className="d-flex align-items-center mt-2">
-                                <img src={item.image} alt={item.name} style={{ width: 50, height: 50, objectFit: "cover" }} className="me-2" />
+                                <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    style={{ width: 50, height: 50, objectFit: "cover" }}
+                                    className="me-2"
+                                />
                                 <div>
                                     <p className="mb-0">{item.name} × {item.quantity}</p>
                                     <small>{(item.price * item.quantity).toLocaleString()}₫</small>
@@ -115,6 +126,4 @@ const Checkout = () => {
             </div>
         </div>
     );
-};
-
-export default Checkout;
+}
