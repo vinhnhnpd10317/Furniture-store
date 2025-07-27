@@ -1,12 +1,35 @@
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "./Css/Home.css";
+// import { useEffect } from "react";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/js/bootstrap.bundle.min.js";
+// import { useState } from "react";
+// import { fetchLatestProducts, ProductItem } from "../api/ProductApi";
+// import { useCart } from "../components/Products/CartContext";
+// import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Css/Home.css";
-import { useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useEffect, useState } from "react";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { fetchLatestProducts, type ProductItem } from "../api/ProductApi";
+import { useCart } from "../components/Products/CartContext";
+import { useNavigate } from "react-router-dom";
+
 
 function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  const [latestProducts, setLatestProducts] = useState<ProductItem[]>([]);
+  
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchLatestProducts()
+      .then(setLatestProducts)
+      .catch((err) => console.error("Lỗi khi lấy sản phẩm mới:", err));
   }, []);
 
   useEffect(() => {
@@ -57,26 +80,18 @@ function App() {
     material: string;
     texture: string;
   }) => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+     addToCart({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    quantity: 1, // luôn là 1 khi thêm nhanh từ Home
+    image: product.image || '/img/imgproduct/default.jpg',
+    material: product.material || 'N/A',
+    texture: product.texture || 'N/A',
+  });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const existingIndex = cart.findIndex((item: any) => item.id === product.id);
-
-    if (existingIndex !== -1) {
-      cart[existingIndex].quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-
-    if (user?.id) {
-      console.log("Người dùng đã đăng nhập, đang lưu vào DB...");
-      // TODO: Gọi API POST để lưu cart vào database tại đây
-    } else {
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert("Đã thêm vào giỏ hàng!");
-    }
-  };
+  alert("Đã thêm sản phẩm vào giỏ hàng!");
+};
   return (
     <>
       <meta charSet="UTF-8" />
@@ -216,37 +231,41 @@ function App() {
         </div>
       </div>
       {/* Phần sản phẩm mới thêm 3 sản phẩm có id khác nhau để tránh trùng lặp */}
+       {/* PHẦN SẢN PHẨM MỚI */}
       <div className="product-container">
         <div className="product-header">
           <h3>SẢN PHẨM MỚI</h3>
-          <a href="#">xem tất cả &gt;</a>
+          <a href="/products">xem tất cả &gt;</a>
         </div>
         <div className="product-list">
-          {[1, 2, 3, 4].map((id) => (
-            <div className="product-card" key={id}>
+          {latestProducts.map((p) => (
+            <div className="product-card" key={p.id}>
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2024/08/ban-nuoc-orientale-walnut-300x200.jpg"
-                alt={`Sản phẩm ${id}`}
+                src={`/img/imgproduct/${p.hinh_anh_dai_dien}`}
+                alt={p.ten_san_pham}
               />
-              <div className="product-name">Bàn nước Orientale walnut {id}</div>
-              <div className="price">49,000,000đ</div>
+              <div className="product-name">{p.ten_san_pham}</div>
+              <div className="price">{p.gia.toLocaleString("vi-VN")}đ</div>
               <div className="hover-actions">
                 <button
                   className="btn btn-outline-dark btn-sm"
-                  onClick={() =>
-                    handleAddToCart({
-                      id: id,
-                      name: `Bàn nước Orientale walnut ${id}`,
-                      price: 49000000,
-                      image: "https://nhaxinh.com/wp-content/uploads/2024/08/ban-nuoc-orientale-walnut-300x200.jpg",
-                      material: "Gỗ walnut",
-                      texture: "Bóng mờ",
-                    })
-                  }
+                  onClick={() => handleAddToCart({
+                    id: p.id,
+                    name: p.ten_san_pham,
+                    price: p.gia,
+                    image: `/img/imgproduct/${p.hinh_anh_dai_dien}`,
+                    material: p.vat_lieu,
+                    texture: p.chat_lieu
+                  })}
                 >
                   THÊM VÀO GIỎ
                 </button>
-                <button className="black">XEM THÊM</button>
+                <button
+                  className="black"
+                  onClick={() => navigate(`/productdetail/${p.id}`)}
+                >
+                  XEM THÊM
+                </button>
               </div>
             </div>
           ))}
