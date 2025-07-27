@@ -10,7 +10,6 @@ import {
 import { useAuth } from "../components/AuthContext";
 import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
-import { getCustomer, type Customer } from "../api/Customer";
 
 const UserOrders = () => {
 

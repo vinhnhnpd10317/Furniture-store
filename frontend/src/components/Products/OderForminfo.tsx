@@ -1,6 +1,8 @@
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { getCustomerById, type Customer } from "../../api/Customer";
+import { getCustomerById } from "../../api/Customer";
+import { useAuth } from "../AuthContext";
+
 
 interface Props {
   form: {
@@ -20,13 +22,15 @@ interface Props {
 }
 
 export default function OrderForminfo({ form, setForm }: Props) {
-  const location = useLocation();
-  const { userId } = location.state || {};
+  // const location = useLocation();
+  // const { userId } = location.state || {};
 
+  const { user } = useAuth();
+  console.log("User hiện tại:", user);
   useEffect(() => {
-    if (userId) {
-      getCustomerById(userId)
-        .then((data: Customer) => {
+    if (user?.id) {
+      getCustomerById(user.id)
+        .then((data) => {
           setForm({
             name: data.ho_ten || "",
             email: data.email || "",
@@ -39,7 +43,7 @@ export default function OrderForminfo({ form, setForm }: Props) {
           console.error("Không lấy được thông tin người dùng:", err);
         });
     }
-  }, [userId, setForm]);
+  }, [user, setForm]);
 
   return (
     <form className="p-4 border rounded shadow-sm bg-light">

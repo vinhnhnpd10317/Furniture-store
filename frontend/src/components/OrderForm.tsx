@@ -4,13 +4,13 @@ import { createOrderWithPayment } from "../api/CheckOutApi";
 import { useCart } from "../components/Products/CartContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import OderForminfo from "./Products/OderForminfo";
 import OrderForminfo from "./Products/OderForminfo";
+import { useAuth } from "../components/AuthContext";
 
 // Hàm xử lý giờ Việt Nam
 function getVietnamTimeString(): string {
     const now = new Date();
-    const offset = 7 * 60 * 60 * 1000; // +7 giờ
+    const offset = 7 * 60 * 60 * 1000; 
     const vietnamTime = new Date(now.getTime() + offset);
     return vietnamTime.toISOString().slice(0, 19).replace('T', ' ');
 }
@@ -30,11 +30,18 @@ const Checkout = () => {
 
     const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+    const { user } = useAuth();
+
     const handleSubmit = async () => {
+        if (!user) {
+            alert("Vui lòng đăng nhập để đặt hàng");
+            return;
+        }
+
         try {
             const payload = {
-                nguoi_dung_id: 1, // Hardcoded user ID
-                ngay_dat: getVietnamTimeString(), // ✅ Đã sửa giờ đúng
+                nguoi_dung_id: user?.id, 
+                ngay_dat: getVietnamTimeString(), 
                 tong_tien: subtotal,
                 phuong_thuc_thanh_toan: paymentMethod,
                 trang_thai: "cho_xu_ly" as const,

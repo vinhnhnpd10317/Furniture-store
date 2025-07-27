@@ -33,6 +33,17 @@ router.post('/', (req, res)=>{
     );
 });
 
+// Lấy thông tin khách hàng theo ID
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+
+    db.query('SELECT * FROM nguoi_dung WHERE id = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: err });
+        if (results.length === 0) return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+        res.json(results[0]);
+    });
+});
+
 // sửa khách hàng
 router.put('/:id', (req, res)=>{
     const {id} = req.params;
