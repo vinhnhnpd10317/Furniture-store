@@ -43,7 +43,7 @@ router.get('/', (req, res) => {
 
 // Lấy 3 sản phẩm mới nhất
 router.get('/latest', (req, res) =>{
-    const sql = 'SELECT * FROM san_pham ORDER BY ngay_tao DESC LIMIT 3 ';
+    const sql = 'SELECT * FROM san_pham ORDER BY ngay_tao DESC LIMIT 4 ';
     db.query(sql, (err, result)=>{
         if(err){
             console.error('Lỗi khi lấy sản phẩm mới nhất', err);
