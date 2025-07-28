@@ -15,6 +15,7 @@ import ArticleForm from "../components/Admin/ArticleForm";
 import Favorites from "../components/Admin/Favorites";
 import Checkout from "../components/Admin/CheckOut";
 
+import RequireAdminAuth from "./RequireAdminAuth";
 
 // Wrapper components
 function AddProductWrapper() {
@@ -29,6 +30,7 @@ function EditProductWrapper() {
 
 export default function AdminRoutes() {
   return (
+    <RequireAdminAuth>
     <>
       <HeaderAdmin />
         <AdminLayout>
@@ -51,5 +53,6 @@ export default function AdminRoutes() {
           </Routes>
         </AdminLayout>
     </>
+    </RequireAdminAuth>
   );
 }
