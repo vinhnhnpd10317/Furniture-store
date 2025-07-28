@@ -109,12 +109,9 @@ const UserOrders = () => {
                               </span>
                             </td>
                             <td>
-                              <button
-                                onClick={() => openModal(order.id)}
-                                className="btn btn-sm btn-outline-dark"
-                              >
+                              <Link to={`/orders/${order.id}`} className="btn btn-sm btn-outline-dark">
                                 <i className="bi bi-eye"></i> Xem
-                              </button>
+                              </Link>
                             </td>
                           </tr>
                         );
