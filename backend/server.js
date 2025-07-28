@@ -9,6 +9,7 @@ import OrderRoutes from './Routes/Order.js';
 import FavoriteRoutes from './Routes/Favorite.js';
 import CommentRoutes from './Routes/Comment.js';
 import CheckOutRoutes from './Routes/CheckOut.js';
+import OrderDetailRoutes from './Routes/OrderDetail.js';
 
 import path from 'path';
 import multer from 'multer';
@@ -43,6 +44,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use('/favorites', FavoriteRoutes);
 app.use('/checkout', CheckOutRoutes);
+app.use('/orderdetails', OrderDetailRoutes);
 
 // Sử dụng middleware upload cho route /products
 // Cập nhật middleware cho nhiều ảnh
