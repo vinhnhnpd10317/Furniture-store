@@ -55,7 +55,8 @@ const handleSubmit = async (e: React.FormEvent) => {
     const formattedUser = {
       id: user.id,
       name: user.ho_ten, 
-      email: user.email
+      email: user.email,
+      vai_tro: user.vai_tro,
     };
 
     login(formattedUser); // Lưu thông tin đã định dạng vào AuthContext

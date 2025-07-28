@@ -5,6 +5,7 @@ interface User {
   id: number;
   name: string;
   email: string;
+  vai_tro: string;
 }
 
 interface AuthContextType {
@@ -42,4 +43,5 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

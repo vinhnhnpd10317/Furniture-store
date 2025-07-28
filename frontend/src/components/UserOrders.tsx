@@ -58,6 +58,15 @@ const UserOrders = () => {
                   <i className="bi bi-person-circle me-2"></i>Thông tin của tôi
                 </Link>
               </li>
+
+              {user?.vai_tro === "quan_tri" && (
+                <li className="mb-3">
+                  <Link to="/admin/dashboard" className="text-decoration-none text-dark">
+                    <i className="bi bi-speedometer2 me-2"></i>Trang quản trị
+                  </Link>
+                </li>
+              )}
+
               <li>
                 <a href="#" className="text-decoration-none text-dark">
                   <i className="bi bi-box-arrow-right me-2"></i>Đăng xuất
