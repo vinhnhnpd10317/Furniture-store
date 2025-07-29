@@ -41,15 +41,19 @@ export const updateCustomer = async (
 export const deleteCustomer = async (id: number) =>
   (await axios.delete(`${API_URL}/${id}`)).data;
 
-export const loginUser = async (email: string, password: string) => {
-  const res = await axios.get(API_URL);
-  const users = res.data;
-  const user = users.find(
-    (u: Customer) => u.email === email && u.mat_khau === password
-  );
-  if (user) return user;
-  else throw new Error("Email hoặc mật khẩu không đúng");
+export const loginUser = async (email: string, mat_khau: string) => {
+  try {
+    const response = await axios.post(`${API_URL}/login`, {
+      email,
+      mat_khau,
+    });
+    return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    throw new Error(err.response?.data?.message || 'Email hoặc mật khẩu không đúng');
+  }
 };
+
 
 export const changeCustomerPassword = async (
   id: number,
@@ -62,6 +66,7 @@ export const changeCustomerPassword = async (
       newPassword,
     });
     return res.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new Error(err.response?.data?.message || "Lỗi đổi mật khẩu");
   }
