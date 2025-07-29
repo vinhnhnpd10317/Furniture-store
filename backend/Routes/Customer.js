@@ -67,4 +67,31 @@ router.delete('/:id', (req, res)=>{
         });
 });
 
+// Đổi mật khẩu (kiểm tra mật khẩu hiện tại)
+router.post('/:id/change-password', (req, res) => {
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+    db.query('SELECT * FROM nguoi_dung WHERE id = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: err });
+        if (results.length === 0) return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+
+        const user = results[0];
+
+        if (user.mat_khau !== currentPassword) {
+            return res.status(401).json({ message: 'Mật khẩu hiện tại không đúng' });
+        }
+
+        db.query(
+            'UPDATE nguoi_dung SET mat_khau = ? WHERE id = ?',
+            [newPassword, id],
+            (updateErr) => {
+                if (updateErr) return res.status(500).json({ error: updateErr });
+                res.json({ message: 'Đổi mật khẩu thành công' });
+            }
+        );
+    });
+});
+
+
 export default router;
