@@ -11,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const backgroundStyle = {
+  const backgroundStyle: React.CSSProperties = {
     backgroundImage: 'url(https://nhaxinh.com/wp-content/uploads/2025/04/Ban-Nuoc-Valencia-Mat-Da-04.jpg)',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -19,7 +19,7 @@ const Login = () => {
     position: 'relative',
   };
 
-  const overlayStyle = {
+  const overlayStyle: React.CSSProperties = {
     position: 'absolute',
     top: 0,
     left: 0,
