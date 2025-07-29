@@ -9,19 +9,25 @@ export default function ProductCart() {
 
     const {user} = useAuth();
 
-    const handleCheckout = () =>{
-        if(user && user.id){
-            navigate("/orderform",{
-                state:{
+    const handleCheckout = () => {
+        if (cartItems.length === 0) {
+            alert("Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi đặt hàng.");
+            return;
+        }
+
+        if (user && user.id) {
+            navigate("/orderform", {
+                state: {
                     userId: user.id,
                     cartItems: cartItems 
                 }
             });
-        }else{
+        } else {
             alert("Vui lòng đăng nhập để đặt hàng.");
             navigate("/login");
         }
     };
+
 
     const { cartItems, updateQuantity, removeFromCart  } = useCart();
     const navigate = useNavigate();
@@ -110,7 +116,7 @@ export default function ProductCart() {
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-between">
                             <Link to="/products" className='btn btn-outline-dark fw-semibold text-success'>Tiếp tục mua hàng</Link>
-                            <button className="btn btn-dark"  onClick={handleCheckout}>ĐẶT HÀNG</button>
+                            <button className="btn btn-dark"  onClick={handleCheckout} disabled={cartItems.length === 0}>ĐẶT HÀNG</button>
                         </div>
                     </div>
                 </div>
