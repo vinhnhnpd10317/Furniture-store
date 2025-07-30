@@ -360,7 +360,7 @@
                                                 src={item.hinh_anh_dai_dien ? `/img/imgproduct/${item.hinh_anh_dai_dien}` : "img/imgproduct/product.png"}
                                                 alt={item.ten_san_pham}
                                                 className="img-fluid"
-                                                style={{ height: "135px", objectFit: "cover" }}
+                                                style={{ height: "135px", objectFit: "cover", opacity: item.trang_thai_kho === "het_hang" ? 0.6 : 1 }}
                                             />
                                             <div className="d-flex justify-content-between align-items-start mt-2">
                                                 <h6 className="mb-1">{item.ten_san_pham}</h6>
@@ -379,14 +379,19 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="btn-group d-flex justify-content-center mt-3 product-btn-group">
-                                                <button className="btn btn-outline-dark btn-sm" onClick={() => handleAddToCart(item)}>
-                                                    THÊM VÀO GIỎ
-                                                </button>
-                                                <button className="btn btn-dark btn-sm" onClick={() => navigate(`/productdetail/${item.id}`)}>
-                                                    XEM THÊM
-                                                </button>
-                                            </div>
+
+                                            {item.trang_thai_kho === "het_hang" ? (
+                                                <div className="text-center mt-2 text-danger fw-bold">HẾT HÀNG</div>
+                                                ) : (
+                                                <div className="btn-group d-flex justify-content-center mt-3 product-btn-group">
+                                                    <button className="btn btn-outline-dark btn-sm" onClick={() => handleAddToCart(item)}>
+                                                        THÊM VÀO GIỎ
+                                                    </button>
+                                                    <button className="btn btn-dark btn-sm" onClick={() => navigate(`/productdetail/${item.id}`)}>
+                                                        XEM THÊM
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 ))}

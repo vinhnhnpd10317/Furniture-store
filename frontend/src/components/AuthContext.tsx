@@ -18,6 +18,7 @@ export interface User {
 // Interface context
 interface AuthContextType {
   user: User | null;
+  isLoading: boolean; 
   login: (user: User) => void;
   logout: () => void;
 }
@@ -25,13 +26,16 @@ interface AuthContextType {
 // Tạo context mặc định
 const AuthContext = createContext<AuthContextType>({
   user: null,
+  isLoading: true, // ← default ban đầu là loading
   login: () => {},
   logout: () => {},
 });
 
 // Provider để bao bọc ứng dụng
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load user từ localStorage khi component mount
   useEffect(() => {
@@ -41,9 +45,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(JSON.parse(storedUser));
       } catch (error) {
         console.error("Lỗi khi parse user từ localStorage:", error);
-        localStorage.removeItem("user"); // Xoá nếu dữ liệu lỗi
+        localStorage.removeItem("user");
       }
     }
+    setIsLoading(false); // ← Kết thúc load
   }, []);
 
   // Hàm đăng nhập
@@ -59,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

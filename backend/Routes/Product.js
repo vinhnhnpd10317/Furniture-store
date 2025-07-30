@@ -35,6 +35,8 @@ router.get('/', (req, res) => {
         sql += ' WHERE ' + conditions.join(' AND ');
     }
 
+    sql += ' ORDER BY ngay_tao DESC';
+
     db.query(sql, values, (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(result);
@@ -73,7 +75,7 @@ router.get('/latest', (req, res) =>{
 
 // Thêm sản phẩm mới
 router.post('/', (req, res) => {
-    const { ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id } = req.body;
+    const { ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id, trang_thai_kho } = req.body;
 
     const hinh_anh_dai_dien = req.files?.['hinh_anh_dai_dien']?.[0]?.filename || '';
 
@@ -85,11 +87,13 @@ router.post('/', (req, res) => {
 
     const query = `
         INSERT INTO san_pham 
-        (ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id, hinh_anh_dai_dien, ds_hinh_anh, ngay_tao)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id, hinh_anh_dai_dien, ds_hinh_anh, ngay_tao, trang_thai_kho)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const values = [ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id, hinh_anh_dai_dien, ds_hinh_anh, ngay_tao];
-
+    const values = [
+        ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id,
+        hinh_anh_dai_dien, ds_hinh_anh, ngay_tao, trang_thai_kho 
+    ];
     db.query(query, values, (err, result) => {
         if (err) {
             console.error('Lỗi query:', err);
@@ -119,7 +123,15 @@ router.get('/:id', (req, res) => {
 // Cập nhật sản phẩm theo id
 router.put('/:id', (req, res) => {
     const { id } = req.params;
-    const { ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id } = req.body;
+    const {
+        ten_san_pham,
+        vat_lieu,
+        chat_lieu,
+        mo_ta,
+        gia,
+        danh_muc_id,
+        trang_thai_kho // 👈 THÊM dòng này
+    } = req.body;
 
     const hinh_anh_dai_dien = req.files?.['hinh_anh_dai_dien']?.[0]?.filename || null;
 
@@ -136,7 +148,14 @@ router.put('/:id', (req, res) => {
         gia = ?, 
         danh_muc_id = ?`;
 
-    const values = [ten_san_pham, vat_lieu, chat_lieu, mo_ta, gia, danh_muc_id];
+    const values = [
+        ten_san_pham,
+        vat_lieu,
+        chat_lieu,
+        mo_ta,
+        gia,
+        danh_muc_id
+    ];
 
     if (hinh_anh_dai_dien) {
         query += `, hinh_anh_dai_dien = ?`;
@@ -146,6 +165,11 @@ router.put('/:id', (req, res) => {
     if (ds_hinh_anh) {
         query += `, ds_hinh_anh = ?`;
         values.push(ds_hinh_anh);
+    }
+
+    if (trang_thai_kho) {
+        query += `, trang_thai_kho = ?`;
+        values.push(trang_thai_kho);
     }
 
     query += ` WHERE id = ?`;
@@ -160,6 +184,7 @@ router.put('/:id', (req, res) => {
         res.json({ message: 'Cập nhật sản phẩm thành công' });
     });
 });
+
 
 // Xoá sản phẩm theo ID
 router.delete('/:id', (req, res) => {
@@ -199,6 +224,26 @@ router.get('/related/:id', (req, res) => {
     db.query(sql, [categoryId, productId], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(result);
+    });
+});
+
+router.put('/:id/trang-thai-kho', (req, res) => {
+    const { id } = req.params;
+    const { trang_thai_kho } = req.body;
+
+    const allowed = ['con_hang', 'het_hang'];
+    if (!allowed.includes(trang_thai_kho)) {
+        return res.status(400).json({ error: 'Trạng thái kho không hợp lệ' });
+    }
+
+    const query = `UPDATE san_pham SET trang_thai_kho = ? WHERE id = ?`;
+    db.query(query, [trang_thai_kho, id], (err, result) => {
+        if (err) {
+        console.error('Lỗi khi cập nhật trạng thái kho:', err);
+        return res.status(500).json({ error: 'Lỗi máy chủ' });
+        }
+
+        res.json({ message: 'Đã cập nhật trạng thái kho thành công' });
     });
 });
 

@@ -1,3 +1,5 @@
+export type TrangThaiKho = 'con_hang' | 'het_hang';
+
 export interface ProductItem {
     id: number;
     ten_san_pham: string;
@@ -9,6 +11,7 @@ export interface ProductItem {
     hinh_anh_dai_dien: string;
     ds_hinh_anh?: string;
     ngay_tao: string;
+    trang_thai_kho: TrangThaiKho;
 }
 
 export async function fetchProducts(

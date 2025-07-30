@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom";
 import axios from "axios";
 
 const formatCurrency = (value: number) =>
@@ -10,7 +10,15 @@ const formatDate = (dateStr: string) => {
   return date.toLocaleDateString("vi-VN");
 };
 
+const trangThaiMap: Record<string, string> = {
+  cho_xu_ly: "Chờ xử lý",
+  dang_giao: "Đang giao",
+  da_huy: "Đã huỷ",
+  hoan_thanh: "Hoàn thành",
+};
+
 const OrderDetail = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [order, setOrder] = useState<any>(null);
 
@@ -23,6 +31,21 @@ const OrderDetail = () => {
     }
   }, [id]);
 
+  const handleCancelOrder = async () => {
+    const confirmCancel = window.confirm("Bạn có chắc muốn huỷ đơn hàng này?");
+    if (!confirmCancel) return;
+
+    try {
+      await axios.put(`http://localhost:3001/orderdetails/orders/${id}/cancel`);
+      alert("Đơn hàng đã được huỷ!");
+      setOrder((prev: any) => ({ ...prev, trang_thai: "da_huy" }));
+      navigate("/userorder");
+    } catch (err) {
+      console.error("Lỗi huỷ đơn:", err);
+      alert("Không thể huỷ đơn hàng. Vui lòng thử lại sau.");
+    }
+  };
+
   if (!order)
     return <div className="text-center mt-5">Đang tải dữ liệu đơn hàng...</div>;
 
@@ -33,7 +56,7 @@ const OrderDetail = () => {
 
         <div className="row mb-3">
           <div className="col-md-6"><strong>Ngày đặt:</strong> {formatDate(order.ngay_dat)}</div>
-          <div className="col-md-6"><strong>Trạng thái:</strong> {order.trang_thai}</div>
+          <div className="col-md-6"><strong>Trạng thái:</strong> {trangThaiMap[order.trang_thai] || order.trang_thai}</div>
         </div>
 
         <div className="row mb-3">
@@ -78,6 +101,14 @@ const OrderDetail = () => {
             </tbody>
           </table>
         </div>
+
+        {order.trang_thai === 'cho_xu_ly' && (
+          <div className="text-end mt-3">
+            <button className="btn btn-danger" onClick={handleCancelOrder}>
+              Huỷ đơn hàng
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

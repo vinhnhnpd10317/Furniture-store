@@ -38,6 +38,26 @@ export default function Products() {
         if (currentPage > lastPage) setCurrentPage(lastPage);
     };
 
+    const handleTrangThaiKhoChange = async (id: number, newStatus: ProductItem["trang_thai_kho"]) => {
+        try {
+                const res = await fetch(`http://localhost:3001/products/${id}/trang-thai-kho`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ trang_thai_kho: newStatus }),
+                });
+                if (!res.ok) throw new Error("Cập nhật trạng thái kho thất bại");
+
+                setProducts((prev) =>
+                prev.map((p) =>
+                    p.id === id ? { ...p, trang_thai_kho: newStatus } : p
+                )
+                );
+        } catch (err) {
+            alert("❌ Không thể cập nhật trạng thái kho.");
+            console.error(err);
+        }
+    };
+
     const filteredProducts = useMemo(() => {
         if (!searchText) return products;
         return products.filter(p =>
@@ -80,6 +100,7 @@ export default function Products() {
                             <th>Danh mục</th>
                             <th>Ảnh đại diện</th>
                             <th>DS Hình ảnh</th>
+                            <th>Kho</th>
                             <th>Ngày tạo</th>
                             <th>Thao tác</th>
                         </tr>
@@ -123,6 +144,22 @@ export default function Products() {
                                         ))}
                                     </div>
                                 </td>
+
+                                <td>
+                                    <select
+                                        value={p.trang_thai_kho}
+                                        className={`form-select form-select-sm w-auto ${
+                                        p.trang_thai_kho === "con_hang" ? "border-success" : "border-danger"
+                                        }`}
+                                        onChange={(e) =>
+                                        handleTrangThaiKhoChange(p.id, e.target.value as ProductItem["trang_thai_kho"])
+                                        }
+                                    >
+                                        <option value="con_hang">Còn hàng</option>
+                                        <option value="het_hang">Hết hàng</option>
+                                    </select>
+                                </td>
+
                                 <td>{new Date(p.ngay_tao).toLocaleString()}</td>
                                 <td>
                                     <ProductActions

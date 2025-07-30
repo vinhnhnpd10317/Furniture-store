@@ -64,4 +64,28 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// Huỷ đơn hàng nếu trạng thái là "cho_xu_ly"
+router.put('/orders/:id/cancel', (req, res) => {
+    const { id } = req.params;
+
+    const checkSql = `SELECT trang_thai FROM don_hang WHERE id = ?`;
+    db.query(checkSql, [id], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Lỗi truy vấn' });
+
+        if (result.length === 0)
+        return res.status(404).json({ error: 'Không tìm thấy đơn hàng' });
+
+        const currentStatus = result[0].trang_thai;
+        if (currentStatus !== 'cho_xu_ly') {
+        return res.status(400).json({ error: 'Đơn hàng không thể huỷ' });
+        }
+
+        const updateSql = `UPDATE don_hang SET trang_thai = 'da_huy' WHERE id = ?`;
+        db.query(updateSql, [id], (err2) => {
+        if (err2) return res.status(500).json({ error: 'Không thể cập nhật trạng thái' });
+        res.json({ message: 'Huỷ đơn hàng thành công' });
+        });
+    });
+});
+
 export default router;

@@ -3,7 +3,11 @@ import { useAuth } from "../components/AuthContext";
 import { Navigate } from "react-router-dom";
 
 const RequireAdminAuth = ({ children }: { children: JSX.Element }) => {
-    const { user } = useAuth();
+    const { user, isLoading  } = useAuth();
+    
+    if (isLoading) {
+            return <div>Loading...</div>; // hoặc spinner đẹp hơn
+    }
 
     if (!user) {
         return <Navigate to="/login" replace />;
