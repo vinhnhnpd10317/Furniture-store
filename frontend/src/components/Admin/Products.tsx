@@ -113,8 +113,9 @@ export default function Products() {
                                 <td>{p.vat_lieu}</td>
                                 <td>{p.chat_lieu}</td>
                                 <td className="text-start small" style={{ wordBreak: "break-word", whiteSpace: "pre-wrap" }}>
-                                    {p.mo_ta}
+                                    {p.mo_ta.length > 100 ? p.mo_ta.slice(0, 100) + "..." : p.mo_ta}
                                 </td>
+
                                 <td className="text-danger fw-bold">
                                     {p.gia.toLocaleString()} đ
                                 </td>

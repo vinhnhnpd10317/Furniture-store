@@ -211,7 +211,14 @@ export default function ProductForm({ editingProduct = null, onDone }: Props) {
                 <textarea
                     className={`form-control ${errors.mo_ta ? "is-invalid" : ""}`}
                     value={form.mo_ta}
-                    onChange={(e) => setForm({ ...form, mo_ta: e.target.value })}
+                    onChange={(e) => {
+                        setForm({ ...form, mo_ta: e.target.value });
+
+                        const el = e.target;
+                        el.style.height = "auto"; 
+                        el.style.height = el.scrollHeight + "px"; 
+                    }}
+                    style={{ overflow: "hidden", resize: "none" }} 
                 ></textarea>
                 {errors.mo_ta && <div className="invalid-feedback">{errors.mo_ta}</div>}
             </div>

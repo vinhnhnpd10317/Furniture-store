@@ -281,7 +281,7 @@ export default function ProductDetail() {
             <div className="row mt-5">
                 <div className="col-12">
                     <h4 className="mb-3">MÔ TẢ SẢN PHẨM</h4>
-                    <div className="border p-4 bg-light rounded">
+                    <div className="bg-light rounded product-description" style={{ whiteSpace: 'pre-line' }}>
                         <p>{product.mo_ta || "Chưa có mô tả"}</p>
                         <p className="mt-3"><strong>Ngày tạo:</strong> {product.ngay_tao || "Chưa cập nhật"}</p>
                     </div>

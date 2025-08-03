@@ -50,6 +50,11 @@
     transition: all 0.2s ease;
 }
 
+.product-cards {
+  border: none !important;
+  box-shadow: none !important;
+}
+
 .product-sidebar-link:hover {
     border-left: 3px solid #333;
     background-color: #f8f9fa;
