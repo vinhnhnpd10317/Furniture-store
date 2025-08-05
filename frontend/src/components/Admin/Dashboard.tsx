@@ -2,6 +2,8 @@ import ArticleBarChart from "./Dashboard/ArticleBarChart";
 import CustomerLineChart from "./Dashboard/CustomerLineChart";
 import ProductCategoryChart from "./Dashboard/ProductCategoryChart";
 import Statistic from "./Dashboard/Statastis";
+import TopSellingProductsChart from "./Dashboard/StatisticBestProduct";
+import StatisticChart from "./Dashboard/StatisticProduct";
 
 export default function Dashboard() {
   return (
@@ -47,6 +49,16 @@ export default function Dashboard() {
       {/* Biểu đồ bán hàng */}
       <div className="mt-5">
         <Statistic />
+      </div>
+
+      {/* Biểu đồ sản phẩm bán ra theo ngày ... */}
+      <div className="mt-5">
+        <StatisticChart/>
+      </div>
+
+      {/* Biểu đồ 3 sản phẩm bán chạy nhất */}
+      <div className="mt-5">
+        <TopSellingProductsChart/>
       </div>
 
       {/* Biểu đồ đường: khách hàng theo tháng */}
