@@ -280,10 +280,10 @@ export default function ProductDetail() {
             {/* Mô tả sản phẩm */}
             <div className="row mt-5">
                 <div className="col-12">
-                    <h4 className="mb-3">MÔ TẢ SẢN PHẨM</h4>
+                    <h4 className="mb-3 mt-3">MÔ TẢ SẢN PHẨM</h4>
                     <div className="bg-light rounded product-description" style={{ whiteSpace: 'pre-line' }}>
                         <p>{product.mo_ta || "Chưa có mô tả"}</p>
-                        <p className="mt-3"><strong>Ngày tạo:</strong> {product.ngay_tao || "Chưa cập nhật"}</p>
+                        <p className="mt-3"><strong>Ngày đăng:</strong> {product.ngay_tao || "Chưa cập nhật"}</p>
                     </div>
                 </div>
             </div>
@@ -368,7 +368,7 @@ export default function ProductDetail() {
               {localStorage.getItem("user") ? (
                 <div className="d-flex align-items-start gap-3">
                   <img
-                    src="https://i.pravatar.cc/40?img=3"
+                    src="https://i.pinimg.com/736x/bc/43/98/bc439871417621836a0eeea768d60944.jpg"
                     className="rounded-circle"
                     alt="User"
                     width={40}

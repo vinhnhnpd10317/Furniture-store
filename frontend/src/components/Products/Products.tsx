@@ -24,7 +24,7 @@
         const [searchParams, setSearchParams] = useSearchParams();
 
         const [currentPage, setCurrentPage] = useState(1);
-        const productsPerPage = 15;
+        const productsPerPage = 30;
         const productListRef = useRef<HTMLDivElement>(null);
 
         const categoryIdParam = searchParams.get("categoryId");
