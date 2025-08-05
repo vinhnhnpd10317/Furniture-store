@@ -228,6 +228,7 @@ export default function ProductDetail() {
                 <div className="col-md-6">
                     <img
                         src={mainImage}
+                        tabIndex={-1}
                         className="img-fluid mb-3"
                         alt="Main Product"
                         style={{ maxHeight: "500px", objectFit: "cover", width: "100%", outline: "none" }}
