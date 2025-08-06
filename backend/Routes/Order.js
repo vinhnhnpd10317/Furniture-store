@@ -14,6 +14,8 @@ router.get('/', (req, res) => {
     values.push(likeSearch, likeSearch);
   }
 
+  sql += ' ORDER BY ngay_dat DESC, id DESC';
+
   db.query(sql, values, (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(result);
@@ -42,7 +44,7 @@ router.get('/user/:id', (req, res) => {
     SELECT DISTINCT id, ngay_dat, tong_tien, trang_thai
     FROM don_hang
     WHERE nguoi_dung_id = ?
-    ORDER BY ngay_dat DESC
+    ORDER BY ngay_dat DESC, id DESC
   `;
 
   db.query(sql, [userId], (err, results) => {
