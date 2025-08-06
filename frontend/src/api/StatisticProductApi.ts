@@ -45,3 +45,4 @@ export const getBestSellingProducts = async (
   });
   return response.data;
 };
+

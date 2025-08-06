@@ -50,7 +50,6 @@ export default function CustomerList() {
             <th>Email</th>
             <th>SĐT</th>
             <th>Địa chỉ</th>
-            <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -60,12 +59,6 @@ export default function CustomerList() {
               <td>{c.email}</td>
               <td>{c.so_dien_thoai}</td>
               <td>{c.dia_chi}</td>
-              <td>
-                {/* Bạn có thể làm trang sửa riêng nếu cần */}
-                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(c.id)}>
-                  Xoá
-                </button>
-              </td>
             </tr>
           ))}
           {customers.length === 0 && (
