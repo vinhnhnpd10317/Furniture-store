@@ -72,3 +72,17 @@ export const changeCustomerPassword = async (
   }
 };
 
+export const loginWithGoogle = async (googleUser: {
+  id: string;
+  name: string;
+  email: string;
+  picture: string;
+}) => {
+  try {
+    const res = await axios.post(`${API_URL}/google-login`, googleUser);
+    return res.data;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.message || "Đăng nhập Google thất bại");
+  }
+};
+

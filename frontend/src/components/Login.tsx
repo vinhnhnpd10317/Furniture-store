@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../components/AuthContext'; // ← sửa đúng path đến AuthContext của bạn
+import { useAuth } from '../components/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { loginUser } from '../api/Customer';
+import { loginUser, loginWithGoogle } from '../api/Customer';
+import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const [error, setError] = useState('');
@@ -48,25 +50,50 @@ const Login = () => {
     padding: '10px 15px',
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    const user = await loginUser(email, password);
-    const formattedUser = {
-      id: user.id,
-      name: user.ho_ten, 
-      email: user.email,
-      vai_tro: user.vai_tro,
-    };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const user = await loginUser(email, password);
+      const formattedUser = {
+        id: user.id,
+        name: user.ho_ten,
+        email: user.email,
+        vai_tro: user.vai_tro,
+      };
+      login(formattedUser);
+      navigate('/');
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
 
-    login(formattedUser); // Lưu thông tin đã định dạng vào AuthContext
-    navigate('/'); 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    setError(err.message);
-  }
-};
+  const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
+    try {
+      if (credentialResponse.credential) {
+        const decoded: any = jwtDecode(credentialResponse.credential);
+        const googleUser = {
+          id: decoded.sub,
+          name: decoded.name,
+          email: decoded.email,
+          picture: decoded.picture,
+        };
 
+        // Gọi API để kiểm tra hoặc tạo user trong DB
+        const user = await loginWithGoogle(googleUser);
+        const formattedUser = {
+          id: user.id,
+          name: user.ho_ten,
+          email: user.email,
+          vai_tro: user.vai_tro,
+        };
+
+        login(formattedUser); // Lưu vào AuthContext và localStorage
+        navigate('/');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Đăng nhập Google thất bại');
+    }
+  };
 
   return (
     <div style={backgroundStyle}>
@@ -104,10 +131,17 @@ const handleSubmit = async (e: React.FormEvent) => {
               <button type="submit" className="btn btn-warning text-white">Đăng Nhập</button>
             </div>
             <p className="text-center text-white mb-4">Hoặc</p>
+
             <div className="d-flex justify-content-between mb-3 gap-2">
-              <button type="button" className="btn btn-danger w-100">Google</button>
-              <button type="button" className="btn btn-primary w-100">Facebook</button>
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => {
+                  setError('Đăng nhập Google thất bại');
+                }}
+                useOneTap
+              />
             </div>
+
             <p className="text-center text-white">
               Không có tài khoản? <a href="/signup" className="fw-bold text-white text-decoration-underline">Đăng ký tại đây!</a>
             </p>

@@ -144,4 +144,43 @@ router.post('/login', (req, res) => {
   });
 });
 
+router.post('/google-login', (req, res) => {
+    const { id, name, email, picture } = req.body;
+
+    const checkUserSql = 'SELECT * FROM nguoi_dung WHERE email = ?';
+    db.query(checkUserSql, [email], (err, results) => {
+        if (err) {
+            console.error("Lỗi kiểm tra user:", err);
+            return res.status(500).json({ message: "Lỗi máy chủ" });
+        }
+
+        if (results.length === 0) {
+            // Nếu user chưa tồn tại → thêm mới
+            const insertSql = `
+                INSERT INTO nguoi_dung (ho_ten, email, mat_khau, so_dien_thoai, dia_chi, vai_tro, ngay_tao)
+                VALUES (?, ?, '', '', '', 'khach_hang', NOW())
+            `;
+            db.query(insertSql, [name, email], (err, result) => {
+                if (err) {
+                    console.error("Lỗi thêm user Google:", err);
+                    return res.status(500).json({ message: "Lỗi máy chủ" });
+                }
+
+                // Lấy thông tin user vừa thêm
+                db.query('SELECT * FROM nguoi_dung WHERE email = ?', [email], (err, newUser) => {
+                    if (err) return res.status(500).json({ message: "Lỗi máy chủ sau khi thêm" });
+                    const user = newUser[0];
+                    delete user.mat_khau; // Xóa mật khẩu khỏi response
+                    res.json(user);
+                });
+            });
+        } else {
+            // User đã tồn tại → trả về thông tin
+            const user = results[0];
+            delete user.mat_khau; // Xóa mật khẩu khỏi response
+            res.json(user);
+        }
+    });
+});
+
 export default router;

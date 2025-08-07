@@ -17,6 +17,7 @@ export const fetchComments = async (): Promise<BinhLuan[]> => {
   try {
     const response = await axios.get<BinhLuan[]>(API_URL);
     return response.data;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     throw new Error("Lỗi khi tải bình luận");
   }
@@ -26,6 +27,7 @@ export const fetchComments = async (): Promise<BinhLuan[]> => {
 export const deleteComment = async (id: number): Promise<void> => {
   try {
     await axios.delete(`${API_URL}/${id}`);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     throw new Error(`Lỗi khi xóa bình luận với ID ${id}`);
   }
@@ -48,6 +50,7 @@ export const fetchCommentsByProductId = async (san_pham_id: number): Promise<Bin
   try {
     const response = await axios.get<BinhLuan[]>(`${API_URL}?san_pham_id=${san_pham_id}`);
     return response.data;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     throw new Error("Lỗi khi tải bình luận sản phẩm");
   }
