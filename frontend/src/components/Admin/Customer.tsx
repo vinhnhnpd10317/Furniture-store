@@ -38,26 +38,25 @@ export default function CustomerList() {
     <div className="container py-4">
       <style>
         {`
-          .table th, .table td {
-            white-space: nowrap;
+        @media (max-width: 768px) {
+          .hide-on-tablet {
+            display: none !important;
           }
+        }
 
-          @media (max-width: 576px) {
-            .table th, .table td {
-              font-size: 14px;
-            }
-
-            .btn {
-              font-size: 14px;
-              padding: 4px 8px;
-            }
-
-            .pagination {
-              flex-wrap: wrap;
-              justify-content: center;
-            }
+        @media (max-width: 576px) {
+          .desktop-table {
+            display: none !important;
           }
-        `}
+          .mobile-card {
+            display: block !important;
+          }
+        }
+
+        .mobile-card {
+          display: none;
+        }
+      `}
       </style>
 
       <h2 className="mb-4 text-center">Quản lý khách hàng</h2>
@@ -68,14 +67,15 @@ export default function CustomerList() {
         </Link>
       </div>
 
-      <div className="table-responsive">
+      {/* TABLE - Desktop & Tablet */}
+      <div className="table-responsive desktop-table">
         <table className="table table-bordered table-hover align-middle">
           <thead className="table-light">
             <tr>
               <th>Họ tên</th>
-              <th>Email</th>
+              <th className="hide-on-tablet">Email</th>
               <th>SĐT</th>
-              <th>Địa chỉ</th>
+              <th className="hide-on-tablet">Địa chỉ</th>
               <th className="text-center">Hành động</th>
             </tr>
           </thead>
@@ -83,9 +83,9 @@ export default function CustomerList() {
             {currentCustomers.map(c => (
               <tr key={c.id}>
                 <td>{c.ho_ten}</td>
-                <td>{c.email}</td>
+                <td className="hide-on-tablet">{c.email}</td>
                 <td>{c.so_dien_thoai}</td>
-                <td>{c.dia_chi}</td>
+                <td className="hide-on-tablet">{c.dia_chi}</td>
                 <td className="text-center">
                   <button
                     className="btn btn-sm btn-danger"
@@ -107,8 +107,31 @@ export default function CustomerList() {
         </table>
       </div>
 
+      {/* CARD - Mobile only */}
+      <div className="mobile-card">
+        {currentCustomers.map(c => (
+          <div key={c.id} className="card mb-3">
+            <div className="card-body">
+              <h5 className="card-title">{c.ho_ten}</h5>
+              <p className="card-text mb-1"><strong>SĐT:</strong> {c.so_dien_thoai}</p>
+              <p className="card-text mb-1"><strong>Email:</strong> {c.email}</p>
+              <p className="card-text mb-2"><strong>Địa chỉ:</strong> {c.dia_chi}</p>
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={() => handleDelete(c.id)}
+              >
+                Xoá
+              </button>
+            </div>
+          </div>
+        ))}
+        {customers.length === 0 && (
+          <p className="text-center">Không có khách hàng nào</p>
+        )}
+      </div>
+
       <nav className="d-flex justify-content-center mt-4">
-        <ul className="pagination">
+        <ul className="pagination flex-wrap justify-content-center">
           {[...Array(totalPages)].map((_, index) => (
             <li
               key={index}
