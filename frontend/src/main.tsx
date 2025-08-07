@@ -5,14 +5,20 @@ import App from './App.tsx';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { CartProvider } from './components/Products/CartContext.tsx';
-import { AuthProvider } from './components/AuthContext.tsx'; // ✅ thêm vào
+import { AuthProvider } from './components/AuthContext.tsx';
+ // ✅ thêm vào
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const clientId = '30882727216-41dktfa6qf444sndjsik5ruk78utbima.apps.googleusercontent.com';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider> 
-      <CartProvider>
-        <App />
-      </CartProvider>
-    </AuthProvider>
+    <GoogleOAuthProvider clientId={clientId}>
+      <AuthProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   </StrictMode>
 );

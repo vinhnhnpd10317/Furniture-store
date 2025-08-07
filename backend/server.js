@@ -13,6 +13,11 @@ import OrderDetailRoutes from './Routes/OrderDetail.js';
 import StatisticRouter from './Routes/Statistic.js';
 import StatisticProduct from './Routes/StatisticProduct.js';
 
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import AuthGoogleRoutes from './Routes/googleAuth.js';
+
 import path from 'path';
 import multer from 'multer';
 import { fileURLToPath } from 'url';
@@ -36,6 +41,31 @@ const upload = multer({ storage: storage });
 
 app.use(cors());
 app.use(express.json());
+
+app.use(session({
+  secret: 'secret-key',
+  resave: false,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new GoogleStrategy({
+    clientID: '30882727216-41dktfa6qf444sndjsik5ruk78utbima.apps.googleusercontent.com',
+    clientSecret: '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',
+    callbackURL: 'http://localhost:3001/auth/google/callback'
+}, (accessToken, refreshToken, profile, done) => {
+    // Gửi profile user
+    return done(null, profile);
+}));
+
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+passport.deserializeUser((obj, done) => {
+    done(null, obj);
+});
+
 app.use('/comments', CommentRoutes);
 app.use('/categorys', CategorytRoutes);
 app.use('/articles', ArticleRoutes);
@@ -57,8 +87,9 @@ app.use('/products', upload.fields([
     { name: 'ds_hinh_anh', maxCount: 10 }
 ]), ProductRoutes);
 
-
 app.use('/categorys', CategorytRoutes); 
+
+app.use('/auth', AuthGoogleRoutes);
 
 // Khởi động server
 app.listen(3001, () => {
