@@ -6,11 +6,11 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./Css/Header.css";
 import { useAuth } from "../components/AuthContext";
 import { getFavoritesByUser } from "../api/FavoriteApi";
-import { useCart } from "../components/Products/CartContext"; // ✅ thêm dòng này
+import { useCart } from "../components/Products/CartContext";
 
 const Header = () => {
   const { user, logout } = useAuth();
-  const { cartCount } = useCart(); // ✅ lấy cartCount
+  const { cartCount } = useCart();
 
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
@@ -85,11 +85,10 @@ const Header = () => {
 
           {/* Desktop Icons */}
           <div className="d-none d-md-flex align-items-center gap-3 text-muted">
-              <Link to="/store-map" className="text-muted">
-                  <i className="bi bi-geo-alt" style={{ cursor: "pointer" }}></i>
-              </Link>
+            <Link to="/store-map" className="text-muted">
+              <i className="bi bi-geo-alt" style={{ cursor: "pointer" }}></i>
+            </Link>
 
-            {/* Icon yêu thích */}
             <Link to="/favorites" className="text-muted position-relative">
               <i className="bi bi-heart fs-6"></i>
               {favoriteCount > 0 && (
@@ -99,7 +98,6 @@ const Header = () => {
               )}
             </Link>
 
-            {/* ✅ Icon giỏ hàng */}
             <Link to="/productcart" className="text-muted position-relative">
               <i className="bi bi-bag fs-6"></i>
               {cartCount > 0 && (
@@ -127,7 +125,6 @@ const Header = () => {
         {/* NAVBAR */}
         <nav className="navbar navbar-expand-md navbar-light bg-white border-bottom px-3 py-3">
           <div className="container-fluid">
-            {/* Toggle Button */}
             <button
               className="navbar-toggler me-2 p-1"
               type="button"
@@ -181,20 +178,60 @@ const Header = () => {
                 />
               </div>
 
-              {/* Mobile Search + Login */}
-              <div className="d-md-none w-100 mt-3 px-2">
-                <input
-                  type="text"
-                  value={keyword}
-                  onChange={e => setKeyword(e.target.value)}
-                  onKeyDown={e => { if (e.key === "Enter") handleSearch(); }}
-                  className="form-control mb-2"
-                  placeholder="Tìm kiếm sản phẩm"
-                />
-                <Link to="/login" className="btn btn-outline-dark w-100 d-flex justify-content-center align-items-center">
-                  Đăng nhập <i className="bi bi-person ms-2"></i>
-                </Link>
-              </div>
+              {/* Mobile Search + Icons */}
+<div className="d-md-none w-100 mt-3 px-2">
+  <div className="input-group mb-2">
+    <input
+      type="text"
+      value={keyword}
+      onChange={e => setKeyword(e.target.value)}
+      onKeyDown={e => { if (e.key === "Enter") handleSearch(); }}
+      className="form-control"
+      placeholder="Tìm kiếm sản phẩm"
+    />
+    <button className="btn btn-outline-secondary" type="button" onClick={handleSearch}>
+      <i className="bi bi-search"></i>
+    </button>
+  </div>
+
+  <div className="d-flex justify-content-around align-items-center mb-2">
+    <Link to="/store-map" className="text-muted">
+      <i className="bi bi-geo-alt fs-5"></i>
+    </Link>
+
+    <Link to="/favorites" className="text-muted position-relative">
+      <i className="bi bi-heart fs-5"></i>
+      {favoriteCount > 0 && (
+        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          {favoriteCount}
+        </span>
+      )}
+    </Link>
+
+    <Link to="/productcart" className="text-muted position-relative">
+      <i className="bi bi-bag fs-5"></i>
+      {cartCount > 0 && (
+        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          {cartCount}
+        </span>
+      )}
+    </Link>
+
+    {user ? (
+      <>
+        <Link to="/userorder" className="text-dark text-decoration-none">
+          {user.name}
+        </Link>
+        <button className="btn btn-sm btn-outline-dark ms-1" onClick={logout}>Đăng xuất</button>
+      </>
+    ) : (
+      <Link to="/login" className="text-dark text-decoration-none">
+        <i className="bi bi-person fs-5"></i>
+      </Link>
+    )}
+  </div>
+</div>
+
             </div>
           </div>
         </nav>
