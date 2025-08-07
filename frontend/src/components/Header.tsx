@@ -76,11 +76,12 @@ const Header = () => {
           <div className="d-flex align-items-center gap-3">
             <span><i className="bi bi-globe2 me-1"></i> VN | EN</span>
             <span className="text-danger fw-semibold">
-              <i className="bi bi-telephone-fill me-1"></i> 0763701215
+              <i className="bi bi-telephone-fill me-1"></i> 0352 885 026
             </span>
+           <Link to="/aboutpage" className="text-decoration-none">
             <span className="text-muted">Giới thiệu</span>
-            <span className="text-muted">Khuyến mãi</span>
-            <span className="text-danger fw-bold">Giảm giá đặc biệt ưu đãi</span>
+          </Link>
+
           </div>
 
           {/* Desktop Icons */}
