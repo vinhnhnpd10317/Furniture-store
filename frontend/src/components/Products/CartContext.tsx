@@ -34,7 +34,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { user } = useAuth();
 
-  // ✅ Tính tổng số lượng sản phẩm
+  // Tính tổng số lượng sản phẩm
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   // 1. Lấy cart từ localStorage nếu chưa login

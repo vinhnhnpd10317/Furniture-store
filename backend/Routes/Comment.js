@@ -40,10 +40,6 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-
-
-
-
 // POST - Thêm bình luận mới 
 
 router.post('/', (req, res) => {
@@ -68,9 +64,6 @@ router.post('/', (req, res) => {
     res.status(201).json({ message: "Đã thêm bình luận thành công" });
   });
 });
-
-
-
 
 // GET - Lấy danh sách bình luận, có thể lọc theo sản phẩm
 router.get('/', (req, res) => {
