@@ -5,6 +5,7 @@ export interface FavoriteItem {
   mo_ta: ReactNode;
   gia: ReactNode;
   ten_san_pham: ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hinh_anh_dai_dien: any;
   id: number;
   nguoi_dung_id: number;
