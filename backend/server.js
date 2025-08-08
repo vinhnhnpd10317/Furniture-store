@@ -12,6 +12,7 @@ import CheckOutRoutes from './Routes/CheckOut.js';
 import OrderDetailRoutes from './Routes/OrderDetail.js';
 import StatisticRouter from './Routes/Statistic.js';
 import StatisticProduct from './Routes/StatisticProduct.js';
+import StatisticSummaryRoutes from './Routes/StatisticSum.js';
 
 import session from 'express-session';
 import passport from 'passport';
@@ -79,6 +80,7 @@ app.use('/checkout', CheckOutRoutes);
 app.use('/orderdetails', OrderDetailRoutes);
 app.use('/statistic', StatisticRouter);
 app.use('/statisticproduct', StatisticProduct);
+app.use('/statisticsum', StatisticSummaryRoutes);
 
 // Sử dụng middleware upload cho route /products
 // Cập nhật middleware cho nhiều ảnh

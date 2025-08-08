@@ -35,11 +35,46 @@ export default function OrderForm() {
     });
     const [paymentMethod, setPaymentMethod] = useState<"tien_mat" | "chuyen_khoan">("tien_mat");
 
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
     const handleSubmit = async () => {
         if (!user) {
             alert("Vui lòng đăng nhập để đặt hàng");
             return;
         }
+
+        const newErrors: Record<string, string> = {};
+
+        if (!form.name.trim() || form.name.trim().length < 4) {
+            newErrors.name = "Họ tên phải có ít nhất 4 ký tự";
+        }
+
+        if (!form.phone.trim()) {
+            newErrors.phone = "Số điện thoại không được để trống";
+        } else if (!/^0[0-9]{9}$/.test(form.phone)) {
+            newErrors.phone = "Số điện thoại không hợp lệ";
+        }
+
+        if (!form.email.trim()) {
+            newErrors.email = "Email không được để trống";
+        } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+            newErrors.email = "Email không hợp lệ";
+        }
+
+        if (!form.address.trim()) {
+            newErrors.address = "Địa chỉ không được để trống";
+        } else if (form.address.trim().length <= 10) {
+            newErrors.address = "Địa chỉ phải dài hơn 10 ký tự";
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
+        setErrors({}); // Xóa lỗi cũ nếu hợp lệ
+
+
         try {
             const payload = {
                 nguoi_dung_id: user.id,
@@ -70,7 +105,7 @@ export default function OrderForm() {
                 <div className="col-lg-8">
                     <div className="card-header fw-bold">THÔNG TIN ĐƠN HÀNG</div>
                     <div className="card-body">
-                        <OrderForminfo form={form} setForm={setForm} />
+                        <OrderForminfo form={form} setForm={setForm} errors={errors} />
                     </div>
                     <h6 className="fw-bold mt-4">PHƯƠNG THỨC THANH TOÁN</h6>
                     <div className="d-flex gap-3 mt-2">
