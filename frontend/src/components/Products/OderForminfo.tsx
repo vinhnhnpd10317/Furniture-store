@@ -19,9 +19,10 @@ interface Props {
     address: string;
     note: string;
   }>>;
+  errors?: Record<string, string>;
 }
 
-export default function OrderForminfo({ form, setForm }: Props) {
+export default function OrderForminfo({ form, setForm, errors = {} }: Props) {
   // const location = useLocation();
   // const { userId } = location.state || {};
 
@@ -51,44 +52,48 @@ export default function OrderForminfo({ form, setForm }: Props) {
         <label className="form-label">Họ tên</label>
         <input
           type="text"
-          className="form-control"
+          className={`form-control ${errors.name ? 'is-invalid' : ''}`}
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
           placeholder="Nhập họ tên"
         />
+        {errors.name && <div className="invalid-feedback">{errors.name}</div>}
       </div>
 
       <div className="mb-3">
         <label className="form-label">Email</label>
         <input
           type="email"
-          className="form-control"
+          className={`form-control ${errors.email ? 'is-invalid' : ''}`}
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           placeholder="Nhập email"
         />
+        {errors.email && <div className="invalid-feedback">{errors.email}</div>}
       </div>
 
       <div className="mb-3">
         <label className="form-label">Số điện thoại</label>
         <input
           type="tel"
-          className="form-control"
+          className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
           value={form.phone}
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
           placeholder="Nhập số điện thoại"
         />
+        {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
       </div>
 
       <div className="mb-3">
         <label className="form-label">Địa chỉ</label>
         <input
           type="text"
-          className="form-control"
+          className={`form-control ${errors.address ? 'is-invalid' : ''}`}
           value={form.address}
           onChange={(e) => setForm({ ...form, address: e.target.value })}
           placeholder="Nhập địa chỉ"
         />
+        {errors.address && <div className="invalid-feedback">{errors.address}</div>}
       </div>
 
       <div className="mb-3">

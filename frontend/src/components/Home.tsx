@@ -14,6 +14,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { fetchLatestProducts, type ProductItem } from "../api/ProductApi";
 import { useCart } from "../components/Products/CartContext";
 import { useNavigate } from "react-router-dom";
+ import { Link } from "react-router-dom"; // ở đầu file
 
 
 function App() {
@@ -100,7 +101,7 @@ function App() {
       <link rel="stylesheet" href="style/home.css" />
       <div className="banner">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/05/z6580490141577_8548ffc185be52ddf8e968ae8b7a90b4.jpg"
+          src="https://nhaxinh.com/wp-content/uploads/2025/07/tang-5tr-1400x789.webp"
           alt="Clearance Sale - Ưu đãi lớn nhất"
         />
       </div>
@@ -271,97 +272,129 @@ function App() {
           ))}
         </div>
       </div>
-      {/* Slider 1 */}
-      <section className="inspiration-section" id="inspiration-slider-1">
-        <h2 className="section-title">Góc cảm hứng </h2>
-        <div className="inspiration-slider">
-          <div className="inspiration-group active">
-            <div className="inspiration-item">
-              <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/05/khong-giang-1200x800.webp"
-                alt="Ảnh 1"
-              />
-              <h3>Tô màu cuộc sống của bạn</h3>
-              <p>
-                Hãy chào đón phong cách sống động với những chiếc bình đầy màu sắc
-                bắt mắt! Trung bày chúng cũng.
-              </p>
-            </div>
-            <div className="inspiration-item">
-              <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/04/goc-cam-hung-4-1200x800.webp"
-                alt="Ảnh 2"
-              />
-              <h3>Chiêm ngưỡng các dòng sản phẩm cho mùa mới tại Premi Seven</h3>
-              <p>
-                Lấy cảm hứng từ thành phố Valencia, miền Đông Nam Tây Ban Nha, nơi
-                nổi tiếng với sự giao thoa.
-              </p>
-            </div>
-          </div>
-          <div className="inspiration-group">
-            <div className="inspiration-item">
-              <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/03/Sofa-da-Jazz.jpg"
-                alt="Ảnh 3"
-              />
-              <h3>Top 5 Sofa Da Tại Nhà Xinh Cho Mọi Không Gian Hiện Đại</h3>
-              <p>
+    
+
+<section className="inspiration-section" id="inspiration-slider-1">
+  <h2 className="section-title">Góc cảm hứng </h2>
+  <div className="inspiration-slider">
+    {/* Group 1 */}
+    <div className="inspiration-group active">
+      <Link to="/inspiration/29" className="inspiration-item text-link">
+        <img
+          src="https://nhaxinh.com/wp-content/uploads/2025/05/khong-giang-1200x800.webp"
+          alt="Ảnh 1"
+        />
+        <h3>Tô màu cuộc sống của bạn</h3>
+        <p>
+          Hãy chào đón phong cách sống động với những chiếc bình đầy màu sắc bắt mắt! Trưng bày chúng cũng.
+        </p>
+      </Link>
+
+      <Link to="/inspiration/27" className="inspiration-item text-link">
+        <img
+          src="https://nhaxinh.com/wp-content/uploads/2025/04/goc-cam-hung-4-1200x800.webp"
+          alt="Ảnh 2"
+        />
+        <h3>Chiêm ngưỡng các dòng sản phẩm cho mùa mới tại Premi Seven</h3>
+        <p>
+          Lấy cảm hứng từ thành phố Valencia, miền Đông Nam Tây Ban Nha, nơi nổi tiếng với sự giao thoa.
+        </p>
+      </Link>
+    </div>
+
+    {/* Group 2 */}
+    <div className="inspiration-group">
+      <Link to="/inspiration/30" className="inspiration-item text-link">
+        <img
+          src="https://nhaxinh.com/wp-content/uploads/2025/03/Sofa-da-Jazz.jpg"
+          alt="Ảnh 3"
+        />
+        <h3>Top 5 Sofa Da Tại Nhà Xinh Cho Mọi Không Gian Hiện Đại</h3>
+        <p>
                 Sofa da luôn là lựa chọn hàng đầu cho phòng khách bởi sự sang trọng,
                 đẳng cấp và độ bền vượt trội. Trong năm 2025, xu hướng sofa da hướng
                 đến các tiêu chí.
               </p>
-            </div>
-            <div className="inspiration-item">
-              <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/02/NHA-XINH-TRAO-GUI-HUONG-THOM-15-1-1200x800.jpg"
-                alt="Ảnh 4"
-              />
-              <h3>
-                Gợi Ý Quà Tặng 8/3 – Trao Hương Thơm, Tôn Vinh Phái Đẹp Cùng Nhà
-                Xinh
-              </h3>
-              <p>
+      </Link>
+
+      <Link to="/inspiration/31" className="inspiration-item text-link">
+        <img
+          src="https://nhaxinh.com/wp-content/uploads/2025/02/NHA-XINH-TRAO-GUI-HUONG-THOM-15-1-1200x800.jpg"
+          alt="Ảnh 4"
+        />
+        <h3>Gợi Ý Quà Tặng 8/3 – Trao Hương Thơm, Tôn Vinh Phái Đẹp Cùng G7 Prime</h3>
+        <p>
                 Ngày Quốc tế Phụ nữ 8/3 là dịp đặc biệt để tôn vinh vẻ đẹp và những
-                đóng góp quan trọng của phái đẹp. Hãy cùng Nhà Xinh gửi trao những
+                đóng góp quan trọng của phái đẹp. Hãy cùng G7 Prime gửi trao những
                 món quà ý nghĩa, thay lời tri ân đến những người phụ nữ quan trọng
                 trong cuộc đời bạn.
               </p>
-            </div>
-          </div>
-          <div className="inspiration-group">
-            <div className="inspiration-item">
-              <img
-                src="https://nhaxinh.com/wp-content/uploads/2024/10/phong-khach-thu-gian-hung-king-1-1110x800.jpg"
-                alt="Ảnh 5"
-              />
-              <h3>Ghế sofa cho không gian nhỏ</h3>
-              <p>
+      </Link>
+    </div>
+
+    {/* Group 3 */}
+    <div className="inspiration-group">
+      <Link to="/inspiration/32" className="inspiration-item text-link">
+        <img
+          src="https://nhaxinh.com/wp-content/uploads/2024/10/phong-khach-thu-gian-hung-king-1-1110x800.jpg"
+          alt="Ảnh 5"
+        />
+        <h3>Ghế sofa cho không gian nhỏ</h3>
+        <p>
                 Ghế sofa là thực sự cần thiết cho không gian phòng khách. Để lựa
                 chọn được một chiếc sofa phù hợp, cần phải có nhiều tiêu chí đánh
                 giá.
               </p>
-            </div>
-            <div className="inspiration-item">
-              <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/02/goi-y-qua-tang-14-2-1200x800.jpg"
-                alt="Ảnh 6"
-              />
-              <h3>GỢI Ý QUÀ TẶNG CHO NGÀY LỄ TÌNH NHÂN 14/02</h3>
-              <p>
+      </Link>
+
+      <Link to="/inspiration/28" className="inspiration-item text-link">
+        <img
+          src="https://nhaxinh.com/wp-content/uploads/2025/02/goi-y-qua-tang-14-2-1200x800.jpg"
+          alt="Ảnh 6"
+        />
+        <h3>GỢI Ý QUÀ TẶNG CHO NGÀY LỄ TÌNH NHÂN 14/02</h3>
+        <p>
                 Trong không khí dễ chịu của những ngày xuân, hãy cùng chọn lựa món
                 quà mang đủ sắc – hương tại Nhà Xinh dành đến cho người thương vào
                 ngày lễ 14/02.
               </p>
-            </div>
-          </div>
-        </div>
-        <div className="inspiration-dots">
-          <span className="dot active" data-index={0} />
-          <span className="dot" data-index={1} />
-          <span className="dot" data-index={2} />
-        </div>
-      </section>
+      </Link>
+    </div>
+
+    {/* Group 4 */}
+    <div className="inspiration-group">
+      <Link to="/inspiration/7" className="inspiration-item text-link">
+        <img
+          src="https://nhaxinh.com/wp-content/uploads/2024/11/goc-cam-hung-6.jpg"
+          alt="Ảnh 7"
+        />
+        <h3>Nghệ thuật phối màu trong thiết kế nội thất</h3>
+        <p>
+          Màu sắc là yếu tố quan trọng tạo nên cảm xúc. Hãy học cách phối màu để tạo nên không gian hài hòa.
+        </p>
+      </Link>
+
+      <Link to="/inspiration/8" className="inspiration-item text-link">
+        <img
+          src="https://nhaxinh.com/wp-content/uploads/2025/01/goc-cam-hung-7.jpg"
+          alt="Ảnh 8"
+        />
+        <h3>Sofa đa năng – xu hướng nội thất hiện đại</h3>
+        <p>
+          Những mẫu sofa đa năng không chỉ tiết kiệm diện tích mà còn mang đến sự tiện nghi và phong cách.
+        </p>
+      </Link>
+    </div>
+  </div>
+
+  <div className="inspiration-dots">
+    <span className="dot active" data-index={0} />
+    <span className="dot" data-index={1} />
+    <span className="dot" data-index={2} />
+    <span className="dot" data-index={3} />
+  </div>
+</section>
+
       <section className="layout-image-left-text-right">
         <div className="image-left">
           <img

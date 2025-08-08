@@ -81,6 +81,7 @@ export const loginWithGoogle = async (googleUser: {
   try {
     const res = await axios.post(`${API_URL}/google-login`, googleUser);
     return res.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new Error(err.response?.data?.message || "Đăng nhập Google thất bại");
   }

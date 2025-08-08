@@ -62,6 +62,7 @@ const Login = () => {
       };
       login(formattedUser);
       navigate('/');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
     }
@@ -70,6 +71,7 @@ const Login = () => {
   const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
     try {
       if (credentialResponse.credential) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const decoded: any = jwtDecode(credentialResponse.credential);
         const googleUser = {
           id: decoded.sub,
@@ -90,6 +92,7 @@ const Login = () => {
         login(formattedUser); // Lưu vào AuthContext và localStorage
         navigate('/');
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || 'Đăng nhập Google thất bại');
     }
