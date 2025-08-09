@@ -29,6 +29,7 @@ interface ProductItem {
 
 interface FullOrderDetail extends Order {
   ho_ten: string;
+  email: string;
   so_dien_thoai: string;
   dia_chi: string;
   ghi_chu: string;
@@ -140,6 +141,7 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
               {/* THÔNG TIN KHÁCH HÀNG */}
               <div className="mb-3">
                 <p><strong>Khách hàng:</strong> {selectedOrder.ho_ten}</p>
+                <p><strong>Email:</strong> {selectedOrder.email}</p>
                 <p><strong>SĐT:</strong> {selectedOrder.so_dien_thoai}</p>
                 <p><strong>Địa chỉ:</strong> {selectedOrder.dia_chi}</p>
                 {selectedOrder.ghi_chu && (

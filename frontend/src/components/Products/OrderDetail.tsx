@@ -22,6 +22,7 @@ const trangThaiMap: Record<string, string> = {
 const OrderDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [order, setOrder] = useState<any>(null);
 
   useEffect(() => {
@@ -40,6 +41,7 @@ const OrderDetail = () => {
     try {
       await axios.put(`http://localhost:3001/orderdetails/orders/${id}/cancel`);
       alert("Đơn hàng đã được huỷ!");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setOrder((prev: any) => ({ ...prev, trang_thai: "da_huy" }));
       navigate("/userorder");
     } catch (err) {
@@ -54,7 +56,7 @@ const OrderDetail = () => {
   return (
     <div className="container py-5">
       <div className="card shadow p-4">
-        <h3 className="mb-4 text-primary">Chi tiết đơn hàng #{order.id}</h3>
+        <h3 className="mb-4">Chi tiết đơn hàng #{order.id}</h3>
 
         <div className="row mb-3">
           <div className="col-md-6"><strong>Ngày đặt:</strong> {formatDate(order.ngay_dat)}</div>
@@ -63,18 +65,19 @@ const OrderDetail = () => {
 
         <div className="row mb-3">
           <div className="col-md-6"><strong>Tên khách:</strong> {order.ho_ten}</div>
+          <div className="col-md-6"><strong>Email:</strong> {order.email}</div>
+        </div>
+
+        <div className="row mb-3">
           <div className="col-md-6"><strong>Số điện thoại:</strong> {order.so_dien_thoai}</div>
-        </div>
-
-        <div className="row mb-3">
           <div className="col-md-6"><strong>Địa chỉ:</strong> {order.dia_chi}</div>
-          <div className="col-md-6"><strong>Tổng tiền:</strong> <span className="text-danger">{formatCurrency(order.tong_tien)}</span></div>
         </div>
 
         <div className="row mb-3">
-          <div className="col-md-12">
+          <div className="col-md-6">
             <strong>Ghi chú:</strong> {order.ghi_chu || "(Không có ghi chú)"}
           </div>
+          <div className="col-md-6"><strong>Tổng tiền:</strong> <span className="text-danger">{formatCurrency(order.tong_tien)}</span></div>
         </div>
 
         <h5 className="mb-3 text-success">Danh sách sản phẩm:</h5>
@@ -112,7 +115,7 @@ const OrderDetail = () => {
 
         {order.trang_thai === 'cho_xu_ly' && (
           <div className="text-end mt-3">
-            <button className="btn btn-danger" onClick={handleCancelOrder}>
+            <button className="btn btn-dark" onClick={handleCancelOrder}>
               Huỷ đơn hàng
             </button>
           </div>

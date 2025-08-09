@@ -15,6 +15,7 @@ router.get('/:id', (req, res) => {
             dh.tong_tien,         -- Tổng tiền đơn hàng
             dh.ghi_chu,           -- Ghi chú
             nd.ho_ten,            -- Họ tên người đặt
+            nd.email,             -- Email người đặt
             nd.so_dien_thoai,     -- Số điện thoại người đặt
             nd.dia_chi            -- Địa chỉ người đặt
         FROM don_hang dh

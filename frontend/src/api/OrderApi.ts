@@ -14,6 +14,7 @@ export interface OrderItem {
   phuong_thuc_thanh_toan: "tien_mat" | "chuyen_khoan";
   trang_thai: OrderStatus;
   ho_ten?: string; 
+  email?: string;
   so_dien_thoai?: string;
   dia_chi?: string;
   ghi_chu?: string;
