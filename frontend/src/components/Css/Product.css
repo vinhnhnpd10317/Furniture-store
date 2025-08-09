@@ -91,3 +91,30 @@
     margin-bottom: 23px;
   }
 }
+.products-sidebar {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.category-link {
+    color: #333;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.25s ease-in-out;
+}
+
+.category-link:hover {
+    background-color: #f0f0f0;
+    color: #000;
+    padding-left: 10px;
+    text-decoration: none;
+}
+
+.filter-btn {
+    transition: all 0.25s ease-in-out;
+    border-radius: 20px;
+}
+
+.filter-btn:hover {
+    background-color: #333;
+    color: white;
+}

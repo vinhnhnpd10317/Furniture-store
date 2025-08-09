@@ -101,7 +101,7 @@ function App() {
       <link rel="stylesheet" href="style/home.css" />
       <div className="banner">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/07/tang-5tr-1400x789.webp"
+          src="https://sdmntprwestus.oaiusercontent.com/files/00000000-5c44-6230-bd49-1a80c38b2297/raw?se=2025-08-09T15%3A55%3A01Z&sp=r&sv=2024-08-04&sr=b&scid=fd19295c-f135-550a-922a-c2798093f89b&skoid=c156db82-7a33-468f-9cdd-06af263ceec8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-09T14%3A47%3A56Z&ske=2025-08-10T14%3A47%3A56Z&sks=b&skv=2024-08-04&sig=zyPc230dspXXSMmcKmFN72BibfmMYkAvQoz9U%2ByEFU0%3D"
           alt="Clearance Sale - Ưu đãi lớn nhất"
         />
       </div>

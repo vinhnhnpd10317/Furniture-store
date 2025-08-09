@@ -166,13 +166,6 @@ const Signup = () => {
               <button type="submit" className="btn btn-warning text-white">Đăng Ký</button>
             </div>
 
-            <p className="text-center text-white mb-4">Hoặc</p>
-
-            <div className="d-flex justify-content-between mb-3 gap-2">
-              <button type="button" className="btn btn-danger w-100">Đăng ký bằng Google</button>
-              <button type="button" className="btn btn-primary w-100">Đăng ký bằng Facebook</button>
-            </div>
-
             <p className="text-center text-white">
               Đã có tài khoản? <a href="/login" className="fw-bold text-white text-decoration-underline">Đăng nhập tại đây!</a>
             </p>
