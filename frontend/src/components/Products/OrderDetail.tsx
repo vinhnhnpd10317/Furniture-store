@@ -12,10 +12,12 @@ const formatDate = (dateStr: string) => {
 
 const trangThaiMap: Record<string, string> = {
   cho_xu_ly: "Chờ xử lý",
-  dang_giao: "Đang giao",
+  dang_xu_ly: "Đang xử lý",
+  dang_van_chuyen: "Đang vận chuyển",
+  da_giao: "Đã giao",
   da_huy: "Đã huỷ",
-  hoan_thanh: "Hoàn thành",
 };
+
 
 const OrderDetail = () => {
   const navigate = useNavigate();
@@ -69,7 +71,13 @@ const OrderDetail = () => {
           <div className="col-md-6"><strong>Tổng tiền:</strong> <span className="text-danger">{formatCurrency(order.tong_tien)}</span></div>
         </div>
 
-        <h5 className="mt-4 mb-3 text-success">Danh sách sản phẩm:</h5>
+        <div className="row mb-3">
+          <div className="col-md-12">
+            <strong>Ghi chú:</strong> {order.ghi_chu || "(Không có ghi chú)"}
+          </div>
+        </div>
+
+        <h5 className="mb-3 text-success">Danh sách sản phẩm:</h5>
         <div className="table-responsive">
           <table className="table table-hover align-middle">
             <thead className="table-light">

@@ -13,9 +13,10 @@ export interface OrderItem {
   tong_tien: number;
   phuong_thuc_thanh_toan: "tien_mat" | "chuyen_khoan";
   trang_thai: OrderStatus;
-  ho_ten?: string; // Thêm để hỗ trợ dữ liệu từ /orderdetails/:id
+  ho_ten?: string; 
   so_dien_thoai?: string;
   dia_chi?: string;
+  ghi_chu?: string;
   chi_tiet?: {
     san_pham_id: number;
     ten_san_pham: string;

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchComments, deleteComment, type BinhLuan } from '../../api/Comment';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { FaTrash } from "react-icons/fa";
 
 const CommentManager: React.FC = () => {
   const [comments, setComments] = useState<BinhLuan[]>([]);
@@ -34,7 +35,7 @@ const CommentManager: React.FC = () => {
   };
 
   return (
-    <div className="container py-5">
+    <div className="container-fluid py-4">
       <h2 className="text-center mb-4">📝 Quản lý bình luận</h2>
       <div className="row gy-4">
         {comments.map((comment) => (
@@ -57,10 +58,10 @@ const CommentManager: React.FC = () => {
                   <p className="mb-3 white-space-pre-line">{comment.noi_dung}</p>
                   <div className="d-flex justify-content-end">
                     <button
-                      className="btn btn-outline-danger btn-sm"
+                      className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
                       onClick={() => handleDelete(comment.id)}
                     >
-                      🗑️ Xóa
+                      <FaTrash /> Xoá
                     </button>
                   </div>
                 </div>

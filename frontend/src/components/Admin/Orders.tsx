@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getOrders, updateOrderStatus } from "../../api/OrderApi";
 import OrderStatusTabs, { type OrderStatus } from "./OrderStatusTabs";
 import OrderTable, { type Order } from "./OrderTable";
+import React from "react";
 
 function useQuery() {
   const { search } = useLocation();
@@ -57,8 +58,8 @@ export default function Order() {
   };
 
   return (
-    <div className="container mt-4">
-      <h4 className="mb-3">Danh sách đơn hàng</h4>
+    <div className="container-fluid py-4">
+      <h3 className="mb-3">Danh sách đơn hàng</h3>
 
       <OrderStatusTabs
         selectedStatus={selectedStatus}
@@ -106,26 +107,59 @@ export default function Order() {
         ))}
       </div>
 
-
-
       {/* Pagination */}
       {totalPages > 1 && (
-        <nav aria-label="Pagination" className="mt-3">
-          <ul className="pagination justify-content-center mb-0">
-            <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-              <button className="page-link" onClick={() => goToPage(currentPage - 1)}>
+        <nav aria-label="pagination" className="mt-4">
+          <ul className="pagination justify-content-end mb-0">
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(1)}>
                 &laquo;
               </button>
             </li>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <li key={n} className={`page-item ${currentPage === n && "active"}`}>
-                <button className="page-link" onClick={() => goToPage(n)}>
-                  {n}
-                </button>
-              </li>
-            ))}
-            <li className={`page-item ${currentPage === totalPages && "disabled"}`}>
-              <button className="page-link" onClick={() => goToPage(currentPage + 1)}>
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(currentPage - 1)}>
+                &lt;
+              </button>
+            </li>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter((n) =>
+                totalPages <= 5 ||
+                n === 1 ||
+                n === totalPages ||
+                Math.abs(currentPage - n) <= 1
+              )
+              .map((n, index, arr) => {
+                const prev = arr[index - 1];
+                const showDots = prev && n - prev > 1;
+
+                return (
+                  <React.Fragment key={n}>
+                    {showDots && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    <li className={`page-item ${currentPage === n ? "active" : ""}`}>
+                      <button
+                        className="page-link py-2 px-3"
+                        onClick={() => goToPage(n)}
+                        style={currentPage === n ? { backgroundColor: "#ffffffff", color: "#ea580c", borderColor: "#d8d8d8ff" } : {}}
+                      >
+                        {n}
+                      </button>
+                    </li>
+                  </React.Fragment>
+                );
+              })}
+
+            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(currentPage + 1)}>
+                &gt;
+              </button>
+            </li>
+            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-388" onClick={() => goToPage(totalPages)}>
                 &raquo;
               </button>
             </li>

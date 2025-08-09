@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getCustomer, deleteCustomer, type Customer } from '../../api/Customer';
 import { Link, useLocation } from 'react-router-dom';
+import { FaTrash } from "react-icons/fa";
+import React from 'react';
 
 function useQuery() {
   const { search } = useLocation();
@@ -34,8 +36,14 @@ export default function CustomerList() {
   const startIndex = (currentPage - 1) * perPage;
   const currentCustomers = customers.slice(startIndex, startIndex + perPage);
 
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
-    <div className="container py-4">
+    <div className="container-fluid py-4">
       <style>
         {`
         @media (max-width: 768px) {
@@ -59,9 +67,8 @@ export default function CustomerList() {
       `}
       </style>
 
-      <h2 className="mb-4 text-center">Quản lý khách hàng</h2>
-
-      <div className="d-flex justify-content-end mb-3">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h3>Quản lý khách hàng</h3>
         <Link to="/admin/customer/add" className="btn btn-success">
           + Thêm khách hàng
         </Link>
@@ -71,12 +78,12 @@ export default function CustomerList() {
       <div className="table-responsive desktop-table">
         <table className="table table-bordered table-hover align-middle">
           <thead className="table-light">
-            <tr>
-              <th>Họ tên</th>
-              <th className="hide-on-tablet">Email</th>
-              <th>SĐT</th>
-              <th className="hide-on-tablet">Địa chỉ</th>
-              <th className="text-center">Hành động</th>
+            <tr className="text-center">
+              <th className="py-3">Họ tên</th>
+              <th className="hide-on-tablet py-3">Email</th>
+              <th className="py-3">SĐT</th>
+              <th className="hide-on-tablet py-3">Địa chỉ</th>
+              <th className="py-3" style={{ width: 120 }}>Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -86,12 +93,12 @@ export default function CustomerList() {
                 <td className="hide-on-tablet">{c.email}</td>
                 <td>{c.so_dien_thoai}</td>
                 <td className="hide-on-tablet">{c.dia_chi}</td>
-                <td className="text-center">
+                <td className="d-flex justify-content-center">
                   <button
-                    className="btn btn-sm btn-danger"
+                    className="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center gap-1"
                     onClick={() => handleDelete(c.id)}
                   >
-                    Xoá
+                    <FaTrash /> Xoá
                   </button>
                 </td>
               </tr>
@@ -130,23 +137,65 @@ export default function CustomerList() {
         )}
       </div>
 
-      <nav className="d-flex justify-content-center mt-4">
-        <ul className="pagination flex-wrap justify-content-center">
-          {[...Array(totalPages)].map((_, index) => (
-            <li
-              key={index}
-              className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}
-            >
-              <button
-                className="page-link"
-                onClick={() => setCurrentPage(index + 1)}
-              >
-                {index + 1}
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <nav aria-label="pagination" className="mt-4">
+          <ul className="pagination justify-content-end mb-0">
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(1)}>
+                &laquo;
               </button>
             </li>
-          ))}
-        </ul>
-      </nav>
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(currentPage - 1)}>
+                &lt;
+              </button>
+            </li>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter((n) =>
+                totalPages <= 5 ||
+                n === 1 ||
+                n === totalPages ||
+                Math.abs(currentPage - n) <= 1
+              )
+              .map((n, index, arr) => {
+                const prev = arr[index - 1];
+                const showDots = prev && n - prev > 1;
+
+                return (
+                  <React.Fragment key={n}>
+                    {showDots && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    <li className={`page-item ${currentPage === n ? "active" : ""}`}>
+                      <button
+                        className="page-link py-2 px-3"
+                        onClick={() => goToPage(n)}
+                        style={currentPage === n ? { backgroundColor: "#ffffffff", color: "#ea580c", borderColor: "#d8d8d8ff" } : {}}
+                      >
+                        {n}
+                      </button>
+                    </li>
+                  </React.Fragment>
+                );
+              })}
+
+            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(currentPage + 1)}>
+                &gt;
+              </button>
+            </li>
+            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-388" onClick={() => goToPage(totalPages)}>
+                &raquo;
+              </button>
+            </li>
+          </ul>
+        </nav>
+      )}
     </div>
   );
 }

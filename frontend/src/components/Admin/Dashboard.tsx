@@ -24,7 +24,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid py-4">
       <h2 className="fw-bold mb-4">Dashboard tổng quan</h2>
 
       {/* Cards biểu diễn số liệu */}

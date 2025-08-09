@@ -5,3 +5,6 @@
     box-shadow: none !important;
     outline: none !important;
 }
+thead th {
+  border-bottom: 2px solid #fff;
+}

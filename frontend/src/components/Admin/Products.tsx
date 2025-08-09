@@ -5,6 +5,7 @@ import type { CategoryItem } from "../../api/CategoryApi";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./CSS/ProductAdmin.css";
+import React from "react";
 
 function useQuery() {
   const { search } = useLocation();
@@ -19,6 +20,8 @@ export default function Products() {
 
   const query = useQuery();
   const searchText = query.get("search")?.toLowerCase() || "";
+
+  const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:3001/products")
@@ -82,9 +85,9 @@ export default function Products() {
     categories.find((c) => c.id === id)?.ten_danh_muc ?? "Không rõ";
 
   return (
-    <div className="container py-4">
+    <div className="container-fluid py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold">📦 Quản lý sản phẩm</h2>
+        <h3>Quản lý sản phẩm</h3>
         <Link to="addproduct" className="btn btn-success">
           ➕ Thêm sản phẩm
         </Link>
@@ -95,18 +98,18 @@ export default function Products() {
         <table className="table table-bordered table-hover align-middle text-center mb-0">
           <thead className="table-light">
             <tr>
-              <th>#</th>
-              <th>Tên sản phẩm</th>
-              <th>Vật liệu</th>
-              <th>Chất liệu</th>
-              <th style={{ width: 180 }}>Mô tả</th>
-              <th>Giá</th>
-              <th>Danh mục</th>
-              <th>Ảnh đại diện</th>
-              <th>DS Hình ảnh</th>
-              <th>Kho</th>
-              <th>Ngày tạo</th>
-              <th>Thao tác</th>
+              <th className="py-3">#</th>
+              <th className="py-3">Tên sản phẩm</th>
+              {/* <th>Vật liệu</th> */}
+              {/* <th>Chất liệu</th> */}
+              <th className="py-3" style={{ width: 180 }}>Mô tả</th>
+              <th className="py-3">Giá (VNĐ)</th>
+              <th className="py-3">Danh mục</th>
+              <th className="py-3" style={{ width: 120 }}>Ảnh đại diện</th>
+              {/* <th>DS Hình ảnh</th> */}
+              <th className="py-3" style={{ width: 100 }}>Kho</th>
+              {/* <th>Ngày tạo</th> */}
+              <th className="py-3" style={{ width: 180 }}>Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -114,16 +117,16 @@ export default function Products() {
               <tr key={p.id}>
                 <td>{p.id}</td>
                 <td className="text-start">{p.ten_san_pham}</td>
-                <td>{p.vat_lieu}</td>
-                <td>{p.chat_lieu}</td>
+                {/* <td>{p.vat_lieu}</td> */}
+                {/* <td>{p.chat_lieu}</td> */}
                 <td
                   className="text-start small"
                   style={{ wordBreak: "break-word", whiteSpace: "pre-wrap" }}
                 >
-                  {p.mo_ta.length > 100 ? p.mo_ta.slice(0, 100) + "..." : p.mo_ta}
+                  {p.mo_ta.length > 100 ? p.mo_ta.slice(0, 45) + "..." : p.mo_ta}
                 </td>
-                <td className="text-danger fw-bold">
-                  {p.gia.toLocaleString()} đ
+                <td className="text-danger">
+                  {p.gia.toLocaleString()} 
                 </td>
                 <td>
                   <span className="badge bg-primary">
@@ -134,11 +137,11 @@ export default function Products() {
                   <img
                     src={`/img/imgproduct/${p.hinh_anh_dai_dien}`}
                     alt="ảnh đại diện"
-                    width={50}
+                    width={90}
                     className="rounded border"
                   />
                 </td>
-                <td>
+                {/* <td>
                   <div className="d-flex flex-wrap justify-content-center gap-1">
                     {p.ds_hinh_anh?.split(";").map((img, i) => (
                       <img
@@ -150,7 +153,7 @@ export default function Products() {
                       />
                     ))}
                   </div>
-                </td>
+                </td> */}
                 <td>
                   <select
                     value={p.trang_thai_kho}
@@ -160,7 +163,7 @@ export default function Products() {
                         : "border-danger"
                     }`}
                     onChange={(e) =>
-                      handleTrangThaiKhoChange(
+                      handleTrangThaiKhoChange( 
                         p.id,
                         e.target.value as ProductItem["trang_thai_kho"]
                       )
@@ -170,11 +173,12 @@ export default function Products() {
                     <option value="het_hang">Hết hàng</option>
                   </select>
                 </td>
-                <td>{new Date(p.ngay_tao).toLocaleString()}</td>
+                {/* <td>{new Date(p.ngay_tao).toLocaleString()}</td> */}
                 <td>
                   <ProductActions
                     product={p}
                     onDeleteSuccess={() => handleDeleted(p.id)}
+                    onView={(p) => setSelectedProduct(p)}
                   />
                 </td>
               </tr>
@@ -230,38 +234,101 @@ export default function Products() {
               <ProductActions
                 product={p}
                 onDeleteSuccess={() => handleDeleted(p.id)}
+                onView={(p) => setSelectedProduct(p)}
               />
             </div>
           </div>
         ))}
       </div>
 
+      {/* Modal hiển thị chi tiết sản phẩm */}
+      {selectedProduct && (
+        <div className="modal fade show d-block" tabIndex={-1} role="dialog" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <div className="modal-dialog modal-xl" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Chi tiết sản phẩm</h5>
+                <button type="button" className="btn-close" onClick={() => setSelectedProduct(null)}></button>
+              </div>
+              <div className="modal-body">
+                <p><strong>ID:</strong> {selectedProduct.id}</p>
+                <p><strong>Tên sản phẩm:</strong> {selectedProduct.ten_san_pham}</p>
+                <p><strong>Vật liệu:</strong> {selectedProduct.vat_lieu}</p>
+                <p><strong>Chất liệu:</strong> {selectedProduct.chat_lieu}</p>
+                <p style={{ whiteSpace: 'pre-line' }}><strong>Mô tả:</strong> {selectedProduct.mo_ta}</p>
+                <p><strong>Giá:</strong> {selectedProduct.gia.toLocaleString()} đ</p>
+                <p><strong>Danh mục:</strong> {getTenDanhMuc(Number(selectedProduct.danh_muc_id))}</p>
+                <p><strong>Trạng thái kho:</strong> {selectedProduct.trang_thai_kho === "con_hang" ? "Còn hàng" : "Hết hàng"}</p>
+                <p><strong>Ngày tạo:</strong> {new Date(selectedProduct.ngay_tao).toLocaleString()}</p>
+                <p><strong>Ảnh đại diện:</strong></p>
+                <img src={`/img/imgproduct/${selectedProduct.hinh_anh_dai_dien}`} alt="Ảnh đại diện" className="img-fluid rounded border" />
+                <p className="mt-2"><strong>Danh sách hình ảnh:</strong></p>
+                <div className="d-flex flex-wrap gap-2">
+                  {selectedProduct.ds_hinh_anh?.split(";").map((img, i) => (
+                    <img key={i} src={`/img/imgproduct/${img}`} width={80} className="rounded border" alt={`img-${i}`} />
+                  ))}
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setSelectedProduct(null)}>Đóng</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {totalPages > 1 && (
-        <nav aria-label="pagination" className="mt-3">
-          <ul className="pagination justify-content-center mb-0">
-            <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-              <button
-                className="page-link"
-                onClick={() => goToPage(currentPage - 1)}
-              >
+        <nav aria-label="pagination" className="mt-4">
+          <ul className="pagination justify-content-end mb-0">
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(1)}>
                 &laquo;
               </button>
             </li>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <li
-                key={n}
-                className={`page-item ${currentPage === n && "active"}`}
-              >
-                <button className="page-link" onClick={() => goToPage(n)}>
-                  {n}
-                </button>
-              </li>
-            ))}
-            <li className={`page-item ${currentPage === totalPages && "disabled"}`}>
-              <button
-                className="page-link"
-                onClick={() => goToPage(currentPage + 1)}
-              >
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(currentPage - 1)}>
+                &lt;
+              </button>
+            </li>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter((n) =>
+                totalPages <= 5 ||
+                n === 1 ||
+                n === totalPages ||
+                Math.abs(currentPage - n) <= 1
+              )
+              .map((n, index, arr) => {
+                const prev = arr[index - 1];
+                const showDots = prev && n - prev > 1;
+
+                return (
+                  <React.Fragment key={n}>
+                    {showDots && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    <li className={`page-item ${currentPage === n ? "active" : ""}`}>
+                      <button
+                        className="page-link py-2 px-3"
+                        onClick={() => goToPage(n)}
+                        style={currentPage === n ? { backgroundColor: "#ffffffff", color: "#ea580c", borderColor: "#d8d8d8ff" } : {}}
+                      >
+                        {n}
+                      </button>
+                    </li>
+                  </React.Fragment>
+                );
+              })}
+
+            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(currentPage + 1)}>
+                &gt;
+              </button>
+            </li>
+            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-388" onClick={() => goToPage(totalPages)}>
                 &raquo;
               </button>
             </li>
