@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getArticles, deleteArticle, type Article } from '../../api/ArticleApi';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 function useQuery() {
   const { search } = useLocation();
@@ -69,10 +70,9 @@ const ArticleList = () => {
       `}</style>
 
       <div className="article-list-wrapper">
-        <div className="container my-4 px-2">
-          <h2 className="mb-4 text-center">📋 Danh sách bài viết</h2>
-
-          <div className="d-flex justify-content-end mb-3">
+        <div className="container-fluid py-4">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h3>Danh sách bài viết</h3>
             <button
               className="btn btn-success"
               onClick={() => navigate("/admin/article/add")}
@@ -83,43 +83,49 @@ const ArticleList = () => {
 
           {/* Bảng cho desktop & tablet */}
           <div className="table-responsive desktop-table">
-            <table className="table table-bordered table-striped align-middle shadow-sm">
+            <table className="table table-bordered align-middle shadow-sm table-hover">
               <thead className="table-light text-center">
                 <tr>
-                  <th style={{ minWidth: 150 }}>Tiêu đề</th>
-                  <th className="hide-on-md" style={{ minWidth: 100 }}>Ảnh</th>
-                  <th className="hide-on-md" style={{ minWidth: 250 }}>Nội dung</th>
-                  <th style={{ minWidth: 150 }}>Ngày đăng</th>
-                  <th style={{ minWidth: 130 }}>Hành động</th>
+                  <th className="py-3" style={{ minWidth: 150 }}>Tiêu đề</th>
+                  <th className="hide-on-md py-3" style={{ minWidth: 100 }}>Ảnh</th>
+                  <th className="hide-on-md py-3" style={{ minWidth: 250 }}>Nội dung</th>
+                  <th className="py-3" style={{ minWidth: 150 }}>Ngày đăng</th>
+                  <th className="py-3" style={{ minWidth: 130 }}>Hành động</th>
                 </tr>
               </thead>
               <tbody>
                 {articles.map((article) => (
                   <tr key={article.id}>
                     <td>{article.tieu_de}</td>
-                    <td className="hide-on-md">
+                    <td className="hide-on-md text-center">
                       <img
                         src={`/img/imgproduct/${article.hinh_anh}`}
                         alt="Ảnh"
-                        className="img-fluid"
-                        style={{ width: "100px", height: "auto", objectFit: "cover" }}
+                        className="img-thumbnail rounded"
+                        style={{ width: "100%", maxWidth: "150px", height: "auto", objectFit: "cover" }}
                       />
                     </td>
-                    <td className="hide-on-md" style={{ maxWidth: "250px" }}>{article.noi_dung}</td>
-                    <td>{new Date(article.ngay_dang).toLocaleString()}</td>
+                    <td className="hide-on-md" style={{ maxWidth: "250px" }}>
+                      {article.noi_dung.length > 50
+                        ? `${article.noi_dung.slice(0, 150)}...`
+                        : article.noi_dung}
+                    </td>
+                    <td className="text-center">{new Date(article.ngay_dang).toLocaleString()}</td>
                     <td className="text-center">
-                      <button
-                        className="btn btn-warning btn-sm me-2"
-                        onClick={() => navigate(`/admin/article/edit/${article.id}`)}
-                      >
-                        ✏️
-                      </button>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDelete(article.id)}
-                      >
-                        🗑️
-                      </button>
+                      <div className="d-flex justify-content-center gap-2">
+                        <button
+                          className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+                          onClick={() => navigate(`/admin/article/edit/${article.id}`)}
+                        >
+                          <FaEdit /> Sửa
+                        </button>
+                        <button
+                          className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+                          onClick={() => handleDelete(article.id)}
+                        >
+                          <FaTrash /> Xoá
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

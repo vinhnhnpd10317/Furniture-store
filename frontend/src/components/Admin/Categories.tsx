@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import React from "react";
 
 interface Category {
   id: number;
@@ -143,7 +145,7 @@ export default function Categories() {
   const goToPage = (n: number) => setCurrentPage(n);
 
   return (
-    <div className="container mt-4 shadow">
+    <div className="container-fluid py-4">
       <form onSubmit={handleSubmit} className="p-3 border rounded bg-light mb-4">
         <h5>{editingId ? "Cập nhật danh mục" : "Thêm Danh Mục"}</h5>
 
@@ -187,14 +189,14 @@ export default function Categories() {
         )}
       </form>
 
-      <table className="table table-bordered">
+      <table className="table table-bordered table-hover">
         <thead className="table-light">
-          <tr>
-            <th>ID</th>
-            <th>Tên danh mục</th>
-            <th>Mô tả</th>
-            <th>Ngày tạo</th>
-            <th>Hành động</th>
+          <tr className="text-center">
+            <th className="py-3">ID</th>
+            <th className="py-3">Tên danh mục</th> 
+            <th className="py-3">Mô tả</th>
+            <th className="py-3">Ngày tạo</th>
+            <th className="py-3" style={{ width: 110 }}>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -204,19 +206,21 @@ export default function Categories() {
               <td>{cat.ten_danh_muc}</td>
               <td>{cat.mo_ta}</td>
               <td>{new Date(cat.ngay_tao).toLocaleString()}</td>
-              <td>
-                <button
-                  className="btn btn-sm btn-warning me-2"
-                  onClick={() => handleEdit(cat)}
-                >
-                  Sửa
-                </button>
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleDelete(cat.id)}
-                >
-                  Xoá
-                </button>
+              <td className="d-flex justify-content-center">
+                <div className="d-flex justify-content-center gap-2">
+                  <button
+                    className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+                    onClick={() => handleEdit(cat)}
+                  >
+                    <FaEdit /> Sửa
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+                    onClick={() => handleDelete(cat.id)}
+                  >
+                    <FaTrash /> Xoá
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
@@ -231,22 +235,57 @@ export default function Categories() {
       </table>
 
       {totalPages > 1 && (
-        <nav className="mt-3">
-          <ul className="pagination justify-content-center mb-0">
-            <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-              <button className="page-link" onClick={() => goToPage(currentPage - 1)}>
+        <nav aria-label="pagination" className="mt-4">
+          <ul className="pagination justify-content-end mb-0">
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(1)}>
                 &laquo;
               </button>
             </li>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <li key={n} className={`page-item ${currentPage === n && "active"}`}>
-                <button className="page-link" onClick={() => goToPage(n)}>
-                  {n}
-                </button>
-              </li>
-            ))}
-            <li className={`page-item ${currentPage === totalPages && "disabled"}`}>
-              <button className="page-link" onClick={() => goToPage(currentPage + 1)}>
+            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(currentPage - 1)}>
+                &lt;
+              </button>
+            </li>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter((n) =>
+                totalPages <= 5 ||
+                n === 1 ||
+                n === totalPages ||
+                Math.abs(currentPage - n) <= 1
+              )
+              .map((n, index, arr) => {
+                const prev = arr[index - 1];
+                const showDots = prev && n - prev > 1;
+
+                return (
+                  <React.Fragment key={n}>
+                    {showDots && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    <li className={`page-item ${currentPage === n ? "active" : ""}`}>
+                      <button
+                        className="page-link py-2 px-3"
+                        onClick={() => goToPage(n)}
+                        style={currentPage === n ? { backgroundColor: "#ffffffff", color: "#ea580c", borderColor: "#d8d8d8ff" } : {}}
+                      >
+                        {n}
+                      </button>
+                    </li>
+                  </React.Fragment>
+                );
+              })}
+
+            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-3" onClick={() => goToPage(currentPage + 1)}>
+                &gt;
+              </button>
+            </li>
+            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+              <button className="page-link py-2 px-388" onClick={() => goToPage(totalPages)}>
                 &raquo;
               </button>
             </li>

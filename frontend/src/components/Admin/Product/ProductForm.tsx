@@ -21,6 +21,7 @@ export default function ProductForm({ editingProduct = null, onDone }: Props) {
         mo_ta: "",
         gia: 0,
         danh_muc_id: "",
+        trang_thai_kho: "con_hang",
     });
     const [error, setError] = useState<string | null>(null);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -47,6 +48,7 @@ export default function ProductForm({ editingProduct = null, onDone }: Props) {
                         mo_ta: data.mo_ta,
                         gia: data.gia,
                         danh_muc_id: data.danh_muc_id,
+                        trang_thai_kho: data.trang_thai_kho || "con_hang",
                     });
                     setError(null);
                 })
@@ -61,6 +63,7 @@ export default function ProductForm({ editingProduct = null, onDone }: Props) {
                 mo_ta: editingProduct.mo_ta,
                 gia: editingProduct.gia,
                 danh_muc_id: editingProduct.danh_muc_id,
+                trang_thai_kho: editingProduct.trang_thai_kho || "con_hang",
             });
             setError(null);
         } else {
@@ -76,6 +79,7 @@ export default function ProductForm({ editingProduct = null, onDone }: Props) {
             mo_ta: "",
             gia: 0,
             danh_muc_id: "",
+            trang_thai_kho: "con_hang",
         });
         setHinhAnhDaiDien(null);
         setDsHinhAnh([]);
@@ -116,7 +120,7 @@ export default function ProductForm({ editingProduct = null, onDone }: Props) {
         if (!hinhAnhDaiDien && !id) {
             newErrors.hinh_anh_dai_dien = "Vui lòng chọn hình ảnh đại diện";
         }
-        if (dsHinhAnh.length < 3) {
+        if (!id && dsHinhAnh.length < 3) {
             newErrors.dsHinhAnh = "Vui lòng chọn ít nhất 3 hình ảnh";
         }
         if (Object.keys(newErrors).length > 0) {
@@ -136,7 +140,9 @@ export default function ProductForm({ editingProduct = null, onDone }: Props) {
             formData.append("hinh_anh_dai_dien", hinhAnhDaiDien);
         }
 
-        dsHinhAnh.forEach(file => formData.append("ds_hinh_anh", file));
+        if (dsHinhAnh.length > 0) {
+            dsHinhAnh.forEach(file => formData.append("ds_hinh_anh", file));
+        }
 
         try {
             const isEditing = Boolean(id);
@@ -285,9 +291,24 @@ export default function ProductForm({ editingProduct = null, onDone }: Props) {
                 )}
             </div>
 
-            <button className="btn btn-success" type="submit">
-                {id ? "Cập nhật" : "Thêm"}
-            </button>
+            <div className="d-flex gap-2">
+                <button className="btn btn-success" type="submit">
+                    {id ? "Cập nhật" : "Thêm"}
+                </button>
+
+                {id && (
+                    <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => {
+                            resetForm();
+                            navigate("/admin/products"); // Hoặc gọi onDone()
+                        }}
+                    >
+                        Hủy
+                    </button>
+                )}
+            </div>
         </form>
     );
 }
