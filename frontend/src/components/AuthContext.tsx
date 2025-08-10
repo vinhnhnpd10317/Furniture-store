@@ -13,6 +13,7 @@ export interface User {
   email: string;
   vai_tro: string;
   dia_chi?: string; 
+  is_google_user?: boolean;
 }
 
 // Interface context

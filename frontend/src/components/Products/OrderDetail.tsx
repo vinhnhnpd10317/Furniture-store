@@ -18,6 +18,11 @@ const trangThaiMap: Record<string, string> = {
   da_huy: "Đã huỷ",
 };
 
+const trangThaiThanhToan: Record<string, string> = {
+  tien_mat: "Thanh toán khi nhận hàng",
+  chuyen_khoan: "Trả trước",
+};
+
 
 const OrderDetail = () => {
   const navigate = useNavigate();
@@ -78,6 +83,10 @@ const OrderDetail = () => {
             <strong>Ghi chú:</strong> {order.ghi_chu || "(Không có ghi chú)"}
           </div>
           <div className="col-md-6"><strong>Tổng tiền:</strong> <span className="text-danger">{formatCurrency(order.tong_tien)}</span></div>
+        </div>
+
+        <div className="row mb-3">
+          <div className="col-md-6"><strong>Phương thức thanh toán:</strong> {trangThaiThanhToan[order.phuong_thuc_thanh_toan] || order.phuong_thuc_thanh_toan}</div>
         </div>
 
         <h5 className="mb-3 text-success">Danh sách sản phẩm:</h5>
