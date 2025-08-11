@@ -11,6 +11,7 @@ import { fetchComments, postComment, type BinhLuan } from "../../api/Comment";
 import { useAuth } from "../../components/AuthContext";
 import { addFavorite, deleteFavorite, getFavoritesByUser } from "../../api/FavoriteApi";
 import { useNavigate } from "react-router-dom";
+import CommentSection from "./CommentSection";
 
 export default function ProductDetail() {
     // const [likedList, setLikedList] = useState<boolean[]>(Array(8).fill(false));
@@ -64,6 +65,19 @@ export default function ProductDetail() {
     }
   };
 
+  // Hàm lấy lại danh sách bình luận
+const loadComments = async () => {
+  if (id) {
+    try {
+      const res = await getCommentsByProductId(id);
+      setCommentList(res.data);
+    } catch (error) {
+      console.error("Lỗi khi tải bình luận:", error);
+    }
+  }
+};
+
+  
     // Thêm vào giỏ hàng
     const handleAddToCart = (item: ProductItem) => {
         addToCart({
@@ -342,61 +356,20 @@ export default function ProductDetail() {
             </div>
 
             {/* Phần bình luận */}
-            <div className="mt-5">
-              <h5 className="fw-bold mb-4">Bình luận</h5>
-              <div className="mb-4">
-                {commentList.map((cmt, idx) => (
-                  <div key={idx} className="d-flex align-items-start gap-3 p-3 mb-3 rounded shadow-sm">
-                    <img
-                      src={`https://i.pravatar.cc/40?img=${(idx % 10) + 1}`}
-                      className="rounded-circle"
-                      alt="User"
-                      width={40}
-                      height={40}
-                    />
-                    <div>
-                      <h6 className="mb-1 fw-semibold">{cmt.ten_nguoi_dung}</h6>
-                      <p className="mb-1">{cmt.noi_dung}</p>
-                      <small className="text-muted">
-                        {new Date(cmt.ngay_binh_luan).toLocaleString()}
-                      </small>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="container mt-4 mb-5">
+                {/* ... Các phần khác của ProductDetail ... */}
 
-              {/* Gửi bình luận */}
-              {localStorage.getItem("user") ? (
-                <div className="d-flex align-items-start gap-3">
-                  <img
-                    src="https://i.pinimg.com/736x/bc/43/98/bc439871417621836a0eeea768d60944.jpg"
-                    className="rounded-circle"
-                    alt="User"
-                    width={40}
-                    height={40}
-                  />
-                  <div className="flex-grow-1">
-                    <textarea
-                      className="form-control"
-                      placeholder="Nhập bình luận của bạn..."
-                      rows={3}
-                      style={{ resize: "none" }}
-                      value={commentContent}
-                      onChange={(e) => setCommentContent(e.target.value)}
-                    ></textarea>
-                    <div className="d-flex justify-content-end mt-2">
-                      <button className="btn btn-dark btn-sm" onClick={handleSendComment}>
-                        Gửi
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="alert alert-warning">
-                  Vui lòng <a href="/login">đăng nhập</a> để bình luận.
-                </div>
-              )}
-            </div>
+                {/* Bình luận */}
+               <CommentSection
+                  commentList={commentList}
+                  commentContent={commentContent}
+                  setCommentContent={setCommentContent}
+                  handleSendComment={handleSendComment}
+                  currentUserId={JSON.parse(localStorage.getItem("user") || "{}").id}
+                  refreshComments={loadComments} // Hàm bạn đang dùng để fetch commentList
+                />
+
+              </div>
         </div>
     );
 }

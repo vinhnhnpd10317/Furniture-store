@@ -10,6 +10,7 @@ export interface BinhLuan {
   ten_nguoi_dung: string;  // ✅ Tên người dùng
   ten_san_pham: string;    // ✅ Tên sản phẩm
   san_pham_anh: string;    // ✅ Ảnh sản phẩm
+  nguoi_dung_id: number;
 }
 
 // GET tất cả bình luận
@@ -54,5 +55,15 @@ export const fetchCommentsByProductId = async (san_pham_id: number): Promise<Bin
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     throw new Error("Lỗi khi tải bình luận sản phẩm");
+  }
+};
+// PUT cập nhật bình luận
+export const updateComment = async (id: number, noi_dung: string): Promise<void> => {
+  try {
+    await axios.put(`${API_URL}/${id}`, { noi_dung });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error("❌ Lỗi cập nhật bình luận:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "Lỗi khi cập nhật bình luận");
   }
 };
