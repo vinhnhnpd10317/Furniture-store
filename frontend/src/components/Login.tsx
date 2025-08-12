@@ -135,13 +135,16 @@ const Login = () => {
             </div>
             <p className="text-center text-white mb-4">Hoặc</p>
 
-            <div className="d-flex justify-content-between mb-3 gap-2">
+            <div className="d-flex justify-content-center mb-3">
               <GoogleLogin
                 onSuccess={handleGoogleLogin}
                 onError={() => {
                   setError('Đăng nhập Google thất bại');
                 }}
                 useOneTap
+                shape="circle"
+                size="large"
+                logo_alignment="center"
               />
             </div>
 

@@ -17,6 +17,8 @@ router.get('/', (req, res) => {
         values.push(likeSearch, likeSearch);
     }
 
+    sql += ' ORDER BY ngay_tao DESC';
+
     db.query(sql, values, (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(result);

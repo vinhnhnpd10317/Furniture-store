@@ -86,32 +86,44 @@ const handleSave = async () => {
 };
 
 
-const renderField = (label: string, name: keyof Customer, type: string = "text") => (
-<div className="mb-3 row">
-    <label className="col-sm-2 col-form-label">{label}</label>
-    <div className="col-sm-8">
-        <input
+const renderField = (
+    label: string,
+    name: keyof Customer,
+    type: string = "text",
+    disabledAlways = false
+) => (
+    <div className="mb-3 row">
+        <label className="col-sm-2 col-form-label">{label}</label>
+        <div className="col-sm-10">
+        <div className="input-group">
+            <input
             type={type}
             className="form-control"
             name={name}
             value={user?.[name] || ""}
             onChange={handleChange}
-            disabled={editingField !== name}
-        />
+            disabled={disabledAlways || editingField !== name}
+            />
+            <span className="input-group-text bg-transparent border-start-0 p-0">
+            {!disabledAlways && (
+                <button
+                className="btn edit-btn"
+                type="button"
+                onClick={editingField === name ? handleSave : () => setEditingField(name)}
+                >
+                {editingField === name ? (
+                    <i className="bi bi-check-lg"></i>
+                ) : (
+                    <i className="bi bi-chevron-right"></i>
+                )}
+                </button>
+            )}
+            </span>
+        </div>
+        </div>
     </div>
-    <div className="col-sm-2">
-        {editingField === name ? (
-            <button className="btn btn-success" onClick={handleSave}>
-            Lưu
-            </button>
-        ) : (
-            <button className="btn btn-outline-primary" onClick={() => setEditingField(name)}>
-            Chỉnh sửa
-            </button>
-        )}
-    </div>
-</div>
 );
+
 
 const renderPasswordFields = () => (
 <>
@@ -219,38 +231,52 @@ return (
             {user ? (
                 <>
                 {renderField("Họ tên", "ho_ten")}
-                {renderField("Email", "email", "email")}
+                {/* Chỉ render Email nếu không phải Google user */}
+                {!user?.is_google_user && renderField("Email", "email", "email")}
                 {renderField("Số điện thoại", "so_dien_thoai")}
                 {renderField("Địa chỉ", "dia_chi")}
 
-                <div className="mb-3 row">
-                    <label className="col-sm-2 col-form-label">Mật khẩu</label>
-                    <div className="col-sm-8">
-                        <input
-                            type="password"
-                            className="form-control"
-                            value="********"
-                            disabled
-                        />
-                    </div>
-                    <div className="col-sm-2">
-                    {editingField === "mat_khau" ? (
-                        <button
-                        className="btn btn-outline-secondary"
-                        onClick={() => setEditingField(null)}
-                        >
-                        Huỷ
-                        </button>
-                    ) : (
-                        <button
-                        className="btn btn-outline-primary"
-                        onClick={() => setEditingField("mat_khau")}
-                        >
-                        Đổi mật khẩu
-                        </button>
-                    )}
-                    </div>
-                </div>
+                {/* Chỉ hiển thị khi KHÔNG phải Google user */}
+                {!user?.is_google_user && (
+                    <>
+                        <div className="mb-3 row">
+                            <label className="col-sm-2 col-form-label">Mật khẩu</label>
+                            <div className="col-sm-10">
+                                <div className="input-group">
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    value="********"
+                                    disabled
+                                />
+                                <span className="input-group-text bg-transparent border-start-0 p-0">
+                                    {editingField === "mat_khau" ? (
+                                    <button
+                                        className="btn edit-btn"
+                                        type="button"
+                                        onClick={() => setEditingField(null)}
+                                        title="Huỷ"
+                                    >
+                                        <i className="bi bi-x-lg"></i>
+                                    </button>
+                                    ) : (
+                                    <button
+                                        className="btn edit-btn"
+                                        type="button"
+                                        onClick={() => setEditingField("mat_khau")}
+                                        title="Đổi mật khẩu"
+                                    >
+                                        <i className="bi bi-chevron-right"></i>
+                                    </button>
+                                    )}
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {editingField === "mat_khau" && renderPasswordFields()}
+                    </>
+                )}
 
                 {editingField === "mat_khau" && renderPasswordFields()}
                 </>

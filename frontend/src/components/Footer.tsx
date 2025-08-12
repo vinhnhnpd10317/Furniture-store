@@ -17,7 +17,7 @@ export default function Footer() {
                     paddingBottom: "60px",
                 }}
             >
-                <div>
+                <div className="mb-5">
                     <h1 className="display-5 fw-bold text-light">Tôn vinh không gian sống của bạn</h1>
                     <a href="/contact" className="btn btn-outline-light btn-lg mt-3">
                         Liên hệ với tôi

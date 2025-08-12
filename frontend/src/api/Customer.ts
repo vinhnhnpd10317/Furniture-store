@@ -9,6 +9,7 @@ export interface Customer {
   dia_chi: string;
   vai_tro: string;
   ngay_tao: string;
+  is_google_user?: boolean;
 }
 
 export const initialCustomerForm: Omit<Customer, "id" | "ngay_tao"> = {
@@ -57,7 +58,7 @@ export const loginUser = async (email: string, mat_khau: string) => {
 
 export const changeCustomerPassword = async (
   id: number,
-  currentPassword: string,
+  currentPassword: string | null,
   newPassword: string
 ) => {
   try {

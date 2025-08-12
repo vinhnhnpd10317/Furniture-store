@@ -12,6 +12,9 @@
     import { fetchCategories, type CategoryItem } from "../../api/CategoryApi";
     import { getFavoritesByUser } from "../../api/FavoriteApi";
 
+    import Slider from "rc-slider";
+    import "rc-slider/assets/index.css";
+
     export default function Product() {
         const navigate = useNavigate();
         const { addToCart } = useCart();
@@ -40,6 +43,8 @@
 
         const selectedMinPrice = minPriceParam ? parseInt(minPriceParam) : undefined;
         const selectedMaxPrice = maxPriceParam ? parseInt(maxPriceParam) : undefined;
+
+        const [priceRange, setPriceRange] = useState<[number, number]>([0, 200000000]); 
 
         const [minPrice, setMinPrice] = useState<number | undefined>();
         const [maxPrice, setMaxPrice] = useState<number | undefined>();
@@ -237,9 +242,10 @@
                             </div>
 
                             {/* Sidebar Desktop */}
-                            <div className="d-none d-md-block products-sidebar">
-                                <h5 className="fw-bold mb-3">Danh Mục</h5>
-                                <ul className="list-unstyled ps-0">
+                            <div className="d-none d-md-block products-sidebar p-3 rounded shadow-sm bg-white">
+                                {/* Danh mục */}
+                                <h6 className="fw-bold mb-3 border-bottom pb-2 text-uppercase text-secondary">Danh Mục</h6>
+                                <ul className="list-unstyled ps-0 mb-4">
                                     <li>
                                         <a
                                             href="#"
@@ -247,7 +253,7 @@
                                                 e.preventDefault();
                                                 showAllProducts();
                                             }}
-                                            className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link"
+                                            className="d-block py-2 px-3 rounded category-link"
                                         >
                                             Tất cả sản phẩm
                                         </a>
@@ -260,7 +266,7 @@
                                                     e.preventDefault();
                                                     handleCategoryClick(cat.id);
                                                 }}
-                                                className="mb-1 d-block py-1 text-decoration-none text-dark product-sidebar-link"
+                                                className="d-block py-2 px-3 rounded category-link"
                                             >
                                                 {cat.ten_danh_muc}
                                             </a>
@@ -268,73 +274,77 @@
                                     ))}
                                 </ul>
 
-                                <div className="mt-4">
-                                    <h5 className="fw-bold mb-3">Lọc theo giá</h5>
+                                {/* Lọc theo giá */}
+                                <h6 className="fw-bold mb-3 border-bottom pb-2 text-uppercase text-secondary">Lọc theo giá</h6>
 
-                                    {/* Bộ lọc nhanh */}
-                                    <div className="d-flex flex-column gap-2 mb-3">
-                                        <button
-                                            className="btn btn-outline-secondary btn-sm"
-                                            onClick={() => {
-                                                const params = new URLSearchParams(searchParams);
-                                                params.set("minPrice", "100000");
-                                                params.set("maxPrice", "1000000");
-                                                setSearchParams(params);
-                                                setMinPrice(100000);
-                                                setMaxPrice(1000000);
-                                            }}
-                                        >
-                                            Từ 100k - 1 triệu
-                                        </button>
-                                        <button
-                                            className="btn btn-outline-secondary btn-sm"
-                                            onClick={() => {
-                                                const params = new URLSearchParams(searchParams);
-                                                params.set("minPrice", "1000000");
-                                                params.set("maxPrice", "10000000");
-                                                setSearchParams(params);
-                                                setMinPrice(1000000);
-                                                setMaxPrice(10000000);
-                                            }}
-                                        >
-                                            Từ 1 triệu - 10 triệu
-                                        </button>
-                                        <button
-                                            className="btn btn-outline-secondary btn-sm"
-                                            onClick={() => {
-                                                const params = new URLSearchParams(searchParams);
-                                                params.set("minPrice", "10000000");
-                                                params.delete("maxPrice");
-                                                setSearchParams(params);
-                                                setMinPrice(10000000);
-                                                setMaxPrice(undefined);
-                                            }}
-                                        >
-                                            Trên 10 triệu
-                                        </button>
-                                    </div>
-
-                                    {/* Tùy chọn giá */}
-                                    <div className="mb-2">
-                                        <label className="form-label">Giá từ:</label>
-                                        <input
-                                        type="number"
-                                        className="form-control"
-                                        value={minPrice ?? ""}
-                                        onChange={(e) => setMinPrice(e.target.value ? Number(e.target.value) : undefined)}
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label">Đến:</label>
-                                        <input
-                                        type="number"
-                                        className="form-control"
-                                        value={maxPrice ?? ""}
-                                        onChange={(e) => setMaxPrice(e.target.value ? Number(e.target.value) : undefined)}
-                                        />
-                                    </div>
+                                {/* Bộ lọc nhanh */}
+                                <div className="d-flex flex-column gap-2 mb-3">
                                     <button
-                                        className="btn btn-dark w-100"
+                                        className="btn btn-outline-dark btn-sm filter-btn"
+                                        onClick={() => {
+                                            const params = new URLSearchParams(searchParams);
+                                            params.set("minPrice", "100000");
+                                            params.set("maxPrice", "1000000");
+                                            setSearchParams(params);
+                                            setMinPrice(100000);
+                                            setMaxPrice(1000000);
+                                        }}
+                                    >
+                                        100k - 1 triệu
+                                    </button>
+                                    <button
+                                        className="btn btn-outline-dark btn-sm filter-btn"
+                                        onClick={() => {
+                                            const params = new URLSearchParams(searchParams);
+                                            params.set("minPrice", "1000000");
+                                            params.set("maxPrice", "10000000");
+                                            setSearchParams(params);
+                                            setMinPrice(1000000);
+                                            setMaxPrice(10000000);
+                                        }}
+                                    >
+                                        1 triệu - 10 triệu
+                                    </button>
+                                    <button
+                                        className="btn btn-outline-dark btn-sm filter-btn"
+                                        onClick={() => {
+                                            const params = new URLSearchParams(searchParams);
+                                            params.set("minPrice", "10000000");
+                                            params.delete("maxPrice");
+                                            setSearchParams(params);
+                                            setMinPrice(10000000);
+                                            setMaxPrice(undefined);
+                                        }}
+                                    >
+                                        Trên 10 triệu
+                                    </button>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label small text-muted">
+                                        Giá: {priceRange[0].toLocaleString()}đ - {priceRange[1].toLocaleString()}đ
+                                    </label>
+                                    <Slider
+                                        range
+                                        min={0}
+                                        max={200000000} 
+                                        step={50000} 
+                                        value={priceRange}
+                                        onChange={(value) => {
+                                            if (Array.isArray(value)) {
+                                                setPriceRange([value[0], value[1]]);
+                                                setMinPrice(value[0]);
+                                                setMaxPrice(value[1]);
+                                            }
+                                        }}
+                                        trackStyle={[{ backgroundColor: "#000", height: 6 }]}
+                                        handleStyle={[
+                                            { borderColor: "#000", backgroundColor: "#000" },
+                                            { borderColor: "#000", backgroundColor: "#000" },
+                                        ]}
+                                    />
+                                    <button
+                                        className="btn btn-dark w-100 fw-semibold mt-3"
                                         onClick={() => {
                                         const params = new URLSearchParams(searchParams);
                                         if (minPrice !== undefined) params.set("minPrice", String(minPrice));

@@ -115,7 +115,12 @@ export default function ProductCart() {
                             <p className="text-warning mt-2">Cửa hàng gần bạn</p>
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-between">
-                            <Link to="/products" className='btn btn-outline-dark fw-semibold text-success'>Tiếp tục mua hàng</Link>
+                            <Link 
+                                to="/products" 
+                                className="btn btn-dark"
+                            >
+                                TIẾP TỤC ĐẶT HÀNG
+                            </Link>
                             <button className="btn btn-dark"  onClick={handleCheckout} disabled={cartItems.length === 0}>ĐẶT HÀNG</button>
                         </div>
                     </div>

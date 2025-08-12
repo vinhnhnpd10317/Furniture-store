@@ -67,21 +67,34 @@ router.post('/:id/change-password', (req, res) => {
 
         const user = results[0];
 
-        const isMatch = await bcrypt.compare(currentPassword, user.mat_khau);
-        if (!isMatch) {
-            return res.status(401).json({ message: 'Mật khẩu hiện tại không đúng' });
-        }
-
-        const hashedNewPassword = await bcrypt.hash(newPassword, 12);
-
-        db.query(
-            'UPDATE nguoi_dung SET mat_khau = ? WHERE id = ?',
-            [hashedNewPassword, id],
-            (updateErr) => {
-                if (updateErr) return res.status(500).json({ error: updateErr });
-                res.json({ message: 'Đổi mật khẩu thành công' });
+        // Nếu là Google user (is_google_user = true hoặc mat_khau trống), bỏ qua kiểm tra currentPassword
+        if (user.is_google_user || !user.mat_khau) {
+            const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+            db.query(
+                'UPDATE nguoi_dung SET mat_khau = ?, is_google_user = ? WHERE id = ?',
+                [hashedNewPassword, false, id], // Đặt is_google_user = false vì user đã thêm mật khẩu
+                (updateErr) => {
+                    if (updateErr) return res.status(500).json({ error: updateErr });
+                    res.json({ message: 'Đổi mật khẩu thành công' });
+                }
+            );
+        } else {
+            // Kiểm tra mật khẩu hiện tại cho user thông thường
+            const isMatch = await bcrypt.compare(currentPassword, user.mat_khau);
+            if (!isMatch) {
+                return res.status(401).json({ message: 'Mật khẩu hiện tại không đúng' });
             }
-        );
+
+            const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+            db.query(
+                'UPDATE nguoi_dung SET mat_khau = ? WHERE id = ?',
+                [hashedNewPassword, id],
+                (updateErr) => {
+                    if (updateErr) return res.status(500).json({ error: updateErr });
+                    res.json({ message: 'Đổi mật khẩu thành công' });
+                }
+            );
+        }
     });
 });
 
@@ -157,10 +170,10 @@ router.post('/google-login', (req, res) => {
         if (results.length === 0) {
             // Nếu user chưa tồn tại → thêm mới
             const insertSql = `
-                INSERT INTO nguoi_dung (ho_ten, email, mat_khau, so_dien_thoai, dia_chi, vai_tro, ngay_tao)
-                VALUES (?, ?, '', '', '', 'khach_hang', NOW())
+                INSERT INTO nguoi_dung (ho_ten, email, mat_khau, so_dien_thoai, dia_chi, vai_tro, ngay_tao, is_google_user)
+                VALUES (?, ?, '', '', '', 'khach_hang', NOW(), ?)
             `;
-            db.query(insertSql, [name, email], (err, result) => {
+            db.query(insertSql, [name, email, true], (err) => {
                 if (err) {
                     console.error("Lỗi thêm user Google:", err);
                     return res.status(500).json({ message: "Lỗi máy chủ" });

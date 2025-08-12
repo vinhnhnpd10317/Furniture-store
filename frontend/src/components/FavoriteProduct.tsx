@@ -68,40 +68,46 @@ export default function FavoriteProducts() {
         ) : (
           favorites.map((item) => (
             <div key={item.id} className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm">
-                <img
-                  src={`/img/imgproduct/${item.hinh_anh_dai_dien}`}
-                  className="card-img-top"
-                  style={{ height: "200px", objectFit: "cover" }}
-                  alt={item.ten_san_pham}
-                />
-                <div className="card-body d-flex flex-column justify-content-between">
-                  <h5 className="card-title">{item.ten_san_pham}</h5>
-                  <p className="card-text text-danger fw-bold">{item.gia.toLocaleString("vi-VN")}₫</p>
-                  <div className="d-flex justify-content-between mt-auto">
-                    <button
-                      className="btn btn-outline-dark btn-sm"
-                      onClick={() => handleAddToCart(item)}
-                    >
-                      Thêm vào giỏ
-                    </button>
-                    <button
-                      className="btn btn-dark btn-sm"
-                      onClick={() => navigate(`/productdetail/${item.san_pham_id}`)}
-                    >
-                      Xem thêm
-                    </button>
-                    <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteFavorite(item.san_pham_id)}
-                    >
-                    Xoá
-                    </button>
+            <div className="card h-100 shadow-sm position-relative">
+              {/* Nút Xoá góc trên bên phải */}
+              <button
+                className="btn btn-danger btn-sm position-absolute top-0 end-0 m-2"
+                style={{ borderRadius: "50%", padding: "5px 8px" }}
+                onClick={() => handleDeleteFavorite(item.san_pham_id)}
+                title="Xoá khỏi yêu thích"
+              >
+                ✕
+              </button>
 
-                  </div>
+              <img
+                src={`/img/imgproduct/${item.hinh_anh_dai_dien}`}
+                className="card-img-top"
+                style={{ height: "200px", objectFit: "cover" }}
+                alt={item.ten_san_pham}
+              />
+
+              <div className="card-body d-flex flex-column justify-content-between">
+                <h5 className="card-title">{item.ten_san_pham}</h5>
+                <p className="card-text text-danger fw-bold">
+                  {item.gia.toLocaleString("vi-VN")}₫
+                </p>
+                <div className="d-flex justify-content-between gap-2 mt-auto">
+                  <button
+                    className="btn btn-outline-dark btn-sm flex-fill"
+                    onClick={() => handleAddToCart(item)}
+                  >
+                    Thêm vào giỏ
+                  </button>
+                  <button
+                    className="btn btn-dark btn-sm flex-fill"
+                    onClick={() => navigate(`/productdetail/${item.san_pham_id}`)}
+                  >
+                    Xem thêm
+                  </button>
                 </div>
               </div>
             </div>
+          </div>
           ))
         )}
       </div>

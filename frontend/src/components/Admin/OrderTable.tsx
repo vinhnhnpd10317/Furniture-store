@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, type ReactNode } from "react";
 import type { OrderStatus } from "./OrderStatusTabs";
 import { getOrderById, OrderStatusMap } from "../../api/OrderApi";
 import { Modal, Button } from "react-bootstrap";
+import { FaEye } from "react-icons/fa";
 
 export interface Order {
+  ten_khach_hang: ReactNode;
   id: number;
   nguoi_dung_id: number;
   nguoi_dung?: {
@@ -27,8 +29,10 @@ interface ProductItem {
 
 interface FullOrderDetail extends Order {
   ho_ten: string;
+  email: string;
   so_dien_thoai: string;
   dia_chi: string;
+  ghi_chu: string;
   chi_tiet: ProductItem[];
 }
 
@@ -67,16 +71,16 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
 
   return (
     <>
-      <table className="table table-bordered">
+      <table className="table table-bordered table-hover">
         <thead className="table-light">
-          <tr>
-            <th>ID</th>
-            <th>Người dùng ID</th>
-            <th>Ngày đặt</th>
-            <th>Tổng tiền</th>
-            <th>Phương thức</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
+          <tr className="text-center">
+            <th className="py-3">ID</th>
+            <th className="py-3">Người dùng ID</th>
+            <th className="py-3">Ngày đặt</th>
+            <th className="py-3">Tổng tiền</th>
+            <th className="py-3">Phương thức</th>
+            <th className="py-3">Trạng thái</th>
+            <th className="py-3" style={{ width: 110 }}>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -106,12 +110,12 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
                   <option value="da_huy">Đã hủy</option>
                 </select>
               </td>
-              <td>
+              <td className="d-flex justify-content-center">
                 <button
-                  className="btn btn-sm btn-outline-primary"
+                  className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
                   onClick={() => handleViewDetail(order.id)}
                 >
-                  <i className="bi bi-eye"></i> Xem
+                  <FaEye /> Xem
                 </button>
               </td>
             </tr>
@@ -137,8 +141,12 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
               {/* THÔNG TIN KHÁCH HÀNG */}
               <div className="mb-3">
                 <p><strong>Khách hàng:</strong> {selectedOrder.ho_ten}</p>
+                <p><strong>Email:</strong> {selectedOrder.email}</p>
                 <p><strong>SĐT:</strong> {selectedOrder.so_dien_thoai}</p>
                 <p><strong>Địa chỉ:</strong> {selectedOrder.dia_chi}</p>
+                {selectedOrder.ghi_chu && (
+                  <p><strong>Ghi chú:</strong> {selectedOrder.ghi_chu}</p>
+                )}
                 <p>
                   <strong>Phương thức thanh toán:</strong>{" "}
                   {selectedOrder.phuong_thuc_thanh_toan === "tien_mat"

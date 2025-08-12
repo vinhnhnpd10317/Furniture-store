@@ -101,7 +101,7 @@ function App() {
       <link rel="stylesheet" href="style/home.css" />
       <div className="banner">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/07/tang-5tr-1400x789.webp"
+          src="public/img/banner.jpg"
           alt="Clearance Sale - Ưu đãi lớn nhất"
         />
       </div>
@@ -161,14 +161,13 @@ function App() {
               <div className="text-item">
                 Không gian phòng khách
                 <p style={{ fontSize: 15 }}>
-                  Phòng khách là không gian chính của ngôi nhà, là nơi sum họp gia
-                  đình
+                  "Phòng khách không chỉ là nơi đón tiếp bạn bè và người thân, mà còn là trung tâm gắn kết cảm xúc của cả gia đình. Một không gian ấm cúng, hài hòa sẽ giúp mỗi cuộc trò chuyện trở nên gần gũi và mỗi khoảnh khắc thêm trọn vẹn."
                 </p>
               </div>
               <div className="text-item">
                 Đồ trang trí
                 <p style={{ fontSize: 15 }}>
-                  Mang lại những nguồn cảm hứng và nét sinh động cho không gian
+                  "Những món đồ trang trí tinh tế không chỉ làm đẹp cho ngôi nhà mà còn thể hiện cá tính, gu thẩm mỹ của gia chủ. Từ lọ hoa, tranh treo tường đến những chi tiết nhỏ, tất cả góp phần tạo nên không gian sống đầy cảm hứng."
                 </p>
               </div>
             </div>
@@ -203,8 +202,8 @@ function App() {
             <div className="text-below">
               Không gian phòng ăn
               <p style={{ fontSize: 15 }}>
-                Một bữa ăn ngon luôn là mong ước của mỗi gia đình. Không gian phòng
-                ăn đóng vai trò rất quan trọng trong văn hóa Việt
+                Phòng ăn không chỉ là nơi thưởng thức bữa ăn, mà còn là nơi gắn kết tình cảm gia đình. Trong không gian ấm áp, 
+                hương vị thơm ngon và câu chuyện thân mật cùng hòa quyện, tạo nên những kỷ niệm khó quên."
               </p>
             </div>
           </div>

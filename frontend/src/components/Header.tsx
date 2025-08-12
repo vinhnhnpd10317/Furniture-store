@@ -145,6 +145,58 @@
                 <span className="fw-bold fs-6 fs-md-4">PRIME SEVEN</span>
               </Link>
 
+              {/* Mobile Search + Icons */}
+              <div className="d-md-none w-100 mt-3 px-2">
+                <div className="input-group mb-2">
+                  <input
+                    type="text"
+                    value={keyword}
+                    onChange={e => setKeyword(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter") handleSearch(); }}
+                    className="form-control"
+                    placeholder="Tìm kiếm sản phẩm"
+                  />
+                  <button className="btn btn-outline-secondary" type="button" onClick={handleSearch}>
+                    <i className="bi bi-search"></i>
+                  </button>
+                </div>
+
+                <div className="d-flex justify-content-around align-items-center mb-2">
+                  <Link to="/store-map" className="text-muted">
+                    <i className="bi bi-geo-alt fs-5"></i>
+                  </Link>
+
+                  <Link to="/favorites" className="text-muted position-relative">
+                    <i className="bi bi-heart fs-5"></i>
+                    {favoriteCount > 0 && (
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {favoriteCount}
+                      </span>
+                    )}
+                  </Link>
+
+                  <Link to="/productcart" className="text-muted position-relative">
+                    <i className="bi bi-bag fs-5"></i>
+                    {cartCount > 0 && (
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {cartCount}
+                      </span>
+                    )}
+                  </Link>
+
+                  {user ? (
+                    <>
+                      <Link to="/userorder" className="text-dark text-decoration-none">
+                        {user.name}
+                      </Link>
+                      <button className="btn btn-sm btn-outline-dark ms-1" onClick={logout}>Đăng xuất</button>
+                    </>
+                  ) : (
+                    <Link to="/login" className="text-dark text-decoration-none">
+                      <i className="bi bi-person fs-5"></i>
+                    </Link>
+                  )}
+                </div>
               {/* NAV CONTENT */}
               <div className="collapse navbar-collapse mt-3 mt-md-0" id="mainNavbar">
                 <ul className="navbar-nav mx-auto mb-2 mb-md-0">
@@ -232,7 +284,6 @@
       )}
     </div>
   </div>
-
               </div>
             </div>
           </nav>
