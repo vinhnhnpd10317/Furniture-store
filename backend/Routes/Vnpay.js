@@ -7,8 +7,8 @@ import db from '../db.js'; // Import kết nối MySQL
 const router = express.Router();
 
 // === Cấu hình VNPay (Sandbox) ===
-const vnp_TmnCode = 'NAYO13CX';
-const vnp_HashSecret = 'R5TZGONO7MOZWQXMFBZYUICJHAD8ZQQC';
+const vnp_TmnCode = '7JQAT9XC';
+const vnp_HashSecret = 'F2BWWDXA72WFSMHUG3QA8H132CHJ9QTF';
 const vnp_Url = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
 const vnp_ReturnUrl = 'http://localhost:3001/vnpay/vnpay_return';
 

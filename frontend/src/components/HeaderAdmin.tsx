@@ -86,16 +86,13 @@ export default function HeaderAdmin() {
                 <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
                     <ul className="navbar-nav">
                         <li className="nav-item me-5">
-                            <Link className="nav-link fw-semibold active" to="/">TRANG CHỦ</Link>
+                            <Link className="nav-link fw-semibold active" to="/">HOME</Link>
                         </li>
                         <li className="nav-item me-5">
                             <Link className="nav-link fw-semibold" to="/admin/dashboard">DASHBOARD</Link>
                         </li>
                         <li className="nav-item me-5">
                             <Link className="nav-link fw-semibold" to="/admin/customer">USER</Link>
-                        </li>
-                        <li className="nav-item me-5">
-                            <Link className="nav-link fw-semibold" to="/">SETTING</Link>
                         </li>
                     </ul>
                 </div>

@@ -364,7 +364,7 @@ function App() {
     <div className="inspiration-group">
       <Link to="/inspiration/7" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2024/11/goc-cam-hung-6.jpg"
+          src="https://nhaxinh.com/wp-content/uploads/2025/02/goi-y-qua-tang-14-2-600x400.jpg"
           alt="Ảnh 7"
         />
         <h3>Nghệ thuật phối màu trong thiết kế nội thất</h3>
@@ -375,7 +375,7 @@ function App() {
 
       <Link to="/inspiration/8" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/01/goc-cam-hung-7.jpg"
+          src="https://nhaxinh.com/wp-content/uploads/2024/12/khong-gian-nha-xinh-thao-dien-4-3-600x400.jpg"
           alt="Ảnh 8"
         />
         <h3>Sofa đa năng – xu hướng nội thất hiện đại</h3>

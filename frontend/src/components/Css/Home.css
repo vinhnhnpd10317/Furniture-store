@@ -994,3 +994,12 @@ body {
     display: block;
   }
 }
+
+.text-link {
+  text-decoration: none; /* Bỏ gạch chân */
+  color: inherit; /* Giữ nguyên màu chữ */
+}
+
+.text-link:hover {
+  text-decoration: none; /* Đảm bảo hover cũng không có gạch chân */
+}
