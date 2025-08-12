@@ -1,22 +1,39 @@
 import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import {
-  getOrdersByUserId,
-  type OrderItem,
-  OrderStatusMap,
-} from "../api/OrderApi";
+import { getOrdersByUserId, type OrderItem, OrderStatusMap } from "../api/OrderApi";
 import { useAuth } from "../components/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const UserOrders = () => {
   const { user } = useAuth();
   const [orders, setOrders] = useState<OrderItem[]>([]);
   const [activeStatus, setActiveStatus] = useState<string>("cho_xu_ly");
+  const location = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+
+    // Kiểm tra query parameters để hiển thị thông báo
+    const queryParams = new URLSearchParams(location.search);
+    const paymentStatus = queryParams.get("payment");
+    const orderId = queryParams.get("orderId");
+    const error = queryParams.get("error");
+
+    if (paymentStatus === "success") {
+      alert(`✅ Đặt hàng và thanh toán thành công VNpay! Mã đơn: ${orderId}`);
+    } else if (paymentStatus === "failed") {
+      alert(
+        `Thanh toán thất bại: ${
+          error === "invalid_checksum"
+            ? "Lỗi xác thực"
+            : error === "db_error"
+            ? "Lỗi hệ thống"
+            : "Giao dịch không thành công"
+        }`
+      );
+    }
+  }, [location]);
 
   useEffect(() => {
     if (!user) return;

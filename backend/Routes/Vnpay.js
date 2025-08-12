@@ -22,7 +22,7 @@ function sortObject(obj) {
         }, {});
 }
 
-// === API tạo URL thanh toán ===
+// === API tạo URLcomun thanh toán ===
 router.post('/create_payment', async (req, res) => {
     let { orderId, amount, bankCode } = req.body;
 
@@ -87,20 +87,19 @@ router.get('/api/payment/callback-vnpay', async (req, res) => {
                     'UPDATE don_hang SET trang_thai_thanh_toan = ? WHERE id = ?',
                     ['da_thanh_toan', orderId]
                 );
-                return res.json({
-                    code: rspCode,
-                    message: 'Thanh toán thành công',
-                    data: vnp_Params,
-                });
+                // Chuyển hướng với query param thông báo thành công
+                return res.redirect('http://localhost:5173/userorder?payment=success&orderId=' + orderId);
             } catch (err) {
                 console.error(err);
-                return res.status(500).json({ code: '99', message: 'Lỗi cập nhật DB' });
+                return res.redirect('http://localhost:5173/userorder?payment=failed&error=db_error');
             }
         } else {
-            return res.status(400).json({ code: rspCode, message: 'Thanh toán thất bại' });
+            // Chuyển hướng với thông báo thất bại
+            return res.redirect('http://localhost:5173/userorder?payment=failed&error=transaction_failed');
         }
     } else {
-        return res.status(400).json({ code: '97', message: 'Invalid checksum' });
+        // Chuyển hướng với thông báo lỗi checksum
+        return res.redirect('http://localhost:5173/userorder?payment=failed&error=invalid_checksum');
     }
 });
 

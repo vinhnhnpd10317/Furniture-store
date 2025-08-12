@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createOrderWithPayment } from "../api/CheckOutApi";
-import { createVNPayPayment } from "../api/vnpayapi"; // ✅ thêm import
+import { createVNPayPayment } from "../api/Vnpayapi"; 
 import { useCart } from "../components/Products/CartContext";
 import { useAuth } from "../components/AuthContext";
 import OrderForminfo from "./Products/OderForminfo";

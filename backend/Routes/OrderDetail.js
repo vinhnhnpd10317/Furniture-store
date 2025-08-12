@@ -14,6 +14,7 @@ router.get('/:id', (req, res) => {
             dh.trang_thai,        -- Trạng thái đơn hàng
             dh.tong_tien,         -- Tổng tiền đơn hàng
             dh.phuong_thuc_thanh_toan,
+            dh.trang_thai_thanh_toan,
             dh.ghi_chu,           -- Ghi chú
             nd.ho_ten,            -- Họ tên người đặt
             nd.email,             -- Email người đặt
