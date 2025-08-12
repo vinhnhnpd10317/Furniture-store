@@ -92,8 +92,6 @@ export default function ProductCart() {
                             </div>
                         </div>
                     ))}
-
-                    <button className="btn btn-dark w-100 mt-3">CẬP NHẬT GIỎ HÀNG</button>
                 </div>
 
                 {/* RIGHT - Order Summary */}
