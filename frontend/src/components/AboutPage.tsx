@@ -77,7 +77,7 @@ export default function AboutPage() {
                 name: 'Nguyễn Hữu Nhật Vinh',
                 role: 'Tổng Quản Lý Cửa Hàng',
                 desc: 'Điều hành toàn bộ hoạt động cửa hàng, quản lý tài chính, nhân sự và chiến lược phát triển.',
-                img: 'https://github.com/Lightwar25/memberImg/blob/main/1.png?raw=true',
+                img: 'https://github.com/Lightwar25/memberImg/blob/main/Screenshot%202025-08-12%20223050.png',
               },
               {
                 name: 'Trương Quang Chiến',
