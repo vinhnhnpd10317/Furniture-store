@@ -7,8 +7,8 @@ interface CommentSectionProps {
   commentContent: string;
   setCommentContent: (value: string) => void;
   handleSendComment: () => void;
-  currentUserId: number; // ✅ thêm để biết bình luận nào của mình
-  refreshComments: () => void; // ✅ load lại list sau khi sửa/xóa
+  currentUserId: number;
+  refreshComments: () => void;
 }
 
 const CommentSection: React.FC<CommentSectionProps> = ({
@@ -50,13 +50,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({
             key={idx}
             className="d-flex align-items-start gap-3 p-3 mb-3 rounded shadow-sm position-relative"
           >
-            <img
-              src={`https://i.pravatar.cc/40?img=${(idx % 10) + 1}`}
-              className="rounded-circle"
-              alt="User"
-              width={40}
-              height={40}
-            />
+            {/* Icon user thay vì avatar ảnh */}
+            <i className="bi bi-person-circle fs-1 text-secondary"></i>
+
             <div className="flex-grow-1">
               <h6 className="mb-1 fw-semibold">{cmt.ten_nguoi_dung}</h6>
 
@@ -94,7 +90,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
             {/* Nút Sửa/Xóa nếu là bình luận của mình */}
             {currentUserId && currentUserId === cmt.nguoi_dung_id && editId !== cmt.id && (
               <div className="position-absolute" style={{ right: "10px", bottom: "10px" }}>
-                <button
+<button
                   className="btn btn-warning btn-sm me-2"
                   onClick={() => {
                     setEditId(cmt.id);
@@ -118,13 +114,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       {/* Form gửi bình luận */}
       {localStorage.getItem("user") ? (
         <div className="d-flex align-items-start gap-3">
-          <img
-            src="https://i.pinimg.com/736x/bc/43/98/bc439871417621836a0eeea768d60944.jpg"
-            className="rounded-circle"
-            alt="User"
-            width={40}
-            height={40}
-          />
+          {/* Icon user ở form nhập */}
+          <i className="bi bi-person-circle fs-1 text-secondary"></i>
+
           <div className="flex-grow-1">
             <textarea
               className="form-control"
