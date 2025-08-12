@@ -16,6 +16,7 @@ import Favorites from "../components/Admin/Favorites";
 import Checkout from "../components/Admin/CheckOut";
 
 import RequireAdminAuth from "./RequireAdminAuth";
+import AdminCart from "../components/Admin/Admincart";
 
 // Wrapper components
 function AddProductWrapper() {
@@ -50,6 +51,7 @@ export default function AdminRoutes() {
             <Route path="orders" element={<Orders/>}/>
             <Route path="favorites" element={<Favorites />} />
             <Route path="checkout" element={<Checkout/>}/>
+            <Route path="cart" element={<AdminCart/>}/>
           </Routes>
         </AdminLayout>
     </>

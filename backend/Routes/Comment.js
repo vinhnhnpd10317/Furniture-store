@@ -99,4 +99,21 @@ router.get('/', (req, res) => {
     res.json(result);
   });
 });
+// PUT - Cập nhật bình luận theo ID (chỉ nội dung)
+router.put('/:id', (req, res) => {
+  const { noi_dung } = req.body;
+  if (!noi_dung) {
+    return res.status(400).json({ message: 'Nội dung bình luận không được để trống' });
+  }
+
+  const sql = "UPDATE binh_luan SET noi_dung = ? WHERE id = ?";
+  db.query(sql, [noi_dung, req.params.id], (err, result) => {
+    if (err) {
+      console.error("❌ Lỗi khi cập nhật:", err);
+      return res.status(500).json({ message: "Lỗi server khi cập nhật bình luận" });
+    }
+    res.json({ message: "Đã cập nhật bình luận thành công" });
+  });
+});
+
 export default router;

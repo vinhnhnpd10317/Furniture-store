@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function KidRoom() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="container-fluid p-0">
       {/* Banner đầu trang */}
@@ -28,7 +32,9 @@ export default function KidRoom() {
       <div className="container py-5">
         {/* Giới thiệu mở đầu */}
         <p className="lead text-muted">
-          Phòng ngủ trẻ em không chỉ là nơi để nghỉ ngơi, mà còn là không gian để bé phát triển trí tuệ, sáng tạo và thể hiện cá tính. Thiết kế một căn phòng hoàn hảo cho trẻ là sự kết hợp giữa màu sắc, ánh sáng, tiện nghi và an toàn – tất cả đều cần được cân nhắc kỹ lưỡng.
+          Phòng ngủ trẻ em không chỉ là nơi để nghỉ ngơi, mà còn là không gian để bé phát triển trí tuệ, sáng tạo và thể hiện cá tính.
+          Thiết kế một căn phòng hoàn hảo cho trẻ là sự kết hợp giữa màu sắc, ánh sáng, tiện nghi và an toàn – tất cả đều cần được
+          cân nhắc kỹ lưỡng.
         </p>
 
         {/* Khu vực 1 */}
@@ -43,12 +49,19 @@ export default function KidRoom() {
           </div>
           <div className="col-md-6">
             <p>
-              Mỗi độ tuổi mang đến một nhu cầu khác nhau trong thiết kế nội thất. Trẻ nhỏ cần một không gian ấm áp, màu sắc nhẹ nhàng và vật liệu an toàn. Trong khi đó, các bé lớn hơn lại cần không gian cá nhân với những yếu tố phản ánh sở thích riêng.
+              Mỗi độ tuổi mang đến một nhu cầu khác nhau trong thiết kế nội thất. Trẻ nhỏ cần một không gian ấm áp, màu sắc nhẹ nhàng
+              và vật liệu an toàn. Trong khi đó, các bé lớn hơn lại cần không gian cá nhân với những yếu tố phản ánh sở thích riêng.
             </p>
             <ul>
-              <li><strong>Chất liệu an toàn:</strong> tránh các góc nhọn, dùng gỗ tự nhiên hoặc nhựa cao cấp không độc hại.</li>
-              <li><strong>Màu sắc phù hợp:</strong> bé gái thích hồng, pastel; bé trai ưa xanh dương, vàng tươi.</li>
-              <li><strong>Đồ nội thất đúng kích cỡ:</strong> bàn ghế thấp vừa tầm bé, tủ đồ dễ mở giúp tăng tính tự lập.</li>
+              <li>
+                <strong>Chất liệu an toàn:</strong> tránh các góc nhọn, dùng gỗ tự nhiên hoặc nhựa cao cấp không độc hại.
+              </li>
+              <li>
+                <strong>Màu sắc phù hợp:</strong> bé gái thích hồng, pastel; bé trai ưa xanh dương, vàng tươi.
+              </li>
+              <li>
+                <strong>Đồ nội thất đúng kích cỡ:</strong> bàn ghế thấp vừa tầm bé, tủ đồ dễ mở giúp tăng tính tự lập.
+              </li>
             </ul>
           </div>
         </div>
@@ -65,12 +78,19 @@ export default function KidRoom() {
           </div>
           <div className="col-md-6">
             <p>
-              Những căn phòng nhỏ vẫn có thể trở nên rộng rãi nếu biết tận dụng không gian. Các thiết kế giường tầng, tủ âm tường, hay hộc kéo dưới giường không chỉ tiết kiệm diện tích mà còn dạy trẻ cách sắp xếp đồ đạc khoa học.
+              Những căn phòng nhỏ vẫn có thể trở nên rộng rãi nếu biết tận dụng không gian. Các thiết kế giường tầng, tủ âm tường, hay
+              hộc kéo dưới giường không chỉ tiết kiệm diện tích mà còn dạy trẻ cách sắp xếp đồ đạc khoa học.
             </p>
             <ul>
-              <li><strong>Giường tầng tích hợp:</strong> có thể kèm bàn học, tủ sách.</li>
-              <li><strong>Kệ nổi hoặc ngăn kéo âm:</strong> giúp lưu trữ đồ chơi, quần áo gọn gàng.</li>
-              <li><strong>Tận dụng chiều cao:</strong> tủ đồ cao chạm trần để mở rộng không gian sàn cho bé chơi đùa.</li>
+              <li>
+                <strong>Giường tầng tích hợp:</strong> có thể kèm bàn học, tủ sách.
+              </li>
+              <li>
+                <strong>Kệ nổi hoặc ngăn kéo âm:</strong> giúp lưu trữ đồ chơi, quần áo gọn gàng.
+              </li>
+              <li>
+                <strong>Tận dụng chiều cao:</strong> tủ đồ cao chạm trần để mở rộng không gian sàn cho bé chơi đùa.
+              </li>
             </ul>
           </div>
         </div>
@@ -87,12 +107,19 @@ export default function KidRoom() {
           </div>
           <div className="col-md-6">
             <p>
-              Phòng ngủ không chỉ để ngủ. Hãy tạo những không gian nhỏ để bé vẽ tranh, đọc truyện, hoặc tưởng tượng. Điều này giúp bé phát triển trí tưởng tượng và tạo nên những kỷ niệm tuổi thơ tuyệt vời.
+              Phòng ngủ không chỉ để ngủ. Hãy tạo những không gian nhỏ để bé vẽ tranh, đọc truyện, hoặc tưởng tượng. Điều này giúp bé
+              phát triển trí tưởng tượng và tạo nên những kỷ niệm tuổi thơ tuyệt vời.
             </p>
             <ul>
-              <li><strong>Khu đọc sách:</strong> ghế lười, đèn vàng, kệ truyện tranh.</li>
-              <li><strong>Bảng vẽ hoặc tường nam châm:</strong> cho bé thể hiện ý tưởng hàng ngày.</li>
-              <li><strong>Góc mơ mộng:</strong> màn che, đèn dây trang trí tạo thành "lâu đài" riêng của bé.</li>
+              <li>
+                <strong>Khu đọc sách:</strong> ghế lười, đèn vàng, kệ truyện tranh.
+              </li>
+              <li>
+                <strong>Bảng vẽ hoặc tường nam châm:</strong> cho bé thể hiện ý tưởng hàng ngày.
+              </li>
+              <li>
+                <strong>Góc mơ mộng:</strong> màn che, đèn dây trang trí tạo thành "lâu đài" riêng của bé.
+              </li>
             </ul>
           </div>
         </div>
@@ -108,4 +135,3 @@ export default function KidRoom() {
     </div>
   );
 }
-    

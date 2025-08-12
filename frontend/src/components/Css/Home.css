@@ -940,3 +940,57 @@ body {
     padding: 6px;
   }
 }
+
+
+/* Layout chung cho hàng */
+.layout .rows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Mặc định desktop vẫn giữ nguyên */
+.layout .row1 .left,
+.layout .row1 .containers,
+.layout .row2 .left,
+.layout .row2 .right {
+  flex: 1;
+}
+
+/* Khi xuống mobile */
+@media (max-width: 768px) {
+  .layout .rows {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Ảnh bên trái và text bên phải xuống hàng */
+  .layout .row1 .left,
+  .layout .row1 .containers,
+  .layout .row2 .left,
+  .layout .row2 .right {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Các khối text và ảnh xếp dọc */
+  .layout .text-block {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .layout .text-item,
+  .layout .image-block,
+  .layout .text-side,
+  .layout .text-below {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Đảm bảo ảnh không bị méo */
+  .layout img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}

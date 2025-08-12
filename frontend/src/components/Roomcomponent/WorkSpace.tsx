@@ -4,8 +4,14 @@ import { fetchLatestProducts, type ProductItem } from "../../api/ProductApi";
 
 export default function WorkRoom() {
     const [sanphams, setSanPham] = useState<ProductItem[]>([]);
+
     useEffect(() => {
-        fetchLatestProducts().then(setSanPham).catch((error) => console.error("Lỗi khi load sản phẩm", error));
+        // Khi component mount, scroll lên đầu trang
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        fetchLatestProducts()
+            .then(setSanPham)
+            .catch((error) => console.error("Lỗi khi load sản phẩm", error));
     }, []);
 
     const imageStyle: React.CSSProperties = {
@@ -13,7 +19,6 @@ export default function WorkRoom() {
         aspectRatio: "4/3",
         borderRadius: "5px",
     };
-
     return (
         <div className="container-fluid px-0">
             <img
@@ -120,7 +125,7 @@ export default function WorkRoom() {
                 </div>
 
                 <div className="container my-5">
-                    <h3 className="text-primary mb-4 text-center">SẢN PHẨM MỚI NHẤT CHO PHÒNG LÀM VIỆC</h3>
+                    <h3 className="text-primary mb-4 text-center">SẢN PHẨM MỚI NHẤT</h3>
                     <div className="row">
                         {sanphams.map((product) => (
                             <div className="col-md-4 mb-4" key={product.id}>
