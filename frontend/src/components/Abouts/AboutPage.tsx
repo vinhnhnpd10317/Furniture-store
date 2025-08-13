@@ -244,7 +244,6 @@ description:
                       <i className="fas fa-envelope fa-lg"></i>
                     </a>
                   </div>
-                  <button className="btn btn-outline-secondary rounded-pill">Liên hệ</button>
                 </div>
               </div>
             ))}
