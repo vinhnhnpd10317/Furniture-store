@@ -62,14 +62,14 @@ const InspirationDetail6 = () => {
         </div>
         <div className="col-md-3">
           <img
-            src="https://nhaxinh.com/wp-content/uploads/2023/06/tha-minh-vao-khong-gian-em-ai-voi-phong-ngu-maxine-4-768x512.jpg"
+            src="https://github.com/Lightwar25/memberImg/blob/main/6t2-1.png?raw=true"
             alt="Chair"
             className="img-fluid rounded maxine-img"
           />
         </div>
         <div className="col-md-3">
           <img
-            src="https://nhaxinh.com/wp-content/uploads/2023/06/tha-minh-vao-khong-gian-em-ai-voi-phong-ngu-maxine-730x800.jpg"
+            src="https://github.com/Lightwar25/memberImg/blob/main/6t2-2.png?raw=true"
             alt="Bedroom"
             className="img-fluid rounded maxine-img"
           />
@@ -80,7 +80,7 @@ const InspirationDetail6 = () => {
       <div className="row gx-4 gy-4 align-items-start">
         <div className="col-md-3">
           <img
-            src="https://nhaxinh.com/wp-content/uploads/2023/06/tha-minh-vao-khong-gian-em-ai-voi-phong-ngu-maxine-1-534x800.jpg"
+            src="https://github.com/Lightwar25/memberImg/blob/main/6t2-3.png?raw=true"
             alt="Bedside"
             className="img-fluid rounded maxine-img"
           />
@@ -99,7 +99,7 @@ const InspirationDetail6 = () => {
         </div>
         <div className="col-md-3">
           <img
-            src="https://nhaxinh.com/wp-content/uploads/2023/06/tha-minh-vao-khong-gian-em-ai-voi-phong-ngu-maxine-2-546x800.jpg"
+            src="https://github.com/Lightwar25/memberImg/blob/main/6t2-4.png?raw=true"
             alt="Work chair"
             className="img-fluid rounded maxine-img"
           />

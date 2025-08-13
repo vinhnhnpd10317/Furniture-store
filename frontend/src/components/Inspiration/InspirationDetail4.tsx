@@ -52,27 +52,27 @@ const InspirationDetail4 = () => {
         {
           title: "1. Sofa da Opal – Thiết kế hiện đại, sang trọng",
           desc: "Với khung gỗ chắc chắn, chân kim loại và lớp bọc da bò tự nhiên mềm mịn, Opal mang lại sự thoải mái tối đa. Các gam màu thời thượng như xám, cognac giúp nâng tầm không gian phòng khách.",
-          img: "https://nhaxinh.com/wp-content/uploads/2025/03/Sofa-da-Opal.jpg",
+          img: "https://github.com/Lightwar25/memberImg/blob/main/4t4-1.jpg?raw=true",
         },
         {
           title: "2. Sofa da Jazz – Cá tính & phong cách Retro",
           desc: "Lấy cảm hứng từ Retro & Vintage, sofa Jazz nổi bật với tông cognac cổ điển. Đây là lựa chọn lý tưởng cho phòng khách nghệ thuật, sáng tạo.",
-          img: "https://nhaxinh.com/wp-content/uploads/2025/03/Sofa-da-Jazz.jpg",
+          img: "https://github.com/Lightwar25/memberImg/blob/main/4t4-2.jpg?raw=true",
         },
         {
           title: "3. Sofa Metro – Thanh lịch & linh hoạt",
           desc: "Thiết kế tối giản, viền sắc sảo và khả năng hòa hợp với mọi phong cách – Metro mang đến sự thanh thoát, tiện nghi và hài hòa cho không gian sống.",
-          img: "https://nhaxinh.com/wp-content/uploads/2025/03/Sofa-Metro.jpg",
+          img: "https://github.com/Lightwar25/memberImg/blob/main/4t4-3.jpg?raw=true",
         },
         {
           title: "4. Sofa Valente – Tinh tế và đẳng cấp",
           desc: "Với đường nét thanh thoát, chân kim loại mạ sang trọng và da cao cấp, Valente không chỉ đẹp mà còn dễ bảo trì. Phù hợp với mọi không gian sống tinh tế.",
-          img: "https://nhaxinh.com/wp-content/uploads/2025/03/Sofa-Valente.jpg",
+          img: "https://github.com/Lightwar25/memberImg/blob/main/4t4-4.jpg?raw=trueg",
         },
         {
           title: "5. Sofa Combo – Hiện đại và tiện nghi",
           desc: "Kiểu dáng gọn gàng, đệm ngồi êm ái, chân kim loại ánh kim – Sofa Combo là lựa chọn hoàn hảo cho người yêu sự hiện đại và tối giản. Chất liệu da tự nhiên và khung gỗ beech giúp sản phẩm bền đẹp theo thời gian.",
-          img: "https://nhaxinh.com/wp-content/uploads/2025/03/Sofa-Combo.jpg",
+          img: "https://github.com/Lightwar25/memberImg/blob/main/4t4-5.jpg?raw=true",
         },
       ].map((item, index) => (
         <div key={index} className="mb-5 text-center">
@@ -103,7 +103,7 @@ const InspirationDetail4 = () => {
           cho tổ ấm của bạn.
         </p>
         <img
-          src="https://noithatkenli.vn/wp-content/uploads/2020/10/0-10-mau-ghe-sofa-cho-khong-gian-nho-hep.jpg"
+          src="https://github.com/Lightwar25/memberImg/blob/main/4t4-6.jpg?raw=true"
           alt="Không gian sống đẳng cấp"
           className="img-fluid rounded shadow mt-3"
           style={{ maxHeight: "450px", objectFit: "cover", width: "100%" }}

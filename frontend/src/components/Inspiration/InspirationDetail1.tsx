@@ -55,7 +55,7 @@ const InspirationDetail1 = () => {
             Căn phòng được bài trí với ánh sáng tự nhiên, kết hợp nội thất gỗ trầm tạo cảm giác ấm cúng...
           </p>
           <img
-            src="https://nhaxinh.com/wp-content/uploads/2025/06/ARMCHAIR-MAY-728x800.webp"
+            src="https://github.com/Lightwar25/memberImg/blob/main/1t5-1.png?raw=true"
             alt="Không gian nội thất"
             className="img-fluid rounded shadow"
             style={{ height: "450px", objectFit: "cover", width: "100%" }}
@@ -68,7 +68,7 @@ const InspirationDetail1 = () => {
             Sự kết hợp giữa các tông màu pastel và chất liệu mộc mạc mang lại cảm giác dễ chịu cho người dùng.
           </p>
           <img
-            src="https://nhaxinh.com/wp-content/uploads/2025/06/GHE-AN-MAY-636x800.webp"
+            src="https://github.com/Lightwar25/memberImg/blob/main/1t5-2.png?raw=true"
             alt="Phối màu"
             className="img-fluid rounded shadow"
             style={{ height: "450px", objectFit: "cover", width: "100%" }}
@@ -82,7 +82,7 @@ const InspirationDetail1 = () => {
           Hãy để mỗi góc nhỏ trong nhà là một mảnh ghép của câu chuyện bạn muốn kể.
         </p>
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/06/SOFAMAY.webp"
+          src="https://github.com/Lightwar25/memberImg/blob/main/1t5-3.png?raw=true"
           alt="Không gian truyền cảm hứng"
           className="img-fluid rounded shadow mt-3"
           style={{ maxHeight: "470px", objectFit: "cover", width: "100%" }}

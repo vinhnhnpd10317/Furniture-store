@@ -54,7 +54,7 @@ const InspirationDetail5 = () => {
               Thiết kế của Valencia tập trung vào việc gợi lên cảm giác ấm áp và linh hoạt, đáp ứng nhu cầu của cuộc sống hiện đại trong khi vẫn tôn vinh những di sản văn hóa lâu đời.
             </p>
             <img
-              src="https://nhaxinh.com/wp-content/uploads/2025/04/Ban-Nuoc-Valencia-Mat-Da-04.jpg"
+              src="https://github.com/Lightwar25/memberImg/blob/main/5t1-1.jpg?raw=true"
               alt="Đóng góp"
               className="img-fluid rounded shadow"
               style={{ height: "450px", objectFit: "cover", width: "100%" }}
@@ -68,7 +68,7 @@ const InspirationDetail5 = () => {
               Thiết kế của Valencia tập trung vào việc gợi lên cảm giác ấm áp và linh hoạt, đáp ứng nhu cầu của cuộc sống hiện đại trong khi vẫn tôn vinh những di sản văn hóa lâu đời. 
             </p>
             <img
-              src="https://nhaxinh.com/wp-content/uploads/2025/04/sofa-Valencia-2-1200x800.webp"
+              src="https://raw.githubusercontent.com/Lightwar25/memberImg/refs/heads/main/5t1-2.webp"
               alt="Tương lai"
               className="img-fluid rounded shadow"
               style={{ height: "450px", objectFit: "cover", width: "100%" }}
@@ -82,7 +82,7 @@ const InspirationDetail5 = () => {
             Ý tưởng thiết kế của Napoli tập trung vào việc tạo ra một sự cân bằng thị giác ấn tượng thông qua các hình khối mang tính kiến trúc. 
           </p>
           <img
-            src="https://nhaxinh.com/wp-content/uploads/2025/04/ban-an-Valencia-1206x800.webp"
+            src="https://raw.githubusercontent.com/Lightwar25/memberImg/refs/heads/main/5t-3.webp"
             alt="Hành trình"
             className="img-fluid rounded shadow mt-3"
             style={{ maxHeight: "470px", objectFit: "cover", width: "100%" }}
