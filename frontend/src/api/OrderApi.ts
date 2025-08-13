@@ -91,10 +91,17 @@ export const updateOrderStatus = async (
   trang_thai: OrderStatus
 ): Promise<void> => {
   try {
+    const bodyData: any = { trang_thai };
+
+    // Nếu là "đã giao" => set thanh toán thành "đã thanh toán"
+    if (trang_thai === "da_giao") {
+      bodyData.trang_thai_thanh_toan = "da_thanh_toan";
+    }
+
     const response = await fetch(`${BASE_URL}/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ trang_thai }),
+      body: JSON.stringify(bodyData),
     });
 
     if (!response.ok) {
@@ -106,6 +113,7 @@ export const updateOrderStatus = async (
     throw error;
   }
 };
+
 
 export const getOrdersByUserId = async (userId: number): Promise<OrderItem[]> => {
   try {

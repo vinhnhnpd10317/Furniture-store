@@ -19,9 +19,15 @@ const trangThaiMap: Record<string, string> = {
 };
 
 const trangThaiThanhToan: Record<string, string> = {
+  chua_thanh_toan: "Chưa thanh toán",
+  da_thanh_toan: "Đã thanh toán",
+};
+
+const phuongThucThanhToan: Record<string, string> = {
   tien_mat: "Thanh toán khi nhận hàng",
   chuyen_khoan: "Trả trước",
 };
+
 
 
 const OrderDetail = () => {
@@ -86,8 +92,22 @@ const OrderDetail = () => {
         </div>
 
         <div className="row mb-3">
-          <div className="col-md-6"><strong>Phương thức thanh toán:</strong> {trangThaiThanhToan[order.phuong_thuc_thanh_toan] || order.phuong_thuc_thanh_toan}</div>
+          <div className="col-md-6">
+            <strong>Phương thức thanh toán:</strong>{" "}
+            {phuongThucThanhToan[order.phuong_thuc_thanh_toan] || order.phuong_thuc_thanh_toan}
+          </div>
+          <div className="col-md-6">
+            <strong>Trạng thái thanh toán:</strong>{" "}
+            {trangThaiThanhToan[order.trang_thai_thanh_toan] || order.trang_thai_thanh_toan}
+          </div>
         </div>
+
+        {order.phuong_thuc_thanh_toan === "chuyen_khoan" && (
+          <div className="alert alert-warning">
+            Lưu ý: Đơn hàng sẽ được kiểm duyệt trong vòng <strong>48 giờ</strong>. 
+            Nếu đơn hàng chưa thanh toán, đơn hàng sẽ bị hủy tự động.
+          </div>
+        )}
 
         <h5 className="mb-3 text-success">Danh sách sản phẩm:</h5>
         <div className="table-responsive">

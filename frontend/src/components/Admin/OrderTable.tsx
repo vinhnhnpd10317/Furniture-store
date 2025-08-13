@@ -16,6 +16,7 @@ export interface Order {
   tong_tien: number;
   phuong_thuc_thanh_toan: string;
   trang_thai: OrderStatus;
+  trang_thai_thanh_toan: "chua_thanh_toan" | "da_thanh_toan";
 }
 
 interface ProductItem {
@@ -34,6 +35,7 @@ interface FullOrderDetail extends Order {
   dia_chi: string;
   ghi_chu: string;
   chi_tiet: ProductItem[];
+  trang_thai_thanh_toan: "chua_thanh_toan" | "da_thanh_toan";
 }
 
 interface Props {
@@ -68,6 +70,11 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
       second: "2-digit",
       hour12: false,
     });
+  
+  const trangThaiThanhToan: Record<string, string> = {
+    chua_thanh_toan: "Chưa thanh toán",
+    da_thanh_toan: "Đã thanh toán",
+  };
 
   return (
     <>
@@ -80,6 +87,7 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
             <th className="py-3">Tổng tiền</th>
             <th className="py-3">Phương thức</th>
             <th className="py-3">Trạng thái</th>
+            <th className="py-3" style={{ width: 190 }}>Trạng thái thanh toán</th>
             <th className="py-3" style={{ width: 110 }}>Hành động</th>
           </tr>
         </thead>
@@ -99,9 +107,17 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
                 <select
                   className="form-select form-select-sm"
                   value={order.trang_thai}
-                  onChange={(e) =>
-                    onStatusChange(order.id, e.target.value as OrderStatus)
-                  }
+                  onChange={(e) => {
+                    const newStatus = e.target.value as OrderStatus;
+
+                    // Nếu là "đã giao" => set thanh toán thành "đã thanh toán"
+                    // if (newStatus === "da_giao" && order.trang_thai_thanh_toan !== "da_thanh_toan") {
+                    //   // Cập nhật UI ngay
+                    //   order.trang_thai_thanh_toan = "da_thanh_toan";
+                    // }
+
+                    onStatusChange(order.id, newStatus);
+                  }}
                 >
                   <option value="cho_xu_ly">Chờ xử lý</option>
                   <option value="dang_xu_ly">Đang xử lý</option>
@@ -110,6 +126,12 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
                   <option value="da_huy">Đã hủy</option>
                 </select>
               </td>
+              <td>
+                {order.trang_thai_thanh_toan === "chua_thanh_toan"
+                  ? "Chưa thanh toán"
+                  : "Đã thanh toán"}
+              </td>    
+
               <td className="d-flex justify-content-center">
                 <button
                   className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
@@ -158,6 +180,10 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
                   <span className={OrderStatusMap[selectedOrder.trang_thai]?.badgeClass}>
                     {OrderStatusMap[selectedOrder.trang_thai]?.label}
                   </span>
+                </p>
+                <p>
+                  <strong>Trạng thái thanh toán:</strong>{" "}
+                  {trangThaiThanhToan[selectedOrder.trang_thai_thanh_toan] || selectedOrder.trang_thai_thanh_toan}
                 </p>
               </div>
 
