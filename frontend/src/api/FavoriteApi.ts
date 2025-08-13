@@ -10,6 +10,7 @@ export interface FavoriteItem {
   id: number;
   nguoi_dung_id: number;
   san_pham_id: number;
+  trang_thai_kho: string; 
 }
 
 export const getFavorites = async (): Promise<FavoriteItem[]> => {

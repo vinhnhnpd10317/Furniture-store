@@ -17,7 +17,7 @@ export const getAllFavorites = (req, res) => {
 export const getFavoritesByUser = (req, res) => {
   const { nguoi_dung_id } = req.params;
   const sql = `
-    SELECT yt.*, sp.ten_san_pham, sp.hinh_anh_dai_dien, sp.gia
+    SELECT yt.*, sp.ten_san_pham, sp.hinh_anh_dai_dien, sp.gia, sp.trang_thai_kho
     FROM yeu_thich yt
     JOIN san_pham sp ON yt.san_pham_id = sp.id
     WHERE yt.nguoi_dung_id = ?
