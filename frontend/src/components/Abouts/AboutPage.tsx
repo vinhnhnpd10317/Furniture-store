@@ -7,7 +7,7 @@ export default function AboutPage() {
       {/* Banner */}
       <section className="banner-wrapper text-center py-5 fw-bold">
         <img
-          src="https://anhdoan.vn/images/img-banner-detail.png"
+          src="https://github.com/Lightwar25/memberImg/blob/main/img-banner-detail.png?raw=true"
           alt="Banner Discover"
           className="img-fluid rounded"
           style={{
@@ -40,10 +40,10 @@ export default function AboutPage() {
         <div className="container">
           <div className="custom-grid-gallery">
             {[
-              'https://kfa.vn/wp-content/uploads/2020/04/ban-tho-dep-1.jpg',   
-              'https://danam.com.vn/wp-content/uploads/2025/06/pt-vl.jpg',
-              'https://noithatgiakhanh.com/wp-content/uploads/2019/10/bo-phong-lam-viec-go-tan-co-dien-mbk303lv.jpg', 
-              'https://noithatmanhhe.vn/media/22203/ban-ghe-go-ong-nghiep-noi-that-manh-he.jpg',
+              'https://github.com/Lightwar25/memberImg/blob/main/a1.jpg?raw=true',   
+              'https://github.com/Lightwar25/memberImg/blob/main/a2.jpg?raw=trueg',
+              'https://github.com/Lightwar25/memberImg/blob/main/a3.jpg?raw=true', 
+              'https://github.com/Lightwar25/memberImg/blob/main/a4.jpg?raw=true',
               
             ].map((img, idx) => (
               <div className={`gallery-item item-${idx + 1}`} key={idx}>
@@ -80,7 +80,7 @@ export default function AboutPage() {
           border: 10px solid #fff;
           background: #f0f0f0;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
+overflow: hidden;
         }
 
         .gallery-frame img {
@@ -122,7 +122,7 @@ export default function AboutPage() {
         description:
           "Là sự giao thoa tinh tế giữa hình khối rõ ràng, đường nét tối giản và tiện nghi vượt trội. Nội thất hiện đại tập trung vào công năng sử dụng, ánh sáng tự nhiên và các gam màu trung tính như trắng, xám, đen – mang lại cảm giác rộng rãi, thoáng đãng.",
         image:
-          "https://housedesign.vn/wp-content/uploads/2019/12/noi-that-hien-dai.jpg",
+          "https://github.com/Lightwar25/memberImg/blob/main/a5.jpg?raw=true",
         reverse: false,
       },
       {
@@ -130,7 +130,7 @@ export default function AboutPage() {
         description:
           "Lấy cảm hứng từ thiên nhiên vùng Bắc Âu, phong cách Scandinavian sử dụng vật liệu gỗ mộc, vải lanh, len dệt kết hợp với ánh sáng tự nhiên để tạo nên không gian ấm áp, giản dị và đầy thi vị. Phù hợp với những ai yêu thích sự tối giản nhưng đầy chất thơ.",
         image:
-          "https://file.hstatic.net/1000400963/file/phong-cach-noi-that-scandinavian-1_115425c0727a4330833b1fa7bd1d5010.jpg",
+          "https://github.com/Lightwar25/memberImg/blob/main/a6.jpg?raw=true",
         reverse: true,
       },
       {
@@ -138,7 +138,7 @@ export default function AboutPage() {
         description:
           "“Less is more” – nguyên tắc cốt lõi của Minimalism. Mỗi chi tiết đều có lý do tồn tại, tránh rườm rà, tạo nên sự tĩnh lặng, tinh tế và cân bằng. Màu sắc thường là trắng, be hoặc đen kết hợp đồ nội thất mảnh, gọn để tối ưu không gian.",
         image:
-          "https://housedesign.vn/wp-content/uploads/2019/12/phong-cach-minimalism.jpg",
+          "https://github.com/Lightwar25/memberImg/blob/main/a7.jpg?raw=true",
         reverse: false,
       },
       {
@@ -146,15 +146,15 @@ export default function AboutPage() {
         description:
           "Là sự tái hiện của nét cổ điển sang trọng nhưng được tinh chỉnh lại phù hợp với nhịp sống hiện đại. Trần cao, phào chỉ tỉ mỉ, nội thất uốn cong kết hợp gam màu như vàng champagne, trắng ngọc – tất cả tạo nên vẻ đẹp vĩnh cửu.",
         image:
-          "https://mant.vn/wp-content/uploads/2021/05/102354823_729434377861237_8429523191001072357_n.jpg",
+          "https://github.com/Lightwar25/memberImg/blob/main/a8.jpg?raw=true",
         reverse: true,
       },
       {
         title: "🏕️ Phong Cách Rustic – Mộc Mạc",
-        description:
+description:
           "Phong cách Rustic mang hơi thở thiên nhiên với chất liệu gỗ thô, đá tự nhiên, ánh sáng vàng ấm áp. Không gian Rustic mang lại cảm giác bình yên, gần gũi, đặc biệt phù hợp với các khu nghỉ dưỡng, homestay hoặc biệt thự vùng quê.",
         image:
-          "https://file.hstatic.net/1000380248/article/phong-cach-rustic-tho-moc-moc-mac-gan-gui-thien-nhien_4f5e55d503554323ad5ea28d4017e82c.jpg",
+          "https://github.com/Lightwar25/memberImg/blob/main/a9.jpg?raw=true",
         reverse: false,
       },
     ].map((style, idx) => (
@@ -212,7 +212,7 @@ export default function AboutPage() {
                 role: 'Giám sát thi công',
                 desc: 'Đảm bảo tiến độ, chất lượng và an toàn công trình lắp đặt.',
                 img: 'https://github.com/Lightwar25/memberImg/blob/main/4.png?raw=true',
-              },
+},
               {
                 name: 'Đỗ Tấn Phát',
                 role: 'Chăm sóc khách hàng',
@@ -258,12 +258,12 @@ export default function AboutPage() {
           <h2 className="section-title">🖼️ Bộ Sưu Tập Hình Ảnh</h2>
           <div className="row gallery gx-4 gy-4">
             {[
-              'https://images.pexels.com/photos/13044790/pexels-photo-13044790.png',
-              'https://images.pexels.com/photos/462235/pexels-photo-462235.jpeg',
-              'https://images.pexels.com/photos/1648768/pexels-photo-1648768.jpeg',
-              'https://images.pexels.com/photos/1099816/pexels-photo-1099816.jpeg',
-              'https://images.pexels.com/photos/2343465/pexels-photo-2343465.jpeg',
-              'https://images.pexels.com/photos/1957478/pexels-photo-1957478.jpeg',
+              'https://github.com/Lightwar25/memberImg/blob/main/a10.jpg?raw=trueg',
+              'https://github.com/Lightwar25/memberImg/blob/main/a11.jpeg?raw=true',
+              'https://github.com/Lightwar25/memberImg/blob/main/a12.jpeg?raw=true',
+              'https://github.com/Lightwar25/memberImg/blob/main/a13.jpeg?raw=true',
+              'https://github.com/Lightwar25/memberImg/blob/main/a14.jpeg?raw=trueg',
+              'https://github.com/Lightwar25/memberImg/blob/main/a15.jpeg?raw=true',
             ].map((img, idx) => (
               <div className="col-md-4 col-12" key={idx}>
                 <img src={img} alt={`Interior ${idx + 1}`} className="gallery-img" />
