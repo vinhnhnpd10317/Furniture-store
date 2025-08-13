@@ -1,26 +1,17 @@
-import express from 'express';
-import crypto from 'crypto';
-import qs from 'qs';
-import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat } from 'vnpay';
-import db from '../db.js'; // Import kết nối MySQL
+import express from "express";
+import { createPayment, callbackVnpay, ipnVnpay } from "../Controllers/VnpayController.js";
 
 const router = express.Router();
 
-// === Cấu hình VNPay (Sandbox) ===
-const vnp_TmnCode = '7JQAT9XC';
-const vnp_HashSecret = 'F2BWWDXA72WFSMHUG3QA8H132CHJ9QTF';
-const vnp_Url = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-const vnp_ReturnUrl = 'http://localhost:3001/vnpay/vnpay_return';
+// Tạo URL thanh toán
+router.post("/create_payment", createPayment);
 
-// Hàm sort object theo key
-function sortObject(obj) {
-    return Object.keys(obj)
-        .sort()
-        .reduce((result, key) => {
-            result[key] = obj[key];
-            return result;
-        }, {});
-}
+// Xử lý Return URL
+router.get("/api/payment/callback-vnpay", callbackVnpay);
+
+
+// Xử lý IPN
+router.get("/vnpay_ipn", ipnVnpay);
 
 // === API tạo URLcomun thanh toán ===
 router.post('/create_payment', async (req, res) => {
@@ -139,5 +130,6 @@ router.get('/vnpay_ipn', async (req, res) => {
         return res.status(200).json({ RspCode: '97', Message: 'Invalid checksum' });
     }
 });
+
 
 export default router;
