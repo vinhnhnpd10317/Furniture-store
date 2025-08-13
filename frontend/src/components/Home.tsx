@@ -109,7 +109,7 @@ function App() {
         <div className="left-large">
           <div className="product">
             <img
-              src="https://nhaxinh.com/wp-content/uploads/2023/07/BST-COASTAL-SOFA-VANG-2.jpg"
+              src="../../public/img/img-home/home1.jpg"
               alt="Sofa"
             />
             <span className="label">SOFA</span>
@@ -119,28 +119,28 @@ function App() {
           <div className="small-grid">
             <div className="product">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2023/04/nha-xinh-banner-ban-an-vuong-24423.jpg"
+                src="../../public/img/img-home/home2.jpg"
                 alt="Bàn ăn"
               />
               <span className="label">BÀN ĂN</span>
             </div>
             <div className="product">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2022/01/giuong-ngu-pio-1.jpg"
+                src="../../public/img/img-home/home3.jpg"
                 alt="Giường"
               />
               <span className="label">GIƯỜNG</span>
             </div>
             <div className="product">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2024/01/banner-armchair-nhaxinh-31-1-24.jpg"
+                src="../../public/img/img-home/home4.jpg"
                 alt="Armchair"
               />
               <span className="label">ARMCHAIR</span>
             </div>
             <div className="product">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2021/11/nha-xinh-ghe-an-phong-an-749x800.jpg"
+                src="../../public/img/img-home/home5.jpg"
                 alt="Ghế ăn"
               />
               <span className="label">GHẾ ĂN</span>
@@ -152,7 +152,7 @@ function App() {
         <div className="rows row1">
           <div className="left">
             <img
-              src="https://nhaxinh.com/wp-content/uploads/2024/01/nha-xinh-banner-phong-khach-31-1-24.jpg"
+              src="../../public/img/img-home/home6.jpg"
               alt="Ảnh 1"
             />
           </div>
@@ -173,7 +173,7 @@ function App() {
             </div>
             <div className="image-block">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2024/01/nha-xinh-do-trang-tri-banner-31-1-24.jpg"
+                src="../../public/img/img-home/home7.jpg"
                 alt="Ảnh 2"
               />
             </div>
@@ -183,7 +183,7 @@ function App() {
         <div className="rows row2">
           <div className="left horizontal">
             <img
-              src="https://nhaxinh.com/wp-content/uploads/2023/05/mau-phong-ngu-16-5-23.jpg"
+              src="../../public/img/img-home/home8.jpg"
               alt="Ảnh 3"
             />
             <div className="text-side">
@@ -196,7 +196,7 @@ function App() {
           </div>
           <div className="right vertical">
             <img
-              src="https://nhaxinh.com/wp-content/uploads/2022/09/banner-phong-an-nha-xinh-12-9-22.jpg"
+              src="../../public/img/img-home/home9.jpg"
               alt="Ảnh 4"
             />
             <div className="text-below">
@@ -225,7 +225,7 @@ function App() {
         </div>
         <div className="intro-right">
           <img
-            src="https://nhaxinh.com/wp-content/uploads/2023/05/nha-xinh-thiet-ke-noi-that-ecopark-16523-1200x800.jpg"
+            src="../../public/img/img-home/home10.jpg"
             alt="Ảnh giới thiệu"
           />
         </div>
@@ -280,7 +280,7 @@ function App() {
     <div className="inspiration-group active">
       <Link to="/inspiration/29" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/05/khong-giang-1200x800.webp"
+          src="../../public/img/img-home/home11.webp"
           alt="Ảnh 1"
         />
         <h3>Tô màu cuộc sống của bạn</h3>
@@ -291,7 +291,7 @@ function App() {
 
       <Link to="/inspiration/27" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/04/goc-cam-hung-4-1200x800.webp"
+          src="../../public/img/img-home/home12.webp"
           alt="Ảnh 2"
         />
         <h3>Chiêm ngưỡng các dòng sản phẩm cho mùa mới tại Premi Seven</h3>
@@ -305,7 +305,7 @@ function App() {
     <div className="inspiration-group">
       <Link to="/inspiration/30" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/03/Sofa-da-Jazz.jpg"
+          src="../../public/img/img-home/home13.jpg"
           alt="Ảnh 3"
         />
         <h3>Top 5 Sofa Da Tại Nhà Xinh Cho Mọi Không Gian Hiện Đại</h3>
@@ -318,7 +318,7 @@ function App() {
 
       <Link to="/inspiration/31" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/02/NHA-XINH-TRAO-GUI-HUONG-THOM-15-1-1200x800.jpg"
+          src="../../public/img/img-home/home14.jpg"
           alt="Ảnh 4"
         />
         <h3>Gợi Ý Quà Tặng 8/3 – Trao Hương Thơm, Tôn Vinh Phái Đẹp Cùng G7 Prime</h3>
@@ -335,7 +335,7 @@ function App() {
     <div className="inspiration-group">
       <Link to="/inspiration/32" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2024/10/phong-khach-thu-gian-hung-king-1-1110x800.jpg"
+          src="../../public/img/img-home/home15.jpg"
           alt="Ảnh 5"
         />
         <h3>Ghế sofa cho không gian nhỏ</h3>
@@ -348,7 +348,7 @@ function App() {
 
       <Link to="/inspiration/28" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/02/goi-y-qua-tang-14-2-1200x800.jpg"
+          src="../../public/img/img-home/home16.jpg"
           alt="Ảnh 6"
         />
         <h3>GỢI Ý QUÀ TẶNG CHO NGÀY LỄ TÌNH NHÂN 14/02</h3>
@@ -364,7 +364,7 @@ function App() {
     <div className="inspiration-group">
       <Link to="/inspiration/7" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2025/02/goi-y-qua-tang-14-2-600x400.jpg"
+          src="../../public/img/img-home/home17.jpg"
           alt="Ảnh 7"
         />
         <h3>Nghệ thuật phối màu trong thiết kế nội thất</h3>
@@ -375,7 +375,7 @@ function App() {
 
       <Link to="/inspiration/8" className="inspiration-item text-link">
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2024/12/khong-gian-nha-xinh-thao-dien-4-3-600x400.jpg"
+          src="../../public/img/img-home/home18.jpg"
           alt="Ảnh 8"
         />
         <h3>Sofa đa năng – xu hướng nội thất hiện đại</h3>
@@ -397,7 +397,7 @@ function App() {
       <section className="layout-image-left-text-right">
         <div className="image-left">
           <img
-            src="https://nhaxinh.com/wp-content/uploads/2022/07/gioi-thieu-nha-xinh-moi-25-7-22-1200x800.jpg"
+            src="../../public/img/img-home/home19.jpg"
             alt="Không gian sống tinh tế"
           />
         </div>
@@ -419,7 +419,7 @@ function App() {
           <div className="inspiration-group active">
             <div className="inspiration-item">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/04/0423-1400x788.png"
+                src="../../public/img/img-home/home20.png"
                 alt="Ảnh 7"
               />
               <h3>KHÁM PHÁ NHÀ MÁY SẢN XUẤT CÁC SẢN PHẨM VIỆT CỦA PREMI SEVEN</h3>
@@ -430,7 +430,7 @@ function App() {
             </div>
             <div className="inspiration-item">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/04/khong-gian-nha-xinh-pmh-8-1200x800.jpg"
+                src="../../public/img/img-home/home21.jpg"
                 alt="Ảnh 8"
               />
               <h3>
@@ -446,7 +446,7 @@ function App() {
           <div className="inspiration-group">
             <div className="inspiration-item">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/04/dien-mao-moi-nha-xinh-phu-my-hung-h4-1200x800.jpg"
+                src="../../public/img/img-home/home22.jpg"
                 alt="Ảnh 9"
               />
               <h3>Khai Trương Diện Mạo Mới Cửa Hàng Premi Seven Phú Mỹ Hưng</h3>
@@ -457,7 +457,7 @@ function App() {
             </div>
             <div className="inspiration-item">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/03/khong-gian-nha-xinh-diamond-9-1-1200x800.jpg"
+                src="../../public/img/img-home/home23.jpg"
                 alt="Ảnh 10"
               />
               <h3>Hòa Mình Giữa Không Gian Mới Của Premi Seven Diamond Plaza</h3>
@@ -471,7 +471,7 @@ function App() {
           <div className="inspiration-group">
             <div className="inspiration-item">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/02/Nha-Xinh-Bo-tu-bao-thu-11-1201x800.jpg"
+                src="../../public/img/img-home/home24.jpg"
                 alt="Ảnh 11"
               />
               <h3>
@@ -486,7 +486,7 @@ function App() {
             </div>
             <div className="inspiration-item">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2025/01/Workshop-Cham-Tet-Nha-Xinh-3-1-533x800.jpg"
+                src="../../public/img/img-home/home25.jpg"
                 alt="Ảnh 12"
               />
               <h3>
@@ -503,7 +503,7 @@ function App() {
           <div className="inspiration-group">
             <div className="inspiration-item">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2024/11/nha-xinh-khai-truong-dien-mao-moi-tai-thao-dien-1200x800.jpg"
+                src="../../public/img/img-home/home26.jpg"
                 alt="Ảnh 11"
               />
               <h3>Premi Seven khai trương diện mạo mới tại Thảo Điền</h3>
@@ -515,7 +515,7 @@ function App() {
             </div>
             <div className="inspiration-item">
               <img
-                src="https://nhaxinh.com/wp-content/uploads/2021/11/thecollection5.jpg"
+                src="../../public/img/img-home/home27.jpg"
                 alt="Ảnh 12"
               />
               <h3>Premi Seven thay đổi qua các giai đoạn</h3>

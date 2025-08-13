@@ -34,25 +34,25 @@ const InteriorDesign = () => {
   const projects = [
     {
       slug: "can-ho-trieu-do-1",
-      img: "https://nhaxinh.com/wp-content/uploads/2024/02/noi-that-phong-khach-sang-trong-1-1241x800.jpg",
+      img: "../../public/img/img-design/design1.jpg",
       title: "Căn hộ triệu đô với nội thất sang trọng",
       text: "Nội thất bọc da mang tới màu sắc trầm ấm và sang trọng cho không gian sống.",
     },
     {
       slug: "can-ho-trieu-do-2",
-      img: "https://nhaxinh.com/wp-content/uploads/2023/05/Thiet-ke-biet-thu-Nine-South-5-768x512.jpg",
+      img: "../../public/img/img-design/design2.jpg",
       title: "Căn hộ triệu đô với nội thất sang trọng",
       text: "Nội thất bọc da mang tới màu sắc trầm ấm và sang trọng cho không gian sống.",
     },
     {
       slug: "can-ho-the-cove",
-      img: "https://nhaxinh.com/wp-content/uploads/2023/05/Thiet-ke-can-ho-The-Cove-Empire-4PN.jpg",
+      img: "../../public/img/img-design/design3.jpg",
       title: "Căn hộ triệu đô với nội thất sang trọng",
       text: "Nội thất bọc da mang tới màu sắc trầm ấm và sang trọng cho không gian sống.",
     },
     {
       slug: "the-collection",
-      img: "https://nhaxinh.com/wp-content/uploads/2023/06/thiet-ke-can-ho-the-collection-1-768x513.jpg",
+      img: "../../public/img/img-design/design4.jpg",
       title: "Thiết kế căn hộ The Collection",
       text: "Dự án The Collection kết hợp màu sắc hiện đại với tầm nhìn xanh mát.",
     },
@@ -71,7 +71,7 @@ const InteriorDesign = () => {
           Liên hệ ngay: 0906904114
         </Link>
         <img
-          src="https://nhaxinh.com/wp-content/uploads/2023/05/du-an-thiet-ke-biet-thu-dao-ecopark-1jpg-1536x1024.jpg"
+          src="../../public/img/img-design/design5.jpg"
           alt="Thiết kế nội thất"
           className="img-fluid rounded shadow"
           style={{ maxHeight: "520px", objectFit: "cover", width: "100%" }}
@@ -187,7 +187,7 @@ const InteriorDesign = () => {
         <div className="row g-3">
           <div className="col-lg-6">
             <img
-              src="https://nhaxinh.com/wp-content/uploads/2021/11/nha-xinh-phong-khach-1.jpg"
+              src="../../public/img/img-design/design6.jpg"
               alt="Phòng khách hiện đại"
               className="img-fluid rounded shadow-sm w-100"
               style={{ objectFit: "cover", height: "100%" }}
@@ -197,28 +197,28 @@ const InteriorDesign = () => {
             <div className="row g-3">
               <div className="col-6">
                 <img
-                  src="https://nhaxinh.com/wp-content/uploads/2021/11/533332_10002.jpg"
+                  src="../../public/img/img-design/design7.jpg"
                   alt="Góc thư giãn"
                   className="img-fluid rounded shadow-sm w-100"
                 />
               </div>
               <div className="col-6">
                 <img
-                  src="https://nhaxinh.com/wp-content/uploads/2021/11/thecollection5.jpg"
+                  src="../../public/img/img-design/design8.jpg"
                   alt="Phòng ăn sang trọng"
                   className="img-fluid rounded shadow-sm w-100"
                 />
               </div>
               <div className="col-6">
                 <img
-                  src="https://nhaxinh.com/wp-content/uploads/2021/11/nha-xinh-phong-ngu-3.jpg"
+                  src="../../public/img/img-design/design9.jpg"
                   alt="Phòng ngủ tối giản"
                   className="img-fluid rounded shadow-sm w-100"
                 />
               </div>
               <div className="col-6">
                 <img
-                  src="https://nhaxinh.com/wp-content/uploads/2023/05/thiet-ke-noi-that-nha-xinh-bep-16523.jpg"
+                  src="../../public/img/img-design/design10.jpg"
                   alt="Không gian làm việc"
                   className="img-fluid rounded shadow-sm w-100"
                 />
