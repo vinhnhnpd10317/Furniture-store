@@ -46,7 +46,7 @@ export default function Dashboard() {
               <h4 className="card-title">
                 {summary ? summary.totalOrders : "..."}
               </h4>
-              <p className="card-text">Tổng đơn hàng đã bán</p>
+              <p className="card-text">Đơn hàng</p>
             </div>
           </div>
         </div>
