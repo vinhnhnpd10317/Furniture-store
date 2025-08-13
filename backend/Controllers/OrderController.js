@@ -84,7 +84,7 @@ export const createOrder = (req, res) => {
 // Cập nhật trạng thái đơn hàng
 export const updateOrderStatus = (req, res) => {
   const { id } = req.params;
-  const { trang_thai } = req.body;
+  let { trang_thai, trang_thai_thanh_toan } = req.body;
 
   const allowedStatuses = ["cho_xu_ly", "dang_xu_ly", "dang_van_chuyen", "da_giao", "da_huy"];
 
@@ -92,10 +92,19 @@ export const updateOrderStatus = (req, res) => {
     return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
   }
 
-  db.query('UPDATE don_hang SET trang_thai = ? WHERE id = ?', [trang_thai, id], (err) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ message: 'Cập nhật trạng thái thành công' });
-  });
+  // Nếu trạng thái là "đã giao" mà chưa truyền thanh toán => tự set
+  if (trang_thai === "da_giao" && !trang_thai_thanh_toan) {
+    trang_thai_thanh_toan = "da_thanh_toan";
+  }
+
+  db.query(
+    'UPDATE don_hang SET trang_thai = ?, trang_thai_thanh_toan = ? WHERE id = ?',
+    [trang_thai, trang_thai_thanh_toan || null, id],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err });
+      res.json({ message: 'Cập nhật trạng thái thành công' });
+    }
+  );
 };
 
 // Xóa đơn hàng

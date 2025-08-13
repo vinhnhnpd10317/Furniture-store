@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 
@@ -6,19 +6,21 @@ const InteriorDesign = () => {
   const form = useRef<HTMLFormElement>(null);
   const [isSent, setIsSent] = useState(false);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.current) return;
 
     emailjs
-      .sendForm("service_vuazo77", "template_kiycbff", form.current, "N_VEUE_HoD6g4vHJM")
+      .sendForm(
+        "service_vuazo77", // Service ID
+        "template_kiycbff", // Template ID
+        form.current,
+        "N_VEUE_HoD6g4vHJM" // Public Key
+      )
       .then(() => {
         setIsSent(true);
         form.current?.reset();
+        setTimeout(() => setIsSent(false), 5000);
       })
       .catch((error) => {
         console.error("EmailJS Error:", error);
@@ -54,7 +56,7 @@ const InteriorDesign = () => {
 
   return (
     <div className="container py-5">
-      {/* Banner chính */}
+      {/* Banner */}
       <div className="text-center mb-5">
         <h1 className="mt-4 text-uppercase text-primary">Thiết kế nội thất</h1>
         <p className="lead">
@@ -75,12 +77,19 @@ const InteriorDesign = () => {
       {/* Dự án tiêu biểu */}
       <div className="mb-5">
         <h2 className="text-uppercase mb-4 text-center">Các dự án thực hiện</h2>
-<div className="row g-4">
+        <div className="row g-4">
           {projects.map((item, index) => (
             <div key={index} className="col-md-6">
-              <Link to={`/project/${item.slug}`} className="text-decoration-none text-dark">
+              <Link
+                to={`/project/${item.slug}`}
+                className="text-decoration-none text-dark"
+              >
                 <div className="card shadow-sm border-0 h-100">
-                  <img src={item.img} className="card-img-top" alt={item.title} />
+                  <img
+                    src={item.img}
+                    className="card-img-top"
+                    alt={item.title}
+                  />
                   <div className="card-body">
                     <h5 className="card-title fw-bold">{item.title}</h5>
                     <p className="card-text">{item.text}</p>
@@ -96,37 +105,81 @@ const InteriorDesign = () => {
       <div className="bg-light p-4 rounded shadow mb-5">
         <h3 className="text-center fw-bold mb-3">ĐĂNG KÝ TƯ VẤN TẠI NHÀ</h3>
         <p className="text-center text-muted mb-4">
-          Hẹn gặp ngay tư vấn thiết kế nội thất tại nhà bằng cách để lại thông tin tại form dưới đây
+          Hẹn gặp ngay tư vấn thiết kế nội thất tại nhà bằng cách để lại thông
+          tin tại form dưới đây
         </p>
 
-        <form ref={form} onSubmit={sendEmail} className="mx-auto" style={{ maxWidth: "600px" }}>
+        <form
+          ref={form}
+          onSubmit={sendEmail}
+          className="mx-auto"
+          style={{ maxWidth: "600px" }}
+        >
           <div className="mb-3">
-            <input type="text" name="user_name" className="form-control" placeholder="Tên của bạn (Yêu cầu)" required />
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              placeholder="Tên của bạn (Yêu cầu)"
+              required
+            />
           </div>
           <div className="mb-3">
-            <input type="text" name="user_phone" className="form-control" placeholder="Điện thoại (Yêu cầu)" required />
+            <input
+              type="text"
+              name="phone"
+              className="form-control"
+              placeholder="Điện thoại (Yêu cầu)"
+              pattern="[0-9]*"
+              onInput={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.value = target.value.replace(/[^0-9]/g, "");
+              }}
+              required
+            />
           </div>
           <div className="mb-3">
-            <input type="email" name="user_email" className="form-control" placeholder="Email của bạn" />
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              placeholder="Email của bạn"
+            />
           </div>
           <div className="mb-3">
-            <input type="text" name="user_address" className="form-control" placeholder="Địa chỉ" />
+            <input
+              type="text"
+              name="address"
+              className="form-control"
+              placeholder="Địa chỉ của bạn"
+              required
+            />
           </div>
           <div className="mb-3">
-            <textarea name="message" className="form-control" rows={4} placeholder="Yêu cầu của bạn (Yêu cầu)" required></textarea>
+            <textarea
+              name="message"
+              className="form-control"
+              rows={4}
+              placeholder="Yêu cầu của bạn (Yêu cầu)"
+              required
+            ></textarea>
           </div>
-          <button type="submit" className="btn btn-dark w-100">Gửi yêu cầu</button>
+          <button type="submit" className="btn btn-dark w-100">
+            Gửi yêu cầu
+          </button>
           {isSent && (
-            <p className="text-success text-center mt-3">
-              Yêu cầu của bạn đã được gửi thành công!
-            </p>
+            <div className="alert alert-success text-center mt-3" role="alert">
+              ✅ Yêu cầu của bạn đã được gửi thành công!
+            </div>
           )}
         </form>
       </div>
 
       {/* Bộ sưu tập ảnh nội thất */}
       <div className="mb-5">
-        <h2 className="text-uppercase mb-4 text-center">Bộ sưu tập không gian sống</h2>
+        <h2 className="text-uppercase mb-4 text-center">
+          Bộ sưu tập không gian sống
+        </h2>
         <div className="row g-3">
           <div className="col-lg-6">
             <img
@@ -139,16 +192,32 @@ const InteriorDesign = () => {
           <div className="col-lg-6">
             <div className="row g-3">
               <div className="col-6">
-                <img src="https://nhaxinh.com/wp-content/uploads/2021/11/533332_10002.jpg" alt="Góc thư giãn" className="img-fluid rounded shadow-sm w-100" />
+                <img
+                  src="https://nhaxinh.com/wp-content/uploads/2021/11/533332_10002.jpg"
+                  alt="Góc thư giãn"
+                  className="img-fluid rounded shadow-sm w-100"
+                />
               </div>
               <div className="col-6">
-                <img src="https://nhaxinh.com/wp-content/uploads/2021/11/thecollection5.jpg" alt="Phòng ăn sang trọng" className="img-fluid rounded shadow-sm w-100" />
+                <img
+                  src="https://nhaxinh.com/wp-content/uploads/2021/11/thecollection5.jpg"
+                  alt="Phòng ăn sang trọng"
+                  className="img-fluid rounded shadow-sm w-100"
+                />
               </div>
               <div className="col-6">
-                <img src="https://nhaxinh.com/wp-content/uploads/2021/11/nha-xinh-phong-ngu-3.jpg" alt="Phòng ngủ tối giản" className="img-fluid rounded shadow-sm w-100" />
+                <img
+                  src="https://nhaxinh.com/wp-content/uploads/2021/11/nha-xinh-phong-ngu-3.jpg"
+                  alt="Phòng ngủ tối giản"
+                  className="img-fluid rounded shadow-sm w-100"
+                />
               </div>
               <div className="col-6">
-                <img src="https://nhaxinh.com/wp-content/uploads/2023/05/thiet-ke-noi-that-nha-xinh-bep-16523.jpg" alt="Không gian làm việc" className="img-fluid rounded shadow-sm w-100" />
+                <img
+                  src="https://nhaxinh.com/wp-content/uploads/2023/05/thiet-ke-noi-that-nha-xinh-bep-16523.jpg"
+                  alt="Không gian làm việc"
+                  className="img-fluid rounded shadow-sm w-100"
+                />
               </div>
             </div>
           </div>

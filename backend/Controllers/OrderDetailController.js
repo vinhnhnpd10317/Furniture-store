@@ -11,6 +11,7 @@ export const getOrderDetailById = (req, res) => {
             dh.trang_thai,
             dh.tong_tien,
             dh.phuong_thuc_thanh_toan,
+            dh.trang_thai_thanh_toan,
             dh.ghi_chu,
             nd.ho_ten,
             nd.email,

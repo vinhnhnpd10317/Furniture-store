@@ -63,41 +63,40 @@ export const createPayment = async (req, res) => {
 // === Xử lý Return URL ===
 export const callbackVnpay = async (req, res) => {
   let vnp_Params = req.query;
-  const secureHash = vnp_Params["vnp_SecureHash"];
+  const secureHash = vnp_Params['vnp_SecureHash'];
 
-  delete vnp_Params["vnp_SecureHash"];
-  delete vnp_Params["vnp_SecureHashType"];
+  delete vnp_Params['vnp_SecureHash'];
+  delete vnp_Params['vnp_SecureHashType'];
 
   vnp_Params = sortObject(vnp_Params);
   const signData = qs.stringify(vnp_Params, { encode: false });
-  const hmac = crypto.createHmac("sha512", vnp_HashSecret);
-  const signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
+  const hmac = crypto.createHmac('sha512', vnp_HashSecret);
+  const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
 
   if (secureHash === signed) {
-    const rspCode = vnp_Params["vnp_ResponseCode"];
-    const transactionStatus = vnp_Params["vnp_TransactionStatus"];
-    const orderId = vnp_Params["vnp_TxnRef"];
+      const rspCode = vnp_Params['vnp_ResponseCode'];
+      const transactionStatus = vnp_Params['vnp_TransactionStatus'];
+      const orderId = vnp_Params['vnp_TxnRef'];
 
-    if (rspCode === "00" && transactionStatus === "00") {
-      try {
-        await db.query(
-          "UPDATE don_hang SET trang_thai_thanh_toan = ? WHERE id = ?",
-          ["da_thanh_toan", orderId]
-        );
-        return res.json({
-          code: rspCode,
-          message: "Thanh toán thành công",
-          data: vnp_Params,
-        });
-      } catch (err) {
-        console.error(err);
-        return res.status(500).json({ code: "99", message: "Lỗi cập nhật DB" });
+      if (rspCode === '00' && transactionStatus === '00') {
+          try {
+              await db.query(
+                  'UPDATE don_hang SET trang_thai_thanh_toan = ? WHERE id = ?',
+                  ['da_thanh_toan', orderId]
+              );
+              // Chuyển hướng với query param thông báo thành công
+              return res.redirect('http://localhost:5173/userorder?payment=success&orderId=' + orderId);
+          } catch (err) {
+              console.error(err);
+              return res.redirect('http://localhost:5173/userorder?payment=failed&error=db_error');
+          }
+      } else {
+          // Chuyển hướng với thông báo thất bại
+          return res.redirect('http://localhost:5173/userorder?payment=failed&error=transaction_failed');
       }
-    } else {
-      return res.status(400).json({ code: rspCode, message: "Thanh toán thất bại" });
-    }
   } else {
-    return res.status(400).json({ code: "97", message: "Invalid checksum" });
+      // Chuyển hướng với thông báo lỗi checksum
+      return res.redirect('http://localhost:5173/userorder?payment=failed&error=invalid_checksum');
   }
 };
 
