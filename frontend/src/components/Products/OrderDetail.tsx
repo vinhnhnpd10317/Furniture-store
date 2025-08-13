@@ -86,13 +86,6 @@ const OrderDetail = () => {
 
         <div className="row mb-3">
           <div className="col-md-6">
-            <strong>Ghi chú:</strong> {order.ghi_chu || "(Không có ghi chú)"}
-          </div>
-          <div className="col-md-6"><strong>Tổng tiền:</strong> <span className="text-danger">{formatCurrency(order.tong_tien)}</span></div>
-        </div>
-
-        <div className="row mb-3">
-          <div className="col-md-6">
             <strong>Phương thức thanh toán:</strong>{" "}
             {phuongThucThanhToan[order.phuong_thuc_thanh_toan] || order.phuong_thuc_thanh_toan}
           </div>
@@ -100,6 +93,13 @@ const OrderDetail = () => {
             <strong>Trạng thái thanh toán:</strong>{" "}
             {trangThaiThanhToan[order.trang_thai_thanh_toan] || order.trang_thai_thanh_toan}
           </div>
+        </div>
+
+        <div className="row mb-3">
+          <div className="col-md-6">
+            <strong>Ghi chú:</strong> {order.ghi_chu || "(Không có ghi chú)"}
+          </div>
+          <div className="col-md-6"><strong>Tổng tiền:</strong> <span className="text-danger">{formatCurrency(order.tong_tien)}</span></div>
         </div>
 
         {order.phuong_thuc_thanh_toan === "chuyen_khoan" && (

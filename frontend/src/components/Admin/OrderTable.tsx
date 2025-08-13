@@ -126,11 +126,19 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
                   <option value="da_huy">Đã hủy</option>
                 </select>
               </td>
-              <td>
-                {order.trang_thai_thanh_toan === "chua_thanh_toan"
-                  ? "Chưa thanh toán"
-                  : "Đã thanh toán"}
-              </td>    
+              <td className="text-center">
+                <span
+                  className={`badge px-3 py-2 fs-6 ${
+                    order.trang_thai_thanh_toan === "chua_thanh_toan"
+                      ? "bg-danger"
+                      : "bg-success"
+                  }`}
+                >
+                  {order.trang_thai_thanh_toan === "chua_thanh_toan"
+                    ? "Chưa thanh toán"
+                    : "Đã thanh toán"}
+                </span>
+              </td>   
 
               <td className="d-flex justify-content-center">
                 <button
@@ -176,14 +184,14 @@ const OrderTable: React.FC<Props> = ({ orders, onStatusChange }) => {
                     : "Chuyển khoản"}
                 </p>
                 <p>
+                  <strong>Trạng thái thanh toán:</strong>{" "}
+                  {trangThaiThanhToan[selectedOrder.trang_thai_thanh_toan] || selectedOrder.trang_thai_thanh_toan}
+                </p>
+                <p>
                   <strong>Trạng thái:</strong>{" "}
                   <span className={OrderStatusMap[selectedOrder.trang_thai]?.badgeClass}>
                     {OrderStatusMap[selectedOrder.trang_thai]?.label}
                   </span>
-                </p>
-                <p>
-                  <strong>Trạng thái thanh toán:</strong>{" "}
-                  {trangThaiThanhToan[selectedOrder.trang_thai_thanh_toan] || selectedOrder.trang_thai_thanh_toan}
                 </p>
               </div>
 
