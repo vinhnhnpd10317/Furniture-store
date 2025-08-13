@@ -83,7 +83,7 @@ export default function CustomerList() {
               <th className="hide-on-tablet py-3">Email</th>
               <th className="py-3">SĐT</th>
               <th className="hide-on-tablet py-3">Địa chỉ</th>
-              <th className="py-3" style={{ width: 120 }}>Hành động</th>
+              {/* <th className="py-3" style={{ width: 120 }}>Hành động</th> */}
             </tr>
           </thead>
           <tbody>
@@ -93,14 +93,14 @@ export default function CustomerList() {
                 <td className="hide-on-tablet">{c.email}</td>
                 <td>{c.so_dien_thoai}</td>
                 <td className="hide-on-tablet">{c.dia_chi}</td>
-                <td className="d-flex justify-content-center">
+                {/* <td className="d-flex justify-content-center">
                   <button
                     className="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center gap-1"
                     onClick={() => handleDelete(c.id)}
                   >
                     <FaTrash /> Xoá
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))}
             {customers.length === 0 && (
@@ -123,12 +123,12 @@ export default function CustomerList() {
               <p className="card-text mb-1"><strong>SĐT:</strong> {c.so_dien_thoai}</p>
               <p className="card-text mb-1"><strong>Email:</strong> {c.email}</p>
               <p className="card-text mb-2"><strong>Địa chỉ:</strong> {c.dia_chi}</p>
-              <button
+              {/* <button
                 className="btn btn-sm btn-danger"
                 onClick={() => handleDelete(c.id)}
               >
                 Xoá
-              </button>
+              </button> */}
             </div>
           </div>
         ))}
