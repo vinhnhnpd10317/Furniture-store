@@ -242,10 +242,10 @@ const loadComments = async () => {
                 <div className="col-md-6">
                     <img
                         src={mainImage}
-                        tabIndex={-1}
                         className="img-fluid mb-3"
                         alt="Main Product"
-                        style={{ maxHeight: "500px", objectFit: "cover", width: "100%", outline: "none" }}
+                        style={{ maxHeight: "500px", objectFit: "cover", width: "100%", outline: "none", userSelect: "none" }}
+                        tabIndex={-1}
                     />
 
                     <div className="d-flex gap-2 flex-wrap">
