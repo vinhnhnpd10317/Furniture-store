@@ -183,7 +183,7 @@ const Header = () => {
         </nav>
 
         {/* Mobile Search + Icons */}
-        <div className="d-md-none w-100 mt-3 px-2">
+        <div className="d-md-none w-100 bg-white px-2">
           <div className="input-group mb-2">
             <input
               type="text"
