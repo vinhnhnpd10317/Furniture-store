@@ -75,11 +75,6 @@ const UserOrders = () => {
                   </Link>
                 </li>
               )}
-              <li>
-                <a href="#" className="text-decoration-none text-dark">
-                  <i className="bi bi-box-arrow-right me-2"></i>Đăng xuất
-                </a>
-              </li>
             </ul>
           </div>
         </div>

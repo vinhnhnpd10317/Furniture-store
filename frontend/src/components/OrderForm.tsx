@@ -98,6 +98,7 @@ export default function OrderForm() {
           `Thanh toan don hang #${result.don_hang_id}`
         );
         if (vnpayRes?.paymentUrl) {
+          if (!buyNowItem) clearCart();
           window.location.href = vnpayRes.paymentUrl; // Chuyển sang VNPay
           return;
         } else {

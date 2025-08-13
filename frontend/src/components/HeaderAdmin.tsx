@@ -57,7 +57,6 @@ export default function HeaderAdmin() {
                     </div>
 
                     <div className="dropdown avatar-dropdown position-absolute end-0 mt-2 mt-lg-0 me-3">
-
                         <button
                             className="btn dropdown-toggle p-0 border-0 bg-transparent"
                             type="button"
@@ -71,14 +70,6 @@ export default function HeaderAdmin() {
                                 style={{ height: "40px", width: "40px", objectFit: "cover" }}
                             />
                         </button>
-                        <ul className="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <Link className="dropdown-item" to="/profile">Trang cá nhân</Link>
-                            </li>
-                            <li>
-                                <button className="dropdown-item" onClick={() => alert("Đăng xuất thành công!")}>Đăng xuất</button>
-                            </li>
-                        </ul>
                     </div>
                 </div>
 
